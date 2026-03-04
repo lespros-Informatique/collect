@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 03 mars 2026 à 13:21
+-- Généré le : mer. 04 mars 2026 à 14:30
 -- Version du serveur : 9.1.0
 -- Version de PHP : 8.3.14
 
@@ -29,19 +29,20 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
-  `id_article` int NOT NULL,
+  `id_article` int NOT NULL AUTO_INCREMENT,
   `code_article` varchar(50) NOT NULL,
   `libelle_article` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `etat_article` int NOT NULL DEFAULT '1',
-  `famille_id` varchar(50) NOT NULL,
-  `image_article` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `famille_code` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `image_article` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  PRIMARY KEY (`id_article`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `articles`
 --
 
-INSERT INTO `articles` (`id_article`, `code_article`, `libelle_article`, `etat_article`, `famille_id`, `image_article`) VALUES
+INSERT INTO `articles` (`id_article`, `code_article`, `libelle_article`, `etat_article`, `famille_code`, `image_article`) VALUES
 (1, 'ART-ASSIETTE-001', 'Assiettes 24 pieces', 1, '1', ''),
 (2, 'ART-VERRE-001', 'Verres 24 pieces', 1, '1', ''),
 (3, 'ART-CASSEROLE-001', 'Casseroles 3 pieces', 1, '2', '');
@@ -54,7 +55,7 @@ INSERT INTO `articles` (`id_article`, `code_article`, `libelle_article`, `etat_a
 
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
-  `id_categorie` int NOT NULL,
+  `id_categorie` int NOT NULL AUTO_INCREMENT,
   `code_categorie` varchar(50) NOT NULL,
   `libelle_categorie` varchar(100) NOT NULL,
   `description_categorie` text,
@@ -62,15 +63,17 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `date_debut` datetime NOT NULL,
   `date_fin` datetime NOT NULL,
   `img_categorie` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `etat_categorie` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='la categorie des choix';
+  `etat_categorie` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_categorie`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COMMENT='la categorie des choix';
 
 --
 -- Déchargement des données de la table `categories`
 --
 
 INSERT INTO `categories` (`id_categorie`, `code_categorie`, `libelle_categorie`, `description_categorie`, `nombre_jour`, `date_debut`, `date_fin`, `img_categorie`, `etat_categorie`) VALUES
-(1, 'CAT-2026-001', 'Collecte 2026', 'Programme annuel 2026', 365, '2026-01-01 00:00:00', '2026-12-31 23:59:59', NULL, 1);
+(1, 'CAT-2026-001', 'Collecte 2026', 'Programme annuel 2026', 365, '2026-01-01 00:00:00', '2026-12-31 23:59:59', NULL, 1),
+(2, 'CAT-LMNRJB', 'quibusdam ratione derelinquo', 'quibusdam ratione derelinquo', 65, '1957-01-18 00:00:00', '1957-01-18 00:00:00', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -80,7 +83,7 @@ INSERT INTO `categories` (`id_categorie`, `code_categorie`, `libelle_categorie`,
 
 DROP TABLE IF EXISTS `choix`;
 CREATE TABLE IF NOT EXISTS `choix` (
-  `id_choix` int NOT NULL,
+  `id_choix` int NOT NULL AUTO_INCREMENT,
   `code_choix` varchar(50) NOT NULL,
   `categorie_code` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `libelle_choix` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
@@ -90,8 +93,9 @@ CREATE TABLE IF NOT EXISTS `choix` (
   `etat_choix` int NOT NULL DEFAULT '1',
   `deleted_by` int DEFAULT NULL,
   `deleted_why` text,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_choix`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `choix`
@@ -108,7 +112,7 @@ INSERT INTO `choix` (`id_choix`, `code_choix`, `categorie_code`, `libelle_choix`
 
 DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
-  `id_client` int NOT NULL,
+  `id_client` int NOT NULL AUTO_INCREMENT,
   `code_client` varchar(250) DEFAULT NULL,
   `nom_client` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `telephone_client` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
@@ -118,8 +122,9 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `etat_client` int NOT NULL DEFAULT '1',
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_client`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `clients`
@@ -136,14 +141,15 @@ INSERT INTO `clients` (`id_client`, `code_client`, `nom_client`, `telephone_clie
 
 DROP TABLE IF EXISTS `demandes`;
 CREATE TABLE IF NOT EXISTS `demandes` (
-  `id_demande` int NOT NULL,
+  `id_demande` int NOT NULL AUTO_INCREMENT,
   `code_demande` varchar(50) NOT NULL,
   `total_demande` int NOT NULL,
   `created_at_demande` datetime NOT NULL,
   `etat_demande` int NOT NULL DEFAULT '1',
   `gestionnaire_code` varchar(50) DEFAULT NULL,
   `utilisateur_code` varchar(50) NOT NULL,
-  `categorie_code` varchar(50) DEFAULT NULL
+  `categorie_code` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_demande`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -154,13 +160,22 @@ CREATE TABLE IF NOT EXISTS `demandes` (
 
 DROP TABLE IF EXISTS `familles`;
 CREATE TABLE IF NOT EXISTS `familles` (
-  `id_famille` int NOT NULL,
+  `id_famille` int NOT NULL AUTO_INCREMENT,
   `code_famille` varchar(50) NOT NULL,
   `libelle_famille` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `description_famille` text NOT NULL,
   `created_at_famille` datetime NOT NULL,
-  `etat_famille` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `etat_famille` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_famille`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `familles`
+--
+
+INSERT INTO `familles` (`id_famille`, `code_famille`, `libelle_famille`, `description_famille`, `created_at_famille`, `etat_famille`) VALUES
+(1, 'FAM-F7VVP6', 'Neque minim cupidata', 'Sit eiusmod cum cons', '2026-03-04 13:57:57', 1),
+(2, 'FAM-I5UAQU', 'Neque minim cupidata', 'dd', '2026-03-04 14:29:14', 1);
 
 -- --------------------------------------------------------
 
@@ -170,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `familles` (
 
 DROP TABLE IF EXISTS `inscriptions`;
 CREATE TABLE IF NOT EXISTS `inscriptions` (
-  `id_inscription` int NOT NULL,
+  `id_inscription` int NOT NULL AUTO_INCREMENT,
   `code_inscription` varchar(100) NOT NULL,
   `user_code` varchar(50) NOT NULL,
   `client_code` varchar(50) NOT NULL,
@@ -180,8 +195,9 @@ CREATE TABLE IF NOT EXISTS `inscriptions` (
   `date_fin` datetime NOT NULL,
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_inscription`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `inscriptions`
@@ -198,7 +214,7 @@ INSERT INTO `inscriptions` (`id_inscription`, `code_inscription`, `user_code`, `
 
 DROP TABLE IF EXISTS `ligne_articles`;
 CREATE TABLE IF NOT EXISTS `ligne_articles` (
-  `id_ligne_article` int NOT NULL,
+  `id_ligne_article` int NOT NULL AUTO_INCREMENT,
   `code_ligne_article` varchar(50) NOT NULL,
   `quantite_ligne_article` int NOT NULL,
   `article_code` varchar(50) NOT NULL,
@@ -207,8 +223,9 @@ CREATE TABLE IF NOT EXISTS `ligne_articles` (
   `etat_ligne_article` int NOT NULL,
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_ligne_article`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `ligne_articles`
@@ -227,7 +244,7 @@ INSERT INTO `ligne_articles` (`id_ligne_article`, `code_ligne_article`, `quantit
 
 DROP TABLE IF EXISTS `ligne_article_inscriptions`;
 CREATE TABLE IF NOT EXISTS `ligne_article_inscriptions` (
-  `id_ligne_art_ins` int NOT NULL,
+  `id_ligne_article_inscription` int NOT NULL AUTO_INCREMENT,
   `code_ligne_article_inscription` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ligne_choix_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ligne_article_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -235,7 +252,8 @@ CREATE TABLE IF NOT EXISTS `ligne_article_inscriptions` (
   `deleted_by` int DEFAULT NULL,
   `deleted_why` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `deleted_at` datetime DEFAULT NULL,
-  `created_at_ligne_article_inscription` datetime DEFAULT CURRENT_TIMESTAMP
+  `created_at_ligne_article_inscription` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_ligne_article_inscription`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -246,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `ligne_article_inscriptions` (
 
 DROP TABLE IF EXISTS `ligne_choix`;
 CREATE TABLE IF NOT EXISTS `ligne_choix` (
-  `id_ligne_choix` int NOT NULL,
+  `id_ligne_choix` int NOT NULL AUTO_INCREMENT,
   `code_ligne_choix` varchar(50) NOT NULL,
   `created_at_ligne_choix` datetime NOT NULL,
   `inscription_code` varchar(50) NOT NULL,
@@ -254,8 +272,9 @@ CREATE TABLE IF NOT EXISTS `ligne_choix` (
   `etat_ligne_choix` int NOT NULL,
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_ligne_choix`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `ligne_choix`
@@ -272,7 +291,7 @@ INSERT INTO `ligne_choix` (`id_ligne_choix`, `code_ligne_choix`, `created_at_lig
 
 DROP TABLE IF EXISTS `paiements`;
 CREATE TABLE IF NOT EXISTS `paiements` (
-  `id_paiement` int NOT NULL,
+  `id_paiement` int NOT NULL AUTO_INCREMENT,
   `code_paiement` varchar(255) DEFAULT NULL,
   `versement_code` varchar(100) DEFAULT NULL,
   `user_code` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
@@ -287,8 +306,9 @@ CREATE TABLE IF NOT EXISTS `paiements` (
   `etat_paiement` int NOT NULL DEFAULT '0',
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_paiement`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `paiements`
@@ -305,7 +325,7 @@ INSERT INTO `paiements` (`id_paiement`, `code_paiement`, `versement_code`, `user
 
 DROP TABLE IF EXISTS `rapports`;
 CREATE TABLE IF NOT EXISTS `rapports` (
-  `id_rapport` int NOT NULL,
+  `id_rapport` int NOT NULL AUTO_INCREMENT,
   `code_rapport` varchar(100) DEFAULT NULL,
   `date_rapport` datetime NOT NULL,
   `observation` longtext,
@@ -313,7 +333,8 @@ CREATE TABLE IF NOT EXISTS `rapports` (
   `user_code` varchar(50) NOT NULL,
   `update_id` int DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
-  `etat_rapport` int NOT NULL DEFAULT '1'
+  `etat_rapport` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_rapport`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -324,15 +345,16 @@ CREATE TABLE IF NOT EXISTS `rapports` (
 
 DROP TABLE IF EXISTS `retraits`;
 CREATE TABLE IF NOT EXISTS `retraits` (
-  `id_retrait` int UNSIGNED NOT NULL,
+  `id_retrait` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `code_retrait` varchar(50) NOT NULL,
   `date_retrait` datetime NOT NULL,
   `user_code` varchar(50) NOT NULL,
   `inscription_code` varchar(50) NOT NULL COMMENT 'ID de l’inscription retirée',
   `details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT 'JSON contenant les choix et articles retirés',
   `type_retrait` enum('inscription') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'inscription',
-  `etat_retrait` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `etat_retrait` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_retrait`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `retraits`
@@ -349,21 +371,22 @@ INSERT INTO `retraits` (`id_retrait`, `code_retrait`, `date_retrait`, `user_code
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
-  `id_role` int NOT NULL,
+  `id_role` int NOT NULL AUTO_INCREMENT,
   `code_role` varchar(50) NOT NULL,
   `libelle_role` varchar(50) NOT NULL,
-  `etat_role` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `etat_role` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_role`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `roles`
 --
 
 INSERT INTO `roles` (`id_role`, `code_role`, `libelle_role`, `etat_role`) VALUES
-(1, 'ROLE-ADMIN-001', 'admin', 1),
-(2, 'ROLE-COMP-001', 'comptable', 1),
-(3, 'ROLE-SUP-001', 'superviseur', 1),
-(4, 'ROLE-COM-001', 'commercial', 1);
+(1, 'code-admin', 'admin', 1),
+(2, 'code-comptable', 'comptable', 1),
+(3, 'code-superviseur', 'superviseur', 1),
+(4, 'code-commercial', 'commercial', 1);
 
 -- --------------------------------------------------------
 
@@ -373,7 +396,7 @@ INSERT INTO `roles` (`id_role`, `code_role`, `libelle_role`, `etat_role`) VALUES
 
 DROP TABLE IF EXISTS `stocks`;
 CREATE TABLE IF NOT EXISTS `stocks` (
-  `id_stock` int NOT NULL,
+  `id_stock` int NOT NULL AUTO_INCREMENT,
   `code_stock` varchar(50) NOT NULL,
   `type_mouvement` enum('ENTREE','SORTIE','RETOUR') NOT NULL,
   `quantite_stock` int NOT NULL,
@@ -381,7 +404,8 @@ CREATE TABLE IF NOT EXISTS `stocks` (
   `demande_code` varchar(50) DEFAULT NULL,
   `user_code` varchar(50) DEFAULT NULL,
   `categorie_code` varchar(50) DEFAULT NULL,
-  `commentaire` varchar(255) DEFAULT NULL
+  `commentaire` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id_stock`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -392,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `stocks` (
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `id_user` int NOT NULL,
+  `id_user` int NOT NULL AUTO_INCREMENT,
   `code_user` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `nom_user` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `prenom_user` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
@@ -409,17 +433,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `role_code` varchar(50) NOT NULL,
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `users`
 --
 
 INSERT INTO `users` (`id_user`, `code_user`, `nom_user`, `prenom_user`, `telephone_user`, `email_user`, `password_user`, `quartier_user`, `zone_user`, `piece_user`, `photo_user`, `date_created_user`, `user_code`, `etat_user`, `role_code`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'USER-ADMIN-001', 'KONE', 'Moussa', '0701010101', 'admin@collect.ci', '$2y$10$AdminHashExample123456', 'Commerce', 'Bouake Centre', NULL, NULL, '2026-03-03 13:21:42', 'USER-ADMIN-001', 1, 'ROLE-ADMIN-001', NULL, NULL, NULL),
-(2, 'USER-COMP-001', 'TRAORE', 'Aminata', '0702020202', 'comptable@collect.ci', '$2y$10$ComptableHashExample', 'Air France', 'Bouake Nord', NULL, NULL, '2026-03-03 13:21:42', 'USER-COMP-001', 1, 'ROLE-COMP-001', NULL, NULL, NULL),
-(3, 'USER-COM-001', 'KOUASSI', 'Jean', '0703030303', 'commercial@collect.ci', '$2y$10$CommercialHashExample', 'Dar Es Salam', 'Bouake Zone 1', NULL, NULL, '2026-03-03 13:21:42', 'USER-COM-001', 1, 'ROLE-COM-001', NULL, NULL, NULL);
+(1, 'USER-ADMIN-001', 'KONE', 'Moussa', '0701010101', 'admin@collect.ci', '$2y$10$kxHoUmjW8mz0v9BoFqajrexyR02JttNjF.wyfelmowf1CgbIqu7Sa', 'Commerce', 'Bouake Centre', NULL, NULL, '2026-03-03 13:21:42', 'USER-ADMIN-001', 0, 'code-commercial', NULL, NULL, NULL),
+(2, 'USER-COMP-001', 'TRAORE', 'Aminata', '0702020202', 'comptable@collect.ci', '$2y$10$ComptableHashExample', 'Air France', 'Bouake Nord', NULL, NULL, '2026-03-03 13:21:42', 'USER-COMP-001', 1, 'code-comptable', NULL, NULL, NULL),
+(3, 'USER-COM-001', 'KOUASSI', 'Jean', '0703030303', 'commercial@collect.ci', '$2y$10$CommercialHashExample', 'Dar Es Salam', 'Bouake Zone 1', NULL, NULL, '2026-03-03 13:21:42', 'USER-COM-001', 1, 'code-commercial', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -429,7 +454,7 @@ INSERT INTO `users` (`id_user`, `code_user`, `nom_user`, `prenom_user`, `telepho
 
 DROP TABLE IF EXISTS `versements`;
 CREATE TABLE IF NOT EXISTS `versements` (
-  `id_versement` int NOT NULL,
+  `id_versement` int NOT NULL AUTO_INCREMENT,
   `code_versement` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `rapport_code` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `user_code` varchar(50) NOT NULL,
@@ -438,7 +463,8 @@ CREATE TABLE IF NOT EXISTS `versements` (
   `date_expires_versement` datetime NOT NULL,
   `reseau_versement` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Wave',
   `statut_versement` enum('pending','succès','échec','annulé') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'pending',
-  `etat_versement` enum('En cours','Validé') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'En cours'
+  `etat_versement` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_versement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 COMMIT;
 

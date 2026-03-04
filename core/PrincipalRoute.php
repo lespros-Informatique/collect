@@ -34,5 +34,12 @@ require_once '../controllers/dashboard/DashboardController.php';
 require_once '../controllers/commercial/CommercialController.php';
 require_once '../controllers/kit/KitController.php';
 require_once '../controllers/client/ClientController.php';
+require_once '../controllers/admin/InscriptionController.php';
+require_once '../controllers/admin/PaiementController.php';
+require_once '../controllers/admin/VersementController.php';
+require_once '../controllers/admin/RetraitController.php';
+require_once '../controllers/admin/SettingsController.php';
+require_once '../controllers/admin/FamilleController.php';
+require_once '../controllers/admin/ArticleController.php';
 
 

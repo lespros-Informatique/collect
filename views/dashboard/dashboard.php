@@ -115,7 +115,7 @@
                                     <div class="col-lg-6 col-xl-6 col-sm-6 col-12">
                                         <div class="d-flex align-items-start">
                                             <span class="card-icon warning d-flex justify-content-center mr-3">
-                                                <i class="fa fa-dollar-sign font-large-2 customize-icon font-large-2 p-1"></i>
+                                                <i class="feather icon-dollar-sign  font-large-2 customize-icon font-large-2 p-1"></i>
                                             </span>
                                             <div class="stats-amount mr-3">
                                                 <h3 class="heading-text text-bold-600"><?= number_format($revenusAujourdhui ?? 0, 0, ',', ' '); ?> FCFA</h3>
@@ -131,7 +131,7 @@
                                     <div class="col-lg-6 col-xl-6 col-sm-6 col-12">
                                         <div class="d-flex align-items-start border-right-blue-grey border-right-lighten-5">
                                             <span class="card-icon secondary d-flex justify-content-center mr-3">
-                                                <i class="fa fa-file-text font-large-2 customize-icon font-large-2 p-1"></i>
+                                                <i class="feather icon-dollar-sign font-large-2 customize-icon font-large-2 p-1"></i>
                                             </span>
                                             <div class="stats-amount mr-3">
                                                 <h3 class="heading-text text-bold-600"> <?= $paiementsAujourdhui ?? 0 ?> </h3>

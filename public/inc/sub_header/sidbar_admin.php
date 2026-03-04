@@ -37,6 +37,22 @@
                     </ul>
                 </li>
 
+                <li class=" nav-item"><a href="#"><i class="feather icon-layers"></i><span class="menu-title" data-i18n="Templates">Familles</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/familles" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des familles</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a href="#"><i class="feather icon-box"></i><span class="menu-title" data-i18n="Templates">Articles</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/articles" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des articles</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class=" nav-item"><a href="#"><i class="feather icon-user-plus"></i><span class="menu-title" data-i18n="Templates">Inscriptions</span></a>
                     <ul class="menu-content">
                          <li>

@@ -131,10 +131,16 @@
               <div class="input-group">
                   <select class="form-control" id="role" name="role" required>
                       <option value="">... Sélectionnez un rôle ...</option>
-                      <option value="ROLE-ADMIN-001">Administrateur</option>
-                      <option value="ROLE-COMP-001">Comptable</option>
-                      <option value="ROLE-SUP-001">Superviseur</option>
-                      <option value="ROLE-COM-001">Commercial</option>
+                      <?php if (isset($allRoles) && !empty($allRoles)): ?>
+                        <?php foreach ($allRoles as $role): ?>
+                          <option value="<?= $role['code_role'] ?>"><?= htmlspecialchars($role['libelle_role']) ?></option>
+                        <?php endforeach; ?>
+                      <?php else: ?>
+                        <option value="ROLE-ADMIN-001">Administrateur</option>
+                        <option value="ROLE-COMP-001">Comptable</option>
+                        <option value="ROLE-SUP-001">Superviseur</option>
+                        <option value="ROLE-COM-001">Commercial</option>
+                      <?php endif; ?>
                   </select>
                   <span class="input-group-addon"> <?=Validator::icon('user-secret'); ?></span>
               </div>

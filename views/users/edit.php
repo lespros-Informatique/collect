@@ -97,10 +97,12 @@
                   <div class="input-group">
                     <select class="form-control" id="role" name="role_code" required>
                       <option value="">... Sélectionnez un rôle ...</option>
-                      <option value="<?= ($userProfile['role_code'] ?? '') == ROLE_ADMIN ? 'selected' : '' ?>" <?= ($userProfile['role_code'] ?? '') == ROLE_ADMIN ? 'selected' : '' ?>>Administrateur</option>
-                      <option value="ROLE-COMP-001" <?= ($userProfile['role_code'] ?? '') == ROLE_COMPTABLE ? 'selected' : '' ?>>Comptable</option>
-                      <option value="ROLE-SUP-001" <?= ($userProfile['role_code'] ?? '') == ROLE_SUPERVISEUR ? 'selected' : '' ?>>Superviseur</option>
-                      <option value="ROLE-COM-001" <?= ($userProfile['role_code'] ?? '') == ROLE_COMMERCIAL ? 'selected' : '' ?>>Commercial</option>
+                      <?php if (isset($allRoles) && !empty($allRoles)){ ?>
+                        <?php foreach ($allRoles as $role): ?>
+                          <option value="<?= $role['code_role'] ?>" <?= ($userProfile['role_code'] ?? '') == $role['code_role'] ? 'selected' : '' ?>><?= htmlspecialchars($role['libelle_role']) ?></option>
+                        <?php endforeach; ?>
+                      <?php } ?>
+                       
                     </select>
                     <span class="input-group-addon"> <?= Validator::icon('user-secret'); ?></span>
                   </div>

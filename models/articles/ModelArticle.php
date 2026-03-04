@@ -15,15 +15,37 @@ class ModelArticle
     public function getAllArticles($status = null)
     {
         try {
-            $sql = 'SELECT * FROM articles';
-            $params = [];
+            // Vérifier si la colonne famille_code existe
+            $pdo = new Database();
+            $conn = $pdo->getCon();
+            
+            // Vérifier si la colonne famille_code existe dans la table articles
+            $columns = $conn->query('SHOW COLUMNS FROM articles LIKE "famille_code"')->fetchAll();
+            
+            if (count($columns) > 0) {
+                // La colonne existe, utiliser la jointure
+                $sql = 'SELECT a.*, f.libelle_famille FROM articles a
+                        LEFT JOIN familles f ON a.famille_code = f.code_famille';
+                $params = [];
 
-            if ($status !== null) {
-                $sql .= ' WHERE etat_article = ?';
-                $params[] = $status;
+                if ($status !== null) {
+                    $sql .= ' WHERE a.etat_article = ?';
+                    $params[] = $status;
+                }
+
+                $sql .= ' ORDER BY a.libelle_article ASC';
+            } else {
+                // La colonne n'existe pas, utiliser une requête simple
+                $sql = 'SELECT * FROM articles';
+                $params = [];
+
+                if ($status !== null) {
+                    $sql .= ' WHERE etat_article = ?';
+                    $params[] = $status;
+                }
+
+                $sql .= ' ORDER BY libelle_article ASC';
             }
-
-            $sql .= ' ORDER BY libelle_article ASC';
 
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute($params);
@@ -70,12 +92,12 @@ class ModelArticle
     }
 
     // Obtenir les articles par famille
-    public function getArticlesByFamille($familleId)
+    public function getArticlesByFamille($familleCode)
     {
         try {
-            $sql = 'SELECT * FROM articles WHERE famille_id = ? AND etat_article = 1 ORDER BY libelle_article ASC';
+            $sql = 'SELECT * FROM articles WHERE famille_code = ? AND etat_article = 1 ORDER BY libelle_article ASC';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$familleId]);
+            $query->execute([$familleCode]);
             if ($query->rowCount() > 0) {
                 return $query->fetchAll(PDO::FETCH_ASSOC);
             }

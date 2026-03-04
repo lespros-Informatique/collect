@@ -12,6 +12,13 @@ $dashboardController = new DashboardController();
 $clientController = new ClientController();
 $kitController = new KitController();
 $commercialController = new CommercialController();
+$inscriptionController = new InscriptionController();
+$paiementController = new PaiementController();
+$versementController = new VersementController();
+$retraitController = new RetraitController();
+$settingsController = new SettingsController();
+$familleController = new FamilleController();
+$articleController = new ArticleController();
 
 
 // Ajout des routes
@@ -45,6 +52,51 @@ $route->addRoute('/userController/editPassword', [$userController, 'editPassword
 // Admin routes
 $route->addRoute('/admin', [$dashboardController, 'index']); // Dashboard admin
 
+// Inscriptions management routes
+$route->addRoute('/admin/inscriptions', [$inscriptionController, 'index']); // Liste des inscriptions
+$route->addRoute('/admin/inscriptions/create', [$inscriptionController, 'create']); // Créer inscription
+$route->addRoute('/admin/inscriptions/edit', [$inscriptionController, 'edit']); // Modifier inscription
+$route->addRoute('/admin/inscriptions/delete', [$inscriptionController, 'delete']); // Supprimer inscription
+$route->addRoute('/admin/inscriptions/details/{params}', [$inscriptionController, 'details']); // Détails inscription
+
+// Paiements management routes
+$route->addRoute('/admin/paiements', [$paiementController, 'index']); // Liste des paiements
+$route->addRoute('/admin/paiements/create', [$paiementController, 'create']); // Créer paiement
+$route->addRoute('/admin/paiements/edit', [$paiementController, 'edit']); // Modifier paiement
+$route->addRoute('/admin/paiements/delete', [$paiementController, 'delete']); // Supprimer paiement
+$route->addRoute('/admin/paiements/details/{params}', [$paiementController, 'details']); // Détails paiement
+
+// Versements management routes
+$route->addRoute('/admin/versements', [$versementController, 'index']); // Liste des versements
+$route->addRoute('/admin/versements/create', [$versementController, 'create']); // Créer versement
+$route->addRoute('/admin/versements/edit', [$versementController, 'edit']); // Modifier versement
+$route->addRoute('/admin/versements/details/{params}', [$versementController, 'details']); // Détails versement
+
+// Retraits management routes
+$route->addRoute('/admin/retraits', [$retraitController, 'index']); // Liste des retraits
+$route->addRoute('/admin/retraits/create', [$retraitController, 'create']); // Créer retrait
+$route->addRoute('/admin/retraits/edit', [$retraitController, 'edit']); // Modifier retrait
+$route->addRoute('/admin/retraits/delete', [$retraitController, 'delete']); // Supprimer retrait
+$route->addRoute('/admin/retraits/details/{params}', [$retraitController, 'details']); // Détails retrait
+
+// Settings management routes
+$route->addRoute('/admin/settings', [$settingsController, 'index']); // Page des paramètres
+$route->addRoute('/admin/settings/update', [$settingsController, 'update']); // Mettre à jour les paramètres
+$route->addRoute('/admin/settings/updatePreferences', [$settingsController, 'updatePreferences']); // Mettre à jour les préférences
+$route->addRoute('/admin/settings/addRole', [$settingsController, 'addRole']); // Ajouter un rôle
+$route->addRoute('/admin/settings/editRole', [$settingsController, 'editRole']); // Modifier un rôle
+
+// Familles management routes
+$route->addRoute('/admin/familles', [$familleController, 'index']); // Liste des familles
+$route->addRoute('/admin/familles/create', [$familleController, 'create']); // Créer famille
+$route->addRoute('/admin/familles/edit', [$familleController, 'edit']); // Modifier famille
+$route->addRoute('/admin/familles/delete', [$familleController, 'delete']); // Supprimer famille
+
+// Articles management routes
+$route->addRoute('/admin/articles', [$articleController, 'index']); // Liste des articles
+$route->addRoute('/admin/articles/create', [$articleController, 'create']); // Créer article
+$route->addRoute('/admin/articles/edit', [$articleController, 'edit']); // Modifier article
+$route->addRoute('/admin/articles/delete', [$articleController, 'delete']); // Supprimer article
 
 // User management routes (using UserController)
 $route->addRoute('/admin/users', [$userController, 'list']); // Liste des utilisateurs
@@ -65,9 +117,6 @@ $route->addRoute('/admin/kits/details/{params}', [$kitController, 'details']); /
 
 $route->addRoute('/admin/categories', [$kitController, 'categories']); // Liste des catégories
 $route->addRoute('/admin/categories/add', [$kitController, 'addCategory']); // Ajouter une catégorie
-
-$route->addRoute('/admin/articles', [$kitController, 'articles']); // Liste des articles
-$route->addRoute('/admin/articles/add', [$kitController, 'addArticle']); // Ajouter un article
 
 // Commercial management routes
 $route->addRoute('/admin/commercial', [$commercialController, 'index']); // Liste des commerciaux

@@ -59,6 +59,10 @@ class UserController
             exit();
         }
 
+        // Récupérer tous les rôles pour le select
+        $roles = new ModelRole();
+        $allRoles = $roles->getAllRoles(1);
+
         require_once '../views/users/edit.php';
     }
 
@@ -82,6 +86,8 @@ class UserController
     public function list()
     {
         $users = $this->user->getUsers();
+        $roles = new ModelRole();
+        $allRoles = $roles->getAllRoles(1);
         require_once '../views/users/list.php';
     }
 
@@ -195,7 +201,6 @@ class UserController
                 'photo_user' => $photo_user ?? null,
                 'date_created_user' => $date_created_user,
                 'user_code' => $code_user,
-                'etat_user' => 1,
                 'role_code' => $role_code ?? 'ROLE-COM-001'
             ];
 
@@ -257,14 +262,14 @@ class UserController
                 'zone_user' => trim($zone_user),
                 'piece_user' => $piece_user ?? null,
                 'photo_user' => $photo_user ?? null,
-                'role_code' => $role_code ?? 'ROLE-COM-001',
+                'role_code' => $role_code ?? ''
             ];
             // var_dump($data);return;
 
             if ($this->validator->update('users', 'id_user', $id_user, $data)) {
                 $msg = ['msg' => 'Utilisateur modifié avec succès!', 'status' => 1];
             } else {
-                $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
+                $msg = ['msg' => 'Aucune modification effectuée', 'status' => 0];
             }
             echo json_encode($msg);
         }

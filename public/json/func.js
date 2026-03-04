@@ -251,7 +251,7 @@ function connexion() {
         e.preventDefault(); // Empêche la soumission normale du formulaire
         // Vérifie si le formulaire est valide
         
-        console.log(LINK + 'userController/connexion');
+        // console.log(LINK + 'userController/connexion');
         
         $.ajax({
             url: LINK + 'userController/connexion',
@@ -342,7 +342,7 @@ function editUser() // form agent edit
                     loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
                 },
                 success: function (rep) {
-                    console.log(rep);return;
+                    // console.log(rep);return;
                     let response = JSON.parse(rep);
 
                     loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Sauvegarder</button>'); // desactiver loader
@@ -405,124 +405,6 @@ function editPassword() // form agent edit
 }
 
 
-
-
-
-
-
-
-function addMenu() {
-    $('.addMenuForm').on('submit', function (e) {
-        e.preventDefault();
-
-        let formData = new FormData(this);
-        $.ajax({
-            url: LINK + 'admin/menu/save',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                loading('.btnMenu', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
-            },
-            success: function (rep) {
-                let response = JSON.parse(rep);
-                loading('.btnMenu', false, '<button type="submit" class="btn btn-primary btnMenu">Enregistrer</button>');
-                if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg, 'success');
-                    setInterval(() => {
-                        window.location.href = LINK + 'admin/menu';
-                    }, 2000);
-                } else {
-                    showAlert('Désolé !', response.msg, 'error');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('Erreur : ' + error);
-            }
-        });
-    });
-}
-
-function editMenu() {
-    $('.editMenuForm').on('submit', function (e) {
-        e.preventDefault();
-
-        let formData = new FormData(this);
-        $.ajax({
-            url: LINK + 'admin/menu/update',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                loading('.btnMenu', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
-            },
-            success: function (rep) {
-                let response = JSON.parse(rep);
-                loading('.btnMenu', false, '<button type="submit" class="btn btn-primary btnMenu">Mettre à jour</button>');
-                if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg, 'success');
-                    setInterval(() => {
-                        window.location.href = LINK + 'admin/menu';
-                    }, 2000);
-                } else {
-                    showAlert('Désolé !', response.msg, 'error');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('Erreur : ' + error);
-            }
-        });
-    });
-}
-
-function toggleMenuStatus() {
-    $('.toggleMenuStatus').on('click', function (e) {
-        e.preventDefault();
-        const id = $(this).data('id');
-
-        $.ajax({
-            url: LINK + 'admin/menu/toggleStatus',
-            type: 'POST',
-            data: { id: id },
-            success: function (rep) {
-                let response = JSON.parse(rep);
-                if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg, 'success');
-                    setInterval(() => {
-                        location.reload();
-                    }, 2000);
-                } else {
-                    showAlert('Désolé !', response.msg, 'error');
-                }
-            }
-        });
-    });
-}
-
-function updateOrderStatus() {
-    $('.updateOrderStatus').on('change', function () {
-        const id = $(this).data('id');
-        const status = $(this).val();
-
-        $.ajax({
-            url: LINK + 'admin/orders/updateStatus',
-            type: 'POST',
-            data: { id: id, status: status },
-            success: function (rep) {
-                let response = JSON.parse(rep);
-                if (response.status == 1) {
-                    toastr.success(response.msg);
-                } else {
-                    toastr.error(response.msg);
-                }
-            }
-        });
-    });
-}
-
-
 function toggleUserStatus() {
     $('.toggleUserStatus').on('click', function (e) {
         e.preventDefault();
@@ -547,295 +429,291 @@ function toggleUserStatus() {
     });
 }
 
-function addPlat() // form
-{
-    $('.formPlat').on('submit', function (e) {
+// ========== CATEGORIES ==========
+function addCategorie() {
+    $('.formCategorie').on('submit', function(e) {
         e.preventDefault();
-
-        // Créer un objet FormData pour gérer l'upload de fichiers
-        const formData = new FormData(this);
+        let formData = $(this).serialize();
         $.ajax({
-            url: LINK + 'admin/plats/save',
+            url: LINK + 'admin/categories/add',
             type: 'POST',
             data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
-            },
-            success: function (rep) {
-                let response = JSON.parse(rep);
-
-                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_action">Sauvegarder</button>'); // desactiver loader
-                if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg , 'success');
-                    setInterval(() => {
-                        location.reload(); // Actualise la page si nécessaire
-                    }, 2000)
-                } else {
-                    showAlert('Désolé !', response.msg, 'error');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('Erreur :' + error);
-            }
-        });
-    });
-}
-
-function editPlat() // form plat edit
-{
-    $('.formPlat').on('submit', function (e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        $.ajax({
-            url: LINK + 'admin/plats/update',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function (rep) {
+            success: function(rep) {
                 let response = JSON.parse(rep);
-
-                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Mettre à jour</button>');
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
-                    showAlert('Félicitations !', 'Modification effectué avec succès.', 'success');
-                    setInterval(() => {
-                        go_b();
-                    }, 2000)
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
                 } else {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function (xhr, status, error) {
+            error: function(xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
     });
 }
 
-function togglePlatStatus() {
-    $('.toggle-status').on('click', function (e) {
+// ========== KITS ==========
+function addKit() {
+    $('.formKit').on('submit', function(e) {
         e.preventDefault();
-        const id = $(this).data('id');
-
-        Swal.fire({
-            title: 'Attention!',
-            html: 'Voulez-vous vraiment changer le statut de ce plat ?',
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: 'Changer le statut',
-            cancelButtonText: 'Retour',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: LINK + 'admin/plats/toggleStatus',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (rep) {
-                        let response = JSON.parse(rep);
-                        if (response.status == 1) {
-                            showAlert('Félicitations !', response.msg, 'success');
-                            setInterval(() => {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            showAlert('Désolé !', response.msg, 'error');
-                        }
-                    }
-                });
-            }
-        });
-    });
-}
-
-function deletePlat() {
-    $('.delete-plat').on('click', function (e) {
-        e.preventDefault();
-        const id = $(this).data('id');
-
-        Swal.fire({
-            title: 'Attention!',
-            html: 'Voulez-vous vraiment supprimer ce plat ?',
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: 'Supprimer',
-            cancelButtonText: 'Annuler',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: LINK + 'admin/plats/delete',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (rep) {
-                        let response = JSON.parse(rep);
-                        if (response.status == 1) {
-                            showAlert('Félicitations !', response.msg, 'success');
-                            setInterval(() => {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            showAlert('Désolé !', response.msg, 'error');
-                        }
-                    }
-                });
-            }
-        });
-    });
-}
-    
-
-
-// Plat CRUD Functions
-function addPlat() // form
-{
-    $('.formPlat').on('submit', function (e) {
-        e.preventDefault();
-
-        // Créer un objet FormData pour gérer l'upload de fichiers
-        const formData = new FormData(this);
+        let formData = $(this).serialize();
         $.ajax({
-            url: LINK + 'admin/plats/save',
+            url: LINK + 'admin/kits/add',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== INSCRIPTIONS ==========
+function addInscription() {
+    $('.formInscription').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/inscriptions/create',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== PAIEMENTS ==========
+function addPaiement() {
+    $('.formPaiement').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/paiements/create',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== VERSEMENTS ==========
+function addVersement() {
+    $('.formVersement').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/versements/create',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== RETRAITS ==========
+function addRetrait() {
+    $('.formRetrait').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/retraits/create',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== SETTINGS ==========
+function updateSettings() {
+    $('.formSettings').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/settings/update',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+function updatePreferences() {
+    $('.formPreferences').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/settings/updatePreferences',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== FAMILLES ==========
+function addFamille() {
+    $('.formFamille').on('submit', function(e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'admin/familles/create',
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function(rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== ARTICLES ==========
+function addArticle() {
+    $('.formArticle').on('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: LINK + 'admin/articles/create',
             type: 'POST',
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function (rep) {
+            success: function(rep) {
                 let response = JSON.parse(rep);
-
-                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_action">Sauvegarder</button>');
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg , 'success');
-                    setInterval(() => {
-                        location.reload();
-                    }, 2000)
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => { location.reload(); }, 2000);
                 } else {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function (xhr, status, error) {
+            error: function(xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
     });
 }
-
-function editPlat() // form plat edit
-{
-    $('.formPlat').on('submit', function (e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        $.ajax({
-            url: LINK + 'admin/plats/update',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
-            },
-            success: function (rep) {
-                let response = JSON.parse(rep);
-
-                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Mettre à jour</button>');
-                if (response.status == 1) {
-                    showAlert('Félicitations !', 'Modification effectué avec succès.', 'success');
-                    setInterval(() => {
-                        go_b();
-                    }, 2000)
-                } else {
-                    showAlert('Désolé !', response.msg, 'error');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('Erreur :' + error);
-            }
-        });
-    });
-}
-
-function togglePlatStatus() {
-    $('.toggle-status').on('click', function (e) {
-        e.preventDefault();
-        const id = $(this).data('id');
-
-        Swal.fire({
-            title: 'Attention!',
-            html: 'Voulez-vous vraiment changer le statut de ce plat ?',
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: 'Changer le statut',
-            cancelButtonText: 'Retour',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: LINK + 'admin/plats/toggleStatus',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (rep) {
-                        let response = JSON.parse(rep);
-                        if (response.status == 1) {
-                            showAlert('Félicitations !', response.msg, 'success');
-                            setInterval(() => {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            showAlert('Désolé !', response.msg, 'error');
-                        }
-                    }
-                });
-            }
-        });
-    });
-}
-
-function deletePlat() {
-    $('.delete-plat').on('click', function (e) {
-        e.preventDefault();
-        const id = $(this).data('id');
-
-        Swal.fire({
-            title: 'Attention!',
-            html: 'Voulez-vous vraiment supprimer ce plat ?',
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: 'Supprimer',
-            cancelButtonText: 'Annuler',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: LINK + 'admin/plats/delete',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (rep) {
-                        let response = JSON.parse(rep);
-                        if (response.status == 1) {
-                            showAlert('Félicitations !', response.msg, 'success');
-                            setInterval(() => {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            showAlert('Désolé !', response.msg, 'error');
-                        }
-                    }
-                });
-            }
-        });
-    });
-}
-
-// Initialize plat functions when document is ready
-$(document).ready(function() {
-    addPlat();
-    editPlat();
-    togglePlatStatus();
-    deletePlat();
-});
