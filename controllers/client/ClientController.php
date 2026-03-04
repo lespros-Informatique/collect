@@ -40,42 +40,48 @@ class ClientController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notEmpty = Validator::validateRequiredFields($_POST);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Validation du téléphone
-                if (!Validator::validNumber($telephone, 10)) {
-                    $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
-                }
-                // Vérification si le téléphone existe déjà
-                elseif ($this->validator->verif('clients', 'telephone_client', $telephone)) {
-                    $msg = ['msg' => 'Ce numéro de téléphone existe déjà!', 'status' => 0];
-                } else {
-                    // Génération automatique du code client
-                    $code_client = $this->validator->generateCode('clients', 'code_client', 'CLIENT-', 6);
-
-                    // Date de création
-                    $created_at_client = Validator::dateActuelle();
-
-                    // Préparation des données pour la méthode create du Validator
-                    $data = [
-                        'code_client' => $code_client,
-                        'nom_client' => trim($nom),
-                        'telephone_client' => trim($telephone),
-                        'quartier_client' => $quartier ?? null,
-                        'zone_client' => $zone ?? null,
-                        'created_at_client' => $created_at_client,
-                        'etat_client' => 1
-                    ];
-
-                    if ($this->validator->create('clients', $data)) {
-                        $msg = ['msg' => 'Client ajouté avec succès!', 'status' => 1];
-                    } else {
-                        $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
-                    }
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+
+            // Validation du téléphone
+            if (!Validator::validNumber($telephone, 10)) {
+                $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Vérification si le téléphone existe déjà
+            if ($this->validator->verif('clients', 'telephone_client', $telephone)) {
+                $msg = ['msg' => 'Ce numéro de téléphone existe déjà!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            // Génération automatique du code client
+            $code_client = $this->validator->generateCode('clients', 'code_client', 'CLIENT-', 6);
+
+            // Date de création
+            $created_at_client = Validator::dateActuelle();
+
+            // Préparation des données pour la méthode create du Validator
+            $data = [
+                'code_client' => $code_client,
+                'nom_client' => trim($nom),
+                'telephone_client' => trim($telephone),
+                'quartier_client' => $quartier ?? null,
+                'zone_client' => $zone ?? null,
+                'created_at_client' => $created_at_client,
+                'etat_client' => 1
+            ];
+
+            if ($this->validator->create('clients', $data)) {
+                $msg = ['msg' => 'Client ajouté avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
             }
             echo json_encode($msg);
         }
@@ -88,34 +94,40 @@ class ClientController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notEmpty = Validator::validateRequiredFields($_POST);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Validation du téléphone
-                if (!Validator::validNumber($telephone, 10)) {
-                    $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
-                }
-                // Vérification si le téléphone existe déjà pour un autre client
-                elseif ($this->validator->_verif('clients', 'telephone_client', $telephone, 'id_client', $id)) {
-                    $msg = ['msg' => 'Ce numéro de téléphone est déjà utilisé!', 'status' => 0];
-                } else {
-                    // Préparation des données pour la méthode update du Validator
-                    $data = [
-                        'nom_client' => trim($nom),
-                        'telephone_client' => trim($telephone),
-                        'quartier_client' => $quartier ?? null,
-                        'zone_client' => $zone ?? null,
-                        'etat_client' => $etat_client ?? 1
-                    ];
-
-                    if ($this->validator->update('clients', 'id_client', $id, $data)) {
-                        $msg = ['msg' => 'Client modifié avec succès!', 'status' => 1];
-                    } else {
-                        $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
-                    }
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+
+            // Validation du téléphone
+            if (!Validator::validNumber($telephone, 10)) {
+                $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Vérification si le téléphone existe déjà pour un autre client
+            if ($this->validator->_verif('clients', 'telephone_client', $telephone, 'id_client', $id)) {
+                $msg = ['msg' => 'Ce numéro de téléphone est déjà utilisé!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            // Préparation des données pour la méthode update du Validator
+            $data = [
+                'nom_client' => trim($nom),
+                'telephone_client' => trim($telephone),
+                'quartier_client' => $quartier ?? null,
+                'zone_client' => $zone ?? null,
+                'etat_client' => $etat_client ?? 1
+            ];
+
+            if ($this->validator->update('clients', 'id_client', $id, $data)) {
+                $msg = ['msg' => 'Client modifié avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
             }
             echo json_encode($msg);
         }

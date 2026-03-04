@@ -322,17 +322,18 @@ function addUser() // form
         // }
     });
 }
-
 function editUser() // form agent edit
 {
-    $('.formEdituser').on('submit', function (e) {
+    
+    $('.formEditUser').on('submit', function (e) {
         e.preventDefault();
         // const table = ['nom','prenom', 'tel','fonction', "role"];
-
+        
         // Vérifie si le formulaire est valide
         // if (formIsValided(table)) {
             // Créer un objet FormData pour gérer l'upload de fichiers
             let formData = $(this).serialize();
+            // alert('click me='+formData);return;
             $.ajax({
                 url: LINK + 'userController/edit',
                 type: 'POST',
@@ -341,7 +342,7 @@ function editUser() // form agent edit
                     loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
                 },
                 success: function (rep) {
-                    // console.log(rep);return;
+                    console.log(rep);return;
                     let response = JSON.parse(rep);
 
                     loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Sauvegarder</button>'); // desactiver loader

@@ -19,6 +19,9 @@ define('USER_ROLE', $_SESSION['user']['role'] ?? null);
 define('USER_PHONE', $_SESSION['user']['telephone'] ?? null);
 define('SIGN', USER_ROLE);
 define('ROLE_ADMIN', "code-admin");
+define('ROLE_COMPTABLE', "code-comptable");
+define('ROLE_SUPERVISEUR', "code-code-superviseur");
+define('ROLE_COMMERCIAL', "code-commercial");
 
 // Additional user constants for profile view
 define('ROLE', $_SESSION['user']['role'] ?? 'Utilisateur');

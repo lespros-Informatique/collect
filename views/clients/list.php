@@ -29,8 +29,8 @@
                                         <th>Code Client</th>
                                         <th>Nom</th>
                                         <th>Téléphone</th>
-                                        <th>Email</th>
-                                        <th>Adresse</th>
+                                        <th>Quartier</th>
+                                        <th>Zone</th>
                                         <th>Date d'inscription</th>
                                         <th>Actions</th>
                                     </tr>
@@ -38,16 +38,16 @@
                                 <tbody>
                                     <?php $i = 0;
                                     foreach ($clients as $client): $i++; 
-                                        $cryptedParams = $this->validator->crypter($client['id_client']); ?>
+                                        $cryptedParams = $this->validator->crypter($client['code_client']); ?>
                                     
                                         <tr>
                                             <td><?= $i ?></td>
                                             <td><?= htmlspecialchars($client['code_client']) ?></td>
-                                            <td><?= htmlspecialchars($client['nom']) ?></td>
-                                            <td><?= htmlspecialchars($client['telephone']) ?></td>
-                                            <td><?= htmlspecialchars($client['email'] ?? 'N/A') ?></td>
-                                            <td><?= htmlspecialchars(substr($client['adresse'], 0, 10)) ?>...</td>
-                                            <td><?= Validator::formatDate($client['created_at']) ?></td>
+                                            <td><?= htmlspecialchars($client['nom_client']) ?></td>
+                                            <td><?= htmlspecialchars($client['telephone_client']) ?></td>
+                                            <td><?= htmlspecialchars($client['quartier_client'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($client['zone_client'] ?? 'N/A') ?></td>
+                                            <td><?= Validator::formatDate($client['created_at_client']) ?></td>
                                             <td>
                                                 <a href="<?= RACINE ?>admin/clients/details/<?= $cryptedParams ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
                                                     <i class="feather icon-eye"></i> Détails
@@ -110,24 +110,24 @@
                     <div class="error-message" id="telephoneError"></div>
                 </div>
 
-                <!-- Email -->
+                <!-- Quartier -->
                 <div class="form-group">
-                    <label for="email">Email :</label>
+                    <label for="quartier">Quartier :</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="email@exemple.com">
-                        <span class="input-group-addon"><i class="feather icon-mail"></i></span>
-                    </div>
-                    <div class="error-message" id="emailError"></div>
-                </div>
-
-                <!-- Adresse -->
-                <div class="form-group">
-                    <label for="adresse">Adresse :</label>
-                    <div class="input-group">
-                        <textarea class="form-control" id="adresse" name="adresse" rows="3" placeholder="Adresse complète" required></textarea>
+                        <input type="text" class="form-control" id="quartier" name="quartier" placeholder="Quartier" required>
                         <span class="input-group-addon"><i class="feather icon-map-pin"></i></span>
                     </div>
-                    <div class="error-message" id="adresseError"></div>
+                    <div class="error-message" id="quartierError"></div>
+                </div>
+
+                <!-- Zone -->
+                <div class="form-group">
+                    <label for="zone">Zone :</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone" required>
+                        <span class="input-group-addon"><i class="feather icon-map"></i></span>
+                    </div>
+                    <div class="error-message" id="zoneError"></div>
                 </div>
 
             <!-- Pied de page -->

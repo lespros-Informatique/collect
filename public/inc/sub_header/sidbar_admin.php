@@ -21,35 +21,58 @@
                     </ul>
                 </li>
 
-                <li class=" nav-item"><a href="#"><i class="feather icon-package"></i><span class="menu-title" data-i18n="Templates">Menu</span></a>
+                <li class=" nav-item"><a href="#"><i class="feather icon-tag"></i><span class="menu-title" data-i18n="Templates">Catégories</span></a>
                     <ul class="menu-content">
                          <li>
-                        <a class="menu-item" href="<?=RACINE?>admin/plats" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des plats</a>
+                        <a class="menu-item" href="<?=RACINE?>admin/categories" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des catégories</a>
                         </li>
                     </ul>
                 </li>
 
-                <li class=" nav-item"><a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="Templates">Commandes</span></a>
+                <li class=" nav-item"><a href="#"><i class="feather icon-gift"></i><span class="menu-title" data-i18n="Templates">Kits</span></a>
                     <ul class="menu-content">
                          <li>
-                        <a class="menu-item" href="<?=RACINE?>admin/commandes" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des commandes</a>
-                        </li>
-                    </ul>
-
-                <li class=" nav-item"><a href="#"><i class="feather icon-truck"></i><span class="menu-title" data-i18n="Templates">Livraisons</span></a>
-                    <ul class="menu-content">
-                         <li>
-                        <a class="menu-item" href="<?=RACINE?>admin/livraison-assignation" data-i18n="Vertical"> <i class="feather icon-user-plus"></i> Assignation des livraisons</a>
+                        <a class="menu-item" href="<?=RACINE?>admin/kits" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des kits</a>
                         </li>
                     </ul>
                 </li>
 
+                <li class=" nav-item"><a href="#"><i class="feather icon-user-plus"></i><span class="menu-title" data-i18n="Templates">Inscriptions</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/inscriptions" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des inscriptions</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li class=" nav-item"><a href="#"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Templates">Clients</span></a>
+                <li class=" nav-item"><a href="#"><i class="feather icon-dollar-sign"></i><span class="menu-title" data-i18n="Templates">Paiements</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/paiements" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des paiements</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a href="#"><i class="feather icon-trending-up"></i><span class="menu-title" data-i18n="Templates">Versements</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/versements" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des versements</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="Templates">Clients</span></a>
                     <ul class="menu-content">
                          <li>
                         <a class="menu-item" href="<?=RACINE?>admin/clients" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des clients</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a href="#"><i class="feather icon-download"></i><span class="menu-title" data-i18n="Templates">Retraits</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/retraits" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des retraits</a>
                         </li>
                     </ul>
                 </li>

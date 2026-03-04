@@ -76,6 +76,24 @@ class ModelAdmin
             $query->execute();
             $stats['versements_valides'] = $query->fetch(PDO::FETCH_ASSOC)['versements_valides'] ?? 0;
 
+            // Total catégories
+            $sql = "SELECT COUNT(*) as total_categories FROM categories WHERE etat_categorie = 1";
+            $query = $this->pdo->getCon()->prepare($sql);
+            $query->execute();
+            $stats['total_categories'] = $query->fetch(PDO::FETCH_ASSOC)['total_categories'] ?? 0;
+
+            // Total retraits
+            $sql = "SELECT COUNT(*) as total_retraits FROM retraits WHERE etat_retrait = 1";
+            $query = $this->pdo->getCon()->prepare($sql);
+            $query->execute();
+            $stats['total_retraits'] = $query->fetch(PDO::FETCH_ASSOC)['total_retraits'] ?? 0;
+
+            // Inscriptions aujourd'hui
+            $sql = "SELECT COUNT(*) as inscriptions_aujourdhui FROM inscriptions WHERE DATE(date_debut) = CURDATE() AND etat_inscription = 1";
+            $query = $this->pdo->getCon()->prepare($sql);
+            $query->execute();
+            $stats['inscriptions_aujourdhui'] = $query->fetch(PDO::FETCH_ASSOC)['inscriptions_aujourdhui'] ?? 0;
+
             return $stats;
         } catch (Exception $e) {
             die('Erreur de récupération des statistiques: ' . $e->getMessage());

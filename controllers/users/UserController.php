@@ -138,61 +138,71 @@ class UserController
             $requiredFields = ['nom_user', 'prenom_user', 'telephone_user', 'email_user', 'quartier_user', 'zone_user', 'role_code'];
             $notEmpty = Validator::validateRequiredFields($_POST, ['piece_user', 'photo_user']);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Validation de l'email
-                if (!Validator::isValidEmail($email_user)) {
-                    $msg = ['msg' => 'Format d\'email invalide!', 'status' => 0];
-                }
-                // Validation du téléphone (8 à 15 chiffres)
-                elseif (!Validator::validNumber($telephone_user, 10)) {
-                    $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
-                }
-                // Vérification si l'email existe déjà
-                elseif ($this->validator->verif('users', 'email_user', $email_user)) {
-                    $msg = ['msg' => 'Cet email existe déjà!', 'status' => 0];
-                }
-                // Vérification si le téléphone existe déjà
-                elseif ($this->validator->verif('users', 'telephone_user', $telephone_user)) {
-                    $msg = ['msg' => 'Ce numéro de téléphone existe déjà!', 'status' => 0];
-                } else {
-                    // Génération automatique du code utilisateur
-                    $code_user = $this->validator->generateCode('users', 'code_user', 'USER-', 6);
-
-                    // Hash du mot de passe par défaut
-                    $defaultPassword = 12345;
-                    $password_user = Validator::hashPassword($defaultPassword);
-
-                    // Date de création
-                    $date_created_user = Validator::dateActuelle();
-
-                    // Préparation des données pour la méthode create du Validator
-                    $data = [
-                        'code_user' => $code_user,
-                        'nom_user' => trim($nom_user),
-                        'prenom_user' => trim($prenom_user),
-                        'telephone_user' => trim($telephone_user),
-                        'email_user' => trim($email_user),
-                        'password_user' => $password_user,
-                        'quartier_user' => trim($quartier_user),
-                        'zone_user' => trim($zone_user),
-                        'piece_user' => $piece_user ?? null,
-                        'photo_user' => $photo_user ?? null,
-                        'date_created_user' => $date_created_user,
-                        'user_code' => $code_user,
-                        'etat_user' => 1,
-                        'role_code' => $role_code ?? 'ROLE-COM-001'
-                    ];
-
-                    if ($this->validator->create('users', $data)) {
-                        $msg = ['msg' => 'Utilisateur ajouté avec succès!', 'status' => 1];
-                    } else {
-                        $msg = ['msg' => 'Erreur lors de l\'ajout de l\'utilisateur', 'status' => 0];
-                    }
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+            
+            // Validation de l'email
+            if (!Validator::isValidEmail($email_user)) {
+                $msg = ['msg' => 'Format d\'email invalide!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Validation du téléphone (8 à 15 chiffres)
+            if (!Validator::validNumber($telephone_user, 10)) {
+                $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Vérification si l'email existe déjà
+            if ($this->validator->verif('users', 'email_user', $email_user)) {
+                $msg = ['msg' => 'Cet email existe déjà!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Vérification si le téléphone existe déjà
+            if ($this->validator->verif('users', 'telephone_user', $telephone_user)) {
+                $msg = ['msg' => 'Ce numéro de téléphone existe déjà!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            // Génération automatique du code utilisateur
+            $code_user = $this->validator->generateCode('users', 'code_user', 'USER-', 6);
+
+            // Hash du mot de passe par défaut
+            $defaultPassword = 12345;
+            $password_user = Validator::hashPassword($defaultPassword);
+
+            // Date de création
+            $date_created_user = Validator::dateActuelle();
+
+            // Préparation des données pour la méthode create du Validator
+            $data = [
+                'code_user' => $code_user,
+                'nom_user' => trim($nom_user),
+                'prenom_user' => trim($prenom_user),
+                'telephone_user' => trim($telephone_user),
+                'email_user' => trim($email_user),
+                'password_user' => $password_user,
+                'quartier_user' => trim($quartier_user),
+                'zone_user' => trim($zone_user),
+                'piece_user' => $piece_user ?? null,
+                'photo_user' => $photo_user ?? null,
+                'date_created_user' => $date_created_user,
+                'user_code' => $code_user,
+                'etat_user' => 1,
+                'role_code' => $role_code ?? 'ROLE-COM-001'
+            ];
+
+            if ($this->validator->create('users', $data)) {
+                $msg = ['msg' => 'Utilisateur ajouté avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de l\'ajout de l\'utilisateur', 'status' => 0];
             }
             echo json_encode($msg);
         }
@@ -204,47 +214,57 @@ class UserController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notEmpty = Validator::validateRequiredFields($_POST, ['piece_user', 'photo_user', 'etat_user']);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Validation de l'email
-                if (!Validator::isValidEmail($email_user)) {
-                    $msg = ['msg' => 'Format d\'email invalide!', 'status' => 0];
-                }
-                // Validation du téléphone
-                elseif (!Validator::validNumber($telephone_user, 10)) {
-                    $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
-                }
-                // Vérification si l'email existe déjà (sauf pour l'utilisateur actuel)
-                elseif ($this->validator->_verif('users', 'email_user', $email_user, 'id_user', $id_user)) {
-                    $msg = ['msg' => 'Cet email est déjà utilisé par un autre utilisateur!', 'status' => 0];
-                }
-                // Vérification si le téléphone existe déjà (sauf pour l'utilisateur actuel)
-                elseif ($this->validator->_verif('users', 'telephone_user', $telephone_user, 'id_user', $id_user)) {
-                    $msg = ['msg' => 'Ce numéro de téléphone est déjà utilisé par un autre utilisateur!', 'status' => 0];
-                } else {
-                    // Préparation des données pour la méthode update du Validator
-                    $data = [
-                        'nom_user' => trim($nom_user),
-                        'prenom_user' => trim($prenom_user),
-                        'telephone_user' => trim($telephone_user),
-                        'email_user' => trim($email_user),
-                        'quartier_user' => trim($quartier_user),
-                        'zone_user' => trim($zone_user),
-                        'piece_user' => $piece_user ?? null,
-                        'photo_user' => $photo_user ?? null,
-                        'role_code' => $role_code ?? 'ROLE-COM-001',
-                        'etat_user' => $etat_user ?? 1
-                    ];
-
-                    if ($this->validator->update('users', 'id_user', $id_user, $data)) {
-                        $msg = ['msg' => 'Utilisateur modifié avec succès!', 'status' => 1];
-                    } else {
-                        $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
-                    }
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+            
+            // Validation de l'email
+            if (!Validator::isValidEmail($email_user)) {
+                $msg = ['msg' => 'Format d\'email invalide!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Validation du téléphone
+            if (!Validator::validNumber($telephone_user, 10)) {
+                $msg = ['msg' => 'Le numéro de téléphone doit contenir 10 chiffres!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Vérification si l'email existe déjà (sauf pour l'utilisateur actuel)
+            if ($this->validator->_verif('users', 'email_user', $email_user, 'id_user', $id_user)) {
+                $msg = ['msg' => 'Cet email est déjà utilisé par un autre utilisateur!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+            // Vérification si le téléphone existe déjà (sauf pour l'utilisateur actuel)
+            if ($this->validator->_verif('users', 'telephone_user', $telephone_user, 'id_user', $id_user)) {
+                $msg = ['msg' => 'Ce numéro de téléphone est déjà utilisé par un autre utilisateur!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            // Préparation des données pour la méthode update du Validator
+            $data = [
+                'nom_user' => trim($nom_user),
+                'prenom_user' => trim($prenom_user),
+                'telephone_user' => trim($telephone_user),
+                'email_user' => trim($email_user),
+                'quartier_user' => trim($quartier_user),
+                'zone_user' => trim($zone_user),
+                'piece_user' => $piece_user ?? null,
+                'photo_user' => $photo_user ?? null,
+                'role_code' => $role_code ?? 'ROLE-COM-001',
+            ];
+            // var_dump($data);return;
+
+            if ($this->validator->update('users', 'id_user', $id_user, $data)) {
+                $msg = ['msg' => 'Utilisateur modifié avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
             }
             echo json_encode($msg);
         }

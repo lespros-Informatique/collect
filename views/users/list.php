@@ -42,15 +42,15 @@
                                         $cryptedParams = $this->validator->crypter($user['id_user']); ?>
                                         <tr>
                                             <td><?= $i ?></td>
-                                            <td><?= htmlspecialchars($user['nom']) ?></td>
-                                            <td><?= htmlspecialchars($user['telephone']) ?></td>
-                                            <td><?= htmlspecialchars($user['email']) ?></td>
+                                            <td><?= htmlspecialchars($user['nom_user'] ?? '') ?></td>
+                                            <td><?= htmlspecialchars($user['telephone_user'] ?? '') ?></td>
+                                            <td><?= htmlspecialchars($user['email_user'] ?? 'N/A') ?></td>
                                             <td>
-                                                <span class="badge badge-<?= $user['role'] == 'admin' ? 'primary' : ($user['role'] == 'livreur' ? 'info' : 'secondary') ?>">
-                                                    <?= ucfirst($user['role']) ?>
+                                                <span class="badge badge-<?= $user['role_code'] == 'ROLE-ADMIN-001' ? 'primary' : ($user['role_code'] == 'ROLE-COM-001' ? 'info' : 'secondary') ?>">
+                                                    <?= ucfirst($user['role_code'] ?? '') ?>
                                                 </span>
                                             </td>
-                                            <td><?= Validator::viewStatus('lock', 'unlock', $user['actif'], STATUS_ACTIVE) ?></td>
+                                            <td><?= Validator::viewStatus('lock', 'unlock', $user['etat_user'], STATUS_ACTIVE) ?></td>
                                             <td>
                                                 <a href="<?= RACINE ?>user/details/<?= $cryptedParams; ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
                                                     <?= Validator::icon('eye'); ?> Détails
@@ -62,7 +62,7 @@
                                                 </a>
                                                 </td>
                                                 <td>
-                                                <button onclick="changeDeleteById('userController/changer',<?= $user['id_user']; ?>)" class="btn btn-sm btn-<?= $user['actif'] == 1 ? 'warning' : 'success' ?>" title="Changer le statut">
+                                                <button onclick="changeDeleteById('userController/changer',<?= $user['id_user']; ?>)" class="btn btn-sm btn-<?= $user['etat_user'] == 1 ? 'warning' : 'success' ?>" title="Changer le statut">
                                                     <?= Validator::icon('retweet'); ?> Changer
                                                 </button>
                                             </td>
@@ -131,13 +131,44 @@
               <div class="input-group">
                   <select class="form-control" id="role" name="role" required>
                       <option value="">... Sélectionnez un rôle ...</option>
-                      <option value="admin">Administrateur</option>
-                      <option value="staff">Personnel</option>
-                      <option value="livreur">Livreur</option>
+                      <option value="ROLE-ADMIN-001">Administrateur</option>
+                      <option value="ROLE-COMP-001">Comptable</option>
+                      <option value="ROLE-SUP-001">Superviseur</option>
+                      <option value="ROLE-COM-001">Commercial</option>
                   </select>
                   <span class="input-group-addon"> <?=Validator::icon('user-secret'); ?></span>
               </div>
               <div class="error-message" id="roleError"></div>
+          </div>
+
+          <!-- Prénom -->
+          <div class="form-group">
+              <label for="prenom">Prénom :</label>
+              <div class="input-group">
+                  <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Entrer le prénom" required>
+                  <span class="input-group-addon"> <?=Validator::icon('user'); ?></span>
+              </div>
+              <div class="error-message" id="prenomError"></div>
+          </div>
+
+          <!-- Quartier -->
+          <div class="form-group">
+              <label for="quartier">Quartier :</label>
+              <div class="input-group">
+                  <input type="text" class="form-control" id="quartier" name="quartier" placeholder="Quartier" required>
+                  <span class="input-group-addon"> <?=Validator::icon('map-pin'); ?></span>
+              </div>
+              <div class="error-message" id="quartierError"></div>
+          </div>
+
+          <!-- Zone -->
+          <div class="form-group">
+              <label for="zone">Zone :</label>
+              <div class="input-group">
+                  <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone" required>
+                  <span class="input-group-addon"> <?=Validator::icon('map'); ?></span>
+              </div>
+              <div class="error-message" id="zoneError"></div>
           </div>
 
         <!-- Pied de page -->

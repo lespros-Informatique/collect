@@ -42,30 +42,32 @@ class KitController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notEmpty = Validator::validateRequiredFields($_POST);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Génération du code choix
-                $code_choix = $this->validator->generateCode('choix', 'code_choix', 'CHOIX-KIT-', 6);
-
-                // Préparation des données pour la méthode create du Validator
-                $data = [
-                    'code_choix' => $code_choix,
-                    'categorie_code' => $categorie_code,
-                    'libelle_choix' => trim($libelle),
-                    'description_choix' => $description ?? null,
-                    'cotisation_choix' => $cotisation,
-                    'img_choix' => null,
-                    'etat_choix' => 1
-                ];
-
-                if ($this->validator->create('choix', $data)) {
-                    $msg = ['msg' => 'Kit ajouté avec succès!', 'status' => 1];
-                } else {
-                    $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+
+            // Génération du code choix
+            $code_choix = $this->validator->generateCode('choix', 'code_choix', 'CHOIX-KIT-', 6);
+
+            // Préparation des données pour la méthode create du Validator
+            $data = [
+                'code_choix' => $code_choix,
+                'categorie_code' => $categorie_code,
+                'libelle_choix' => trim($libelle),
+                'description_choix' => $description ?? null,
+                'cotisation_choix' => $cotisation,
+                'img_choix' => null,
+                'etat_choix' => 1
+            ];
+
+            if ($this->validator->create('choix', $data)) {
+                $msg = ['msg' => 'Kit ajouté avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
             }
             echo json_encode($msg);
         }
@@ -78,25 +80,27 @@ class KitController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notEmpty = Validator::validateRequiredFields($_POST);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Préparation des données pour la méthode update du Validator
-                $data = [
-                    'libelle_choix' => trim($libelle),
-                    'description_choix' => $description ?? null,
-                    'cotisation_choix' => $cotisation,
-                    'img_choix' => null,
-                    'etat_choix' => $etat_choix ?? 1
-                ];
-
-                if ($this->validator->update('choix', 'id_choix', $id, $data)) {
-                    $msg = ['msg' => 'Kit modifié avec succès!', 'status' => 1];
-                } else {
-                    $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+
+            // Préparation des données pour la méthode update du Validator
+            $data = [
+                'libelle_choix' => trim($libelle),
+                'description_choix' => $description ?? null,
+                'cotisation_choix' => $cotisation,
+                'img_choix' => null,
+                'etat_choix' => $etat_choix ?? 1
+            ];
+
+            if ($this->validator->update('choix', 'id_choix', $id, $data)) {
+                $msg = ['msg' => 'Kit modifié avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
             }
             echo json_encode($msg);
         }
@@ -137,31 +141,33 @@ class KitController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notEmpty = Validator::validateRequiredFields($_POST);
 
-            if ($notEmpty === true) {
-                extract($_POST);
-
-                // Génération du code catégorie
-                $code_categorie = $this->validator->generateCode('categories', 'code_categorie', 'CAT-', 6);
-
-                // Préparation des données pour la méthode create du Validator
-                $data = [
-                    'code_categorie' => $code_categorie,
-                    'libelle_categorie' => trim($libelle),
-                    'description_categorie' => $description ?? null,
-                    'nombre_jour' => $nombre_jour ?? 365,
-                    'date_debut' => $date_debut,
-                    'date_fin' => $date_fin,
-                    'img_categorie' => null,
-                    'etat_categorie' => 1
-                ];
-
-                if ($this->validator->create('categories', $data)) {
-                    $msg = ['msg' => 'Catégorie ajoutée avec succès!', 'status' => 1];
-                } else {
-                    $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
-                }
-            } else {
+            if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
+            extract($_POST);
+
+            // Génération du code catégorie
+            $code_categorie = $this->validator->generateCode('categories', 'code_categorie', 'CAT-', 6);
+
+            // Préparation des données pour la méthode create du Validator
+            $data = [
+                'code_categorie' => $code_categorie,
+                'libelle_categorie' => trim($libelle),
+                'description_categorie' => $description ?? null,
+                'nombre_jour' => $nombre_jour ?? 365,
+                'date_debut' => $date_debut,
+                'date_fin' => $date_fin,
+                'img_categorie' => null,
+                'etat_categorie' => 1
+            ];
+
+            if ($this->validator->create('categories', $data)) {
+                $msg = ['msg' => 'Catégorie ajoutée avec succès!', 'status' => 1];
+            } else {
+                $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
             }
             echo json_encode($msg);
         }
