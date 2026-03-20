@@ -26,12 +26,17 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Code</th>
+                                        <th>Image</th>
+                                        <!-- <th>Code</th> -->
                                         <th>Libellé</th>
                                         <th>Description</th>
                                         <th>Cotisation</th>
                                         <th>Catégorie</th>
                                         <th>Etat</th>
+                                        <th>Articles</th>
+                                        <th>Détail</th>
+                                        <th>Edit</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,9 +46,16 @@
                                     
                                         <tr>
                                             <td><?= $i ?></td>
-                                            <td><?= htmlspecialchars($kit['code_choix']) ?></td>
-                                            <td><?= htmlspecialchars($kit['libelle_choix']) ?></td>
-                                            <td><?= htmlspecialchars($kit['description_choix'] ?? 'N/A') ?></td>
+                                            <td>
+                                                <?php if(!empty($kit['img_choix'])): ?>
+                                                    <img src="<?= RACINE . $kit['img_choix'] ?>" alt="" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <?php else: ?>
+                                                    <span class="badge badge-secondary">Pas d'image</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <!-- <td><?= htmlspecialchars($kit['code_choix']) ?></td> -->
+                                            <?= Validator::truncateText($kit['libelle_choix'] ?? 'N/A') ?>
+                                            <?= Validator::truncateText($kit['description_choix'] ?? 'N/A',5) ?>
                                             <td><?= number_format($kit['cotisation_choix'], 0, ',', ' ') ?> F</td>
                                             <td><?= htmlspecialchars($kit['categorie_code'] ?? 'N/A') ?></td>
                                             <td>
@@ -52,6 +64,31 @@
                                                 <?php else: ?>
                                                     <span class="badge badge-danger">Inactive</span>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?= RACINE ?>admin/kits/articles/<?= $cryptedParams ?>" class="btn btn-sm btn-success mr-1" title="Articles">
+                                                    <i class="feather icon-package"></i>
+                                                </a>
+                                               
+                                            </td>
+                                            <td>
+                                                
+                                                <a href="<?= RACINE ?>admin/kits/details/<?= $cryptedParams ?>" class="btn btn-sm btn-info mr-1" title="Détails">
+                                                    <i class="feather icon-eye"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                              
+                                                <a href="<?= RACINE ?>admin/kits/edit/<?= $cryptedParams ?>" class="btn btn-sm btn-primary mr-1" title="Modifier">
+                                                    <i class="feather icon-edit"></i>
+                                                </a>
+                                                
+                                            </td>
+                                            <td>
+                                               
+                                                <a href="#" class="btn btn-sm btn-danger" onclick="changeDeleteById('admin/kits/delete', '<?= $kit['id_choix'] ?>')" title="Supprimer">
+                                                    <i class="feather icon-trash-2"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -70,26 +107,16 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <!-- En-tête -->
-            <div class="modal-header text-light" style="background-color: #28a745;">
+            <div class="modal-header text-light" style="background-color: #20AFB1;">
                 <h5 class="modal-title" id="modalTitle">Nouveau Kit</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            
+        
             <!-- Corps du modal -->
             <div class="modal-body">
-            <form class="formKit" method="POST">
-                <!-- Code Kit -->
-                <div class="form-group">
-                    <label for="code_kit">Code Kit :</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="code_kit" name="code_kit" placeholder="Code kit" required>
-                        <span class="input-group-addon"><i class="feather icon-hashtag"></i></span>
-                    </div>
-                    <div class="error-message" id="codeKitError"></div>
-                </div>
-
+            <form class="formKit" method="POST" enctype="multipart/form-data">
                 <!-- Catégorie -->
                 <div class="form-group">
                     <label for="categorie">Catégorie :</label>
@@ -133,6 +160,15 @@
                         <span class="input-group-addon"><i class="feather icon-dollar-sign"></i></span>
                     </div>
                     <div class="error-message" id="cotisationError"></div>
+                </div>
+
+                <!-- Image -->
+                <div class="form-group">
+                    <label for="image">Image :</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <span class="input-group-addon"><i class="feather icon-image"></i></span>
+                    </div>
                 </div>
 
             <!-- Pied de page -->

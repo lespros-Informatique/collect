@@ -94,3 +94,13 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 	text-align: center;
 	color: #fff;
   }
+  
+.choices__inner {
+    border-radius: 8px;
+    min-height: 42px;
+}
+.choices__list--multiple .choices__item {
+    background-color: #111827;
+    border: none;
+    border-radius: 6px;
+}

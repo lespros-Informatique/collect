@@ -77,7 +77,7 @@
 
 <!-- Modal pour ajouter un paiement -->
 <div class="modal fade" id="addPaiementModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <!-- En-tête -->
             <div class="modal-header text-light" style="background-color: #28a745;">
@@ -90,85 +90,51 @@
             <!-- Corps du modal -->
             <div class="modal-body">
             <form class="formPaiement" method="POST">
-                <!-- Code Paiement -->
+                <!-- Sélection User -->
                 <div class="form-group">
-                    <label for="code_paiement">Code Paiement :</label>
+                    <label for="user_select">Utilisateur :</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="code_paiement" name="code_paiement" placeholder="Code paiement" required>
-                        <span class="input-group-addon"><i class="feather icon-hashtag"></i></span>
-                    </div>
-                    <div class="error-message" id="codePaiementError"></div>
-                </div>
-
-                <!-- Inscription -->
-                <div class="form-group">
-                    <label for="inscription">Inscription :</label>
-                    <div class="input-group">
-                        <select class="form-control" id="inscription" name="inscription" required>
-                            <option value="">... Sélectionnez une inscription ...</option>
-                            <?php if (isset($inscriptions) && !empty($inscriptions)): ?>
-                                <?php foreach ($inscriptions as $inscription): ?>
-                                    <option value="<?= $inscription['code_inscription'] ?>"><?= htmlspecialchars($inscription['code_inscription']) ?></option>
+                        <select class="form-control" id="user_select" name="user_code" required>
+                            <option value="">... Sélectionnez un utilisateur ...</option>
+                            <?php if (isset($users) && !empty($users)): ?>
+                                <?php foreach ($users as $user): ?>
+                                    <option value="<?= $user['code_user'] ?>"><?= htmlspecialchars($user['nom_user'] . ' ' . $user['prenom_user']) ?></option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>
-                        <span class="input-group-addon"><i class="feather icon-file-text"></i></span>
+                        <span class="input-group-addon"><i class="feather icon-user"></i></span>
                     </div>
                 </div>
 
-                <!-- Montant -->
+                <!-- Sélection Inscription (dépend du user) -->
                 <div class="form-group">
-                    <label for="montant">Montant :</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="montant" name="montant" placeholder="Montant du paiement" required>
-                        <span class="input-group-addon"><i class="feather icon-dollar-sign"></i></span>
-                    </div>
-                    <div class="error-message" id="montantError"></div>
-                </div>
-
-                <!-- Téléphone -->
-                <div class="form-group">
-                    <label for="telephone">Téléphone :</label>
-                    <div class="input-group">
-                        <input type="tel" class="form-control" id="telephone" name="telephone" maxlength="10" placeholder="10 chiffres">
-                        <span class="input-group-addon"><i class="feather icon-phone"></i></span>
-                    </div>
-                </div>
-
-                <!-- Réseau -->
-                <div class="form-group">
-                    <label for="reseau">Réseau :</label>
-                    <div class="input-group">
-                        <select class="form-control" id="reseau" name="reseau">
-                            <option value="ESPECES">Espèces</option>
-                            <option value="WAVE">Wave</option>
-                            <option value="MOOV_MONEY">Moov Money</option>
-                            <option value="ORANGE_MONEY">Orange Money</option>
+                    <label for="inscription_select">Inscription :</label>
+                        <select class="form-control" id="inscription_select" name="inscription" required disabled>
+                            <option value="">... Sélectionnez d'abord un utilisateur ...</option>
                         </select>
-                        <span class="input-group-addon"><i class="feather icon-credit-card"></i></span>
-                    </div>
+                </div>
+
+                <!-- Zone des détails de l'inscription -->
+                <div id="inscription_details" class="mb-3">
+                    <!-- Les détails seront chargés dynamiquement ici -->
                 </div>
 
                 <!-- Nombre de jours -->
                 <div class="form-group">
                     <label for="nombre_jour">Nombre de jours payé :</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="nombre_jour" name="nombre_jour" placeholder="Nombre de jours" required>
+                        <input type="number" class="form-control" id="nombre_jour" name="nombre_jour" placeholder="Nombre de jours" min="1" required>
                         <span class="input-group-addon"><i class="feather icon-calendar"></i></span>
                     </div>
                 </div>
 
-                <!-- Type de paiement -->
-                <div class="form-group">
-                    <label for="type">Type de paiement :</label>
-                    <div class="input-group">
-                        <select class="form-control" id="type" name="type">
-                            <option value="manuel">Manuel</option>
-                            <option value="automatique">Automatique</option>
-                        </select>
-                        <span class="input-group-addon"><i class="feather icon-settings"></i></span>
-                    </div>
+                <!-- Affichage du montant calculé -->
+                <div id="montant_display" class="alert alert-success mb-3" style="display: none;">
+                    <h5 class="mb-0">Montant à payer: <strong id="montant_value">0</strong> F</h5>
                 </div>
+
+                <!-- Champ montant caché -->
+                <input type="hidden" id="montant" name="montant" value="">
 
             <!-- Pied de page -->
             <div class="modal-footer">
@@ -180,11 +146,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function() {
-        addPaiement();
-    });
-</script>
 
 <?php require_once '../public/inc/footer.php'; ?>

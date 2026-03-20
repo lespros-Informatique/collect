@@ -19,6 +19,7 @@ $retraitController = new RetraitController();
 $settingsController = new SettingsController();
 $familleController = new FamilleController();
 $articleController = new ArticleController();
+$demandeController = new DemandeController();
 
 
 // Ajout des routes
@@ -54,8 +55,12 @@ $route->addRoute('/admin', [$dashboardController, 'index']); // Dashboard admin
 
 // Inscriptions management routes
 $route->addRoute('/admin/inscriptions', [$inscriptionController, 'index']); // Liste des inscriptions
+$route->addRoute('/admin/inscriptions/choix/{param}', [$inscriptionController, 'choix']); // Choisir un kit pour un client
 $route->addRoute('/admin/inscriptions/create', [$inscriptionController, 'create']); // Créer inscription
+$route->addRoute('/admin/inscriptions/save', [$inscriptionController, 'save']); // Sauvegarder inscription avec choix
 $route->addRoute('/admin/inscriptions/edit', [$inscriptionController, 'edit']); // Modifier inscription
+$route->addRoute('/admin/inscriptions/getArticlesByKit', [$inscriptionController, 'getArticlesByKit']); // Obtenir les articles d'un kit
+$route->addRoute('/admin/inscriptions/saveMultiple', [$inscriptionController, 'saveMultiple']); // Sauvegarder inscription avec plusieurs kits
 $route->addRoute('/admin/inscriptions/delete', [$inscriptionController, 'delete']); // Supprimer inscription
 $route->addRoute('/admin/inscriptions/details/{params}', [$inscriptionController, 'details']); // Détails inscription
 
@@ -65,6 +70,8 @@ $route->addRoute('/admin/paiements/create', [$paiementController, 'create']); //
 $route->addRoute('/admin/paiements/edit', [$paiementController, 'edit']); // Modifier paiement
 $route->addRoute('/admin/paiements/delete', [$paiementController, 'delete']); // Supprimer paiement
 $route->addRoute('/admin/paiements/details/{params}', [$paiementController, 'details']); // Détails paiement
+$route->addRoute('/admin/paiements/getInscriptionsByUser', [$paiementController, 'getInscriptionsByUser']); // Récupérer inscriptions par utilisateur
+$route->addRoute('/admin/paiements/getInscriptionDetails', [$paiementController, 'getInscriptionDetails']); // Récupérer détails inscription
 
 // Versements management routes
 $route->addRoute('/admin/versements', [$versementController, 'index']); // Liste des versements
@@ -98,6 +105,23 @@ $route->addRoute('/admin/articles/create', [$articleController, 'create']); // C
 $route->addRoute('/admin/articles/edit', [$articleController, 'edit']); // Modifier article
 $route->addRoute('/admin/articles/delete', [$articleController, 'delete']); // Supprimer article
 
+// Demandes management routes
+$route->addRoute('/admin/demandes', [$demandeController, 'index']); // Liste des demandes
+$route->addRoute('/admin/demandes/add', [$demandeController, 'add']); // Ajouter une demande
+$route->addRoute('/admin/demandes/create', [$demandeController, 'create']); // Créer demande
+$route->addRoute('/admin/demandes/edit', [$demandeController, 'edit']); // Modifier demande
+$route->addRoute('/admin/demandes/delete', [$demandeController, 'delete']); // Supprimer demande
+$route->addRoute('/admin/demandes/details/{params}', [$demandeController, 'details']); // Détails demande
+$route->addRoute('/admin/demandes/stocks', [$demandeController, 'stocks']); // Gestion des stocks
+
+// Demandes controller routes
+$route->addRoute('/demandeController/create', [$demandeController, 'create']); // Créer demande (AJAX)
+$route->addRoute('/demandeController/valider', [$demandeController, 'valider']); // Valider demande (AJAX)
+$route->addRoute('/demandeController/rejeter', [$demandeController, 'rejeter']); // Rejeter demande (AJAX)
+$route->addRoute('/demandeController/entreeStock', [$demandeController, 'entreeStock']); // Entrée stock (AJAX)
+$route->addRoute('/demandeController/retourStock', [$demandeController, 'retourStock']); // Retour stock (AJAX)
+$route->addRoute('/demandeController/getStockByCategorie', [$demandeController, 'getStockByCategorie']); // Get stock (AJAX)
+
 // User management routes (using UserController)
 $route->addRoute('/admin/users', [$userController, 'list']); // Liste des utilisateurs
 $route->addRoute('/admin/users/add', [$userController, 'add']); // Ajouter un utilisateur
@@ -106,14 +130,18 @@ $route->addRoute('/admin/users/changer', [$userController, 'changer']); // Chang
 
 // Client management routes
 $route->addRoute('/admin/clients', [$clientController, 'index']); // Liste des clients
+$route->addRoute('/admin/clients/create', [$clientController, 'add']); // Créer un client
 $route->addRoute('/admin/clients/details/{params}', [$clientController, 'details']); // Détails client
 
 // Kit/Categorie management routes
 $route->addRoute('/admin/kits', [$kitController, 'index']); // Liste des kits
 $route->addRoute('/admin/kits/add', [$kitController, 'add']); // Ajouter un kit
-$route->addRoute('/admin/kits/edit', [$kitController, 'edit']); // Modifier un kit
+$route->addRoute('/admin/kits/edit', [$kitController, 'edit']); // Modifier un kit (POST pour soumission formulaire)
+$route->addRoute('/admin/kits/edit/{params}', [$kitController, 'edit']); // Modifier un kit (GET pour affichage formulaire)
 $route->addRoute('/admin/kits/delete', [$kitController, 'delete']); // Supprimer un kit
 $route->addRoute('/admin/kits/details/{params}', [$kitController, 'details']); // Détails kit
+$route->addRoute('/admin/kits/articles/{params}', [$kitController, 'addArticlesToKit']); // Ajouter des articles au kit
+$route->addRoute('/admin/kits/saveArticles', [$kitController, 'saveKitArticles']); // Sauvegarder les articles du kit
 
 $route->addRoute('/admin/categories', [$kitController, 'categories']); // Liste des catégories
 $route->addRoute('/admin/categories/add', [$kitController, 'addCategory']); // Ajouter une catégorie

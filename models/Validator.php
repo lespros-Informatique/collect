@@ -346,8 +346,8 @@ class Validator
 
         $extension = $extensionsAutorisees[$typeMime];
         
-        // Chemin du dossier uploads
-        $uploadDir = dirname(dirname(__DIR__)) . '/public/uploads/' . $subFolder . '/';
+        // Chemin du dossier uploads - utilisation du DOCUMENT_ROOT pour un chemin correct
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/collect/public/uploads/' . $subFolder . '/';
         
         // Créer le dossier s'il n'existe pas
         if (!file_exists($uploadDir)) {

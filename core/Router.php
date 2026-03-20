@@ -21,7 +21,7 @@ class Router
             }
             
         }
-        echo '404 Not Found';
+        echo '404 Page Not Found !!!!';
     }
 
     public function getRoutes()

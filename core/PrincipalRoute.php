@@ -23,6 +23,7 @@ require_once '../models/articles/ModelArticle.php';
 require_once '../models/familles/ModelFamille.php';
 require_once '../models/versements/ModelVersement.php';
 require_once '../models/retraits/ModelRetrait.php';
+require_once '../models/demandes/ModelDemande.php';
 
 
 require_once '../controllers/home/HomeController.php';
@@ -41,5 +42,6 @@ require_once '../controllers/admin/RetraitController.php';
 require_once '../controllers/admin/SettingsController.php';
 require_once '../controllers/admin/FamilleController.php';
 require_once '../controllers/admin/ArticleController.php';
+require_once '../controllers/admin/DemandeController.php';
 
 

@@ -93,6 +93,17 @@
                     </ul>
                 </li>
 
+                <li class=" nav-item"><a href="#"><i class="feather icon-file-text"></i><span class="menu-title" data-i18n="Templates">Demandes</span></a>
+                    <ul class="menu-content">
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/demandes" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des demandes</a>
+                        </li>
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>admin/demandes/stocks" data-i18n="Vertical"> <i class="feather icon-cubes"></i> Gestion des stocks</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class=" navigation-header"><span>Configuration</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="Configuration"></i>
                 </li>
 

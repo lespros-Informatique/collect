@@ -26,6 +26,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Image</th>
                                         <th>Code</th>
                                         <th>Libellé</th>
                                         <th>Description</th>
@@ -42,6 +43,13 @@
                                     
                                         <tr>
                                             <td><?= $i ?></td>
+                                            <td>
+                                                <?php if(!empty($categorie['img_categorie'])): ?>
+                                                    <img src="<?= RACINE . $categorie['img_categorie'] ?>" alt="" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <?php else: ?>
+                                                    <span class="badge badge-secondary">Pas d'image</span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td><?= htmlspecialchars($categorie['code_categorie']) ?></td>
                                             <td><?= htmlspecialchars($categorie['libelle_categorie']) ?></td>
                                             <td><?= htmlspecialchars($categorie['description_categorie'] ?? 'N/A') ?></td>
@@ -81,17 +89,7 @@
             
             <!-- Corps du modal -->
             <div class="modal-body">
-            <form class="formCategorie" method="POST">
-                <!-- Code Catégorie -->
-                <div class="form-group">
-                    <label for="code_categorie">Code Catégorie :</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="code_categorie" name="code_categorie" placeholder="Code catégorie" required>
-                        <span class="input-group-addon"><i class="feather icon-hashtag"></i></span>
-                    </div>
-                    <div class="error-message" id="codeCategorieError"></div>
-                </div>
-
+            <form class="formCategorie" method="POST" enctype="multipart/form-data">
                 <!-- Libellé -->
                 <div class="form-group">
                     <label for="libelle">Libellé :</label>
@@ -135,6 +133,15 @@
                     <div class="input-group">
                         <input type="date" class="form-control" id="date_fin" name="date_fin" required>
                         <span class="input-group-addon"><i class="feather icon-calendar"></i></span>
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="form-group">
+                    <label for="image">Image :</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <span class="input-group-addon"><i class="feather icon-image"></i></span>
                     </div>
                 </div>
 

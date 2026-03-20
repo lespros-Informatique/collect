@@ -60,8 +60,8 @@
     <link rel="stylesheet" type="text/css" href="<?= RACINE ?>app-assets/css/pages/app-contacts.css">
     <!-- END: Page CSS-->
 
-
-    
+<!-- select tag -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="<?=RACINE; ?>app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="<?=RACINE; ?>app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">

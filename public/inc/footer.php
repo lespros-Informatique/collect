@@ -82,14 +82,27 @@
     <!-- BEGIN: Page JS-->
     <script src="<?= RACINE ?>app-assets/js/scripts/forms/select/form-select2.js"></script>
     <!-- END: Page JS-->
-
+     <!-- select tag -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
   <script>
   $(function () {
 
     $('.datatable-table').DataTable();
+    $('#demandes-table').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+        }
+    });
+    $('#stocks-table').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+        },
+        order: [[6, 'desc']]
+    });
 
   });
+
   </script>
 
 

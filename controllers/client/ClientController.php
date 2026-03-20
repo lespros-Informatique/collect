@@ -6,6 +6,7 @@ class ClientController
     private $client;
     private $inscription;
     private $paiement;
+    private $user;
 
     public function __construct()
     {
@@ -13,22 +14,30 @@ class ClientController
         $this->client = new ModelClient();
         $this->inscription = new ModelInscription();
         $this->paiement = new ModelPaiement();
+        $this->user = new ModelUser();
     }
 
     // Liste des clients
     public function index()
     {
         $clients = $this->client->getAllClients(1);
+        $users = $this->user->getUsers(1);
+        $validator = $this->validator;
         require_once '../views/clients/list.php';
     }
 
     // Détails d'un client
     public function details($code)
     {
-        $client = $this->client->getClientByCode($code);
+        // Décrypter le code client
+        $clientCode = $this->validator->decrypter($code);
+        
+        $client = $this->client->getClientByCode($clientCode);
+        $inscriptions = [];
+        $paiements = [];
         if ($client) {
-            $inscriptions = $this->inscription->getInscriptionsByClient($code);
-            $paiements = $this->paiement->getPaiementsByInscription($code);
+            $inscriptions = $this->inscription->getInscriptionsByClient($clientCode) ?? [];
+            $paiements = $this->paiement->getPaiementsByInscription($clientCode) ?? [];
         }
         require_once '../views/clients/details.php';
     }
@@ -70,6 +79,7 @@ class ClientController
             // Préparation des données pour la méthode create du Validator
             $data = [
                 'code_client' => $code_client,
+                'user_code' => $user_code ?? null,
                 'nom_client' => trim($nom),
                 'telephone_client' => trim($telephone),
                 'quartier_client' => $quartier ?? null,
@@ -79,7 +89,11 @@ class ClientController
             ];
 
             if ($this->validator->create('clients', $data)) {
-                $msg = ['msg' => 'Client ajouté avec succès!', 'status' => 1];
+                $msg = [
+                    'msg' => 'Client ajouté avec succès!',
+                    'status' => 1,
+                    'code_client' => $code_client
+                ];
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
             }
