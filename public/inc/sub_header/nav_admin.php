@@ -22,30 +22,30 @@
                         <li class="dropdown nav-item mega-dropdown d-none d-lg-block"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Accès Rapide</a>
                             <ul class="mega-dropdown-menu dropdown-menu row p-1">
                                 <li class="col-md-4 bg-mega p-2">
-                                    <h3 class="text-white mb-1 font-weight-bold">Gestion Restaurant</h3>
-                                    <p class="text-white line-height-2">Accédez rapidement aux fonctionnalités principales de gestion de votre restaurant.</p>
+                                    <h3 class="text-white mb-1 font-weight-bold">Gestion de Collecte</h3>
+                                    <p class="text-white line-height-2">Accédez rapidement aux fonctionnalités principales de votre système de collecte.</p>
                                     <a href="<?=RACINE?>admin" class="btn btn-outline-white">Tableau de bord</a>
                                 </li>
                                 <li class="col-md-8 px-2">
                                     <h6 class="font-weight-bold font-medium-2 ml-1">Modules</h6>
                                     <ul class="row mt-2">
-                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3" href="<?=RACINE?>admin/plats"><i class="feather icon-package font-large-1 mr-0"></i>
-                                                <p class="font-medium-2 mt-25 mb-0">Menu</p>
-                                            </a></li>
-                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3" href="<?=RACINE?>admin/commandes"><i class="feather icon-shopping-cart font-large-1 mr-0"></i>
-                                                <p class="font-medium-2 mt-25 mb-0">Commandes</p>
-                                            </a></li>
-                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3 mt-75 mt-xl-0" href="<?=RACINE?>admin/clients"><i class="feather icon-users font-large-1 mr-0"></i>
+                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3" href="<?=RACINE?>admin/clients"><i class="feather icon-users font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-0">Clients</p>
+                                            </a></li>
+                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3" href="<?=RACINE?>admin/inscriptions"><i class="feather icon-user-plus font-large-1 mr-0"></i>
+                                                <p class="font-medium-2 mt-25 mb-0">Inscriptions</p>
+                                            </a></li>
+                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3 mt-75 mt-xl-0" href="<?=RACINE?>admin/paiements"><i class="feather icon-dollar-sign font-large-1 mr-0"></i>
+                                                <p class="font-medium-2 mt-25 mb-0">Paiements</p>
+                                            </a></li>
+                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mt-75 mt-xl-0" href="<?=RACINE?>admin/kits"><i class="feather icon-gift font-large-1 mr-0"></i>
+                                                <p class="font-medium-2 mt-25 mb-0">Kits</p>
                                             </a></li>
                                         <li class="col-6 col-xl-4"><a class="text-center mb-2 mt-75 mt-xl-0" href="<?=RACINE?>admin/users"><i class="feather icon-user-check font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-50">Utilisateurs</p>
                                             </a></li>
                                         <li class="col-6 col-xl-4"><a class="text-center mb-2 mt-75 mt-xl-0" href="<?=RACINE?>admin/settings"><i class="feather icon-settings font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-50">Paramètres</p>
-                                            </a></li>
-                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mt-75 mt-xl-0" href="<?=RACINE?>user/profil"><i class="feather icon-user font-large-1 mr-0"></i>
-                                                <p class="font-medium-2 mt-25 mb-50">Mon Profil</p>
                                             </a></li>
                                     </ul>
                                 </li>

@@ -311,6 +311,62 @@ class Validator
         return $binaire; // prêt pour insertion en BDD
     }
 
+    /**
+     * Traite l'upload d'une image et l'enregistre dans un dossier spécifique.
+     * Crée automatiquement les dossiers nécessaires.
+     * 
+     * @param string $champ Le nom du champ de fichier dans $_FILES
+     * @param string $subFolder Le sous-dossier dans uploads (ex: 'articles', 'clients', etc.)
+     * @param int $tailleMax Taille maximale en octets (défaut: 2Mo)
+     * @return string|null Le chemin relatif de l'image ou null si aucune image
+     */
+    public static function uploadImage(string $champ, string $subFolder = 'articles', int $tailleMax = 2 * 1024 * 1024): ?string
+    {
+        if (!isset($_FILES[$champ]) || $_FILES[$champ]['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+
+        $fichier = $_FILES[$champ];
+        $nomTmp = $fichier['tmp_name'];
+        $taille = $fichier['size'];
+        $typeMime = mime_content_type($nomTmp);
+
+        // Extensions autorisées
+        $extensionsAutorisees = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+
+        // Vérification de la taille
+        if ($taille > $tailleMax) {
+            throw new RuntimeException("L'image dépasse la taille maximale autorisée.");
+        }
+
+        // Vérification de l'extension MIME
+        if (!array_key_exists($typeMime, $extensionsAutorisees)) {
+            throw new RuntimeException("Format d'image non autorisé.");
+        }
+
+        $extension = $extensionsAutorisees[$typeMime];
+        
+        // Chemin du dossier uploads - utilisation du DOCUMENT_ROOT pour un chemin correct
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/collect/public/uploads/' . $subFolder . '/';
+        
+        // Créer le dossier s'il n'existe pas
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // Générer un nom unique
+        $nomFichier = uniqid('img_') . '_' . time() . '.' . $extension;
+        $cheminComplet = $uploadDir . $nomFichier;
+
+        // Déplacer le fichier
+        if (move_uploaded_file($nomTmp, $cheminComplet)) {
+            // Retourner le chemin relatif pour la base de données
+            return 'public/uploads/' . $subFolder . '/' . $nomFichier;
+        }
+
+        return null;
+    }
+
     public static function dateActuelle($waveDate = null)
     {
         if ($waveDate) {

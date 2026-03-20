@@ -22,15 +22,18 @@ class HomeController
             // Récupérer les statistiques du dashboard
             $stats = $this->admin->getDashboardStats();
             
-            // var_dump($stats);
             // Map stats to variables for collectes management
             $totalClients = $stats['total_clients'] ?? 0;
             $totalInscriptions = $stats['total_inscriptions'] ?? 0;
+            $totalCategories = $stats['total_categories'] ?? 0;
+            $totalKits = $stats['total_kits'] ?? 0;
+            $totalRetraits = $stats['total_retraits'] ?? 0;
             $totalPaiements = $stats['total_paiements'] ?? 0;
             $revenusAujourdhui = $stats['today_revenue'] ?? 0;
             $paiementsAujourdhui = $stats['today_paiements'] ?? 0;
+            $inscriptionsAujourdhui = $stats['inscriptions_aujourdhui'] ?? 0;
             
-            require_once '../views/home/home.php'; // On inclut la vue d'accueil qui contient le code HTML
+            require_once '../views/dashboard/dashboard.php'; // On inclut la vue du dashboard
         } else {
             require_once '../views/users/connexion.php';
         }
@@ -45,11 +48,15 @@ class HomeController
             // Map stats to variables for collectes management
             $totalClients = $stats['total_clients'] ?? 0;
             $totalInscriptions = $stats['total_inscriptions'] ?? 0;
+            $totalCategories = $stats['total_categories'] ?? 0;
+            $totalKits = $stats['total_kits'] ?? 0;
+            $totalRetraits = $stats['total_retraits'] ?? 0;
             $totalPaiements = $stats['total_paiements'] ?? 0;
             $revenusAujourdhui = $stats['today_revenue'] ?? 0;
             $paiementsAujourdhui = $stats['today_paiements'] ?? 0;
+            $inscriptionsAujourdhui = $stats['inscriptions_aujourdhui'] ?? 0;
             
-            require_once '../views/home/home.php';
+            require_once '../views/dashboard/dashboard.php';
         } else {
             require_once '../views/users/connexion.php';
         }

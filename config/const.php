@@ -19,6 +19,9 @@ define('USER_ROLE', $_SESSION['user']['role'] ?? null);
 define('USER_PHONE', $_SESSION['user']['telephone'] ?? null);
 define('SIGN', USER_ROLE);
 define('ROLE_ADMIN', "code-admin");
+define('ROLE_COMPTABLE', "code-comptable");
+define('ROLE_SUPERVISEUR', "code-code-superviseur");
+define('ROLE_COMMERCIAL', "code-commercial");
 
 // Additional user constants for profile view
 define('ROLE', $_SESSION['user']['role'] ?? 'Utilisateur');
@@ -30,4 +33,30 @@ define('TITLE', 'Collect - Gestion de Collectes');
 define('APP_NAME', 'Collect');
 define('LOGO', RACINE.'assets/logo/logo.avif');
 
+class TABLES
+{
+   
 
+    // Utilisateurs & rôles
+    public const USERS                       = 'users';
+    public const ROLES                       = 'roles';
+
+    // Clients
+    public const CLIENTS                     = 'clients';
+
+    // Autres tables de la base existante
+    public const ARTICLES                     = 'articles';
+    public const CATEGORIES                   = 'categories';
+    public const CHOIX                        = 'choix';
+    public const DEMANDES                     = 'demandes';
+    public const FAMILLES                     = 'familles';
+    public const INSCRIPTIONS                 = 'inscriptions';
+    public const LIGNE_ARTICLES               = 'ligne_articles';
+    public const LIGNE_ARTICLE_INSCRIPTIONS  = 'ligne_article_inscriptions';
+    public const LIGNE_CHOIX                  = 'ligne_choix';
+    public const PAIEMENTS                    = 'paiements';
+    public const RAPPORTS                     = 'rapports';
+    public const RETRAITS                     = 'retraits';
+    public const STOCKS                       = 'stocks';
+    public const VERSEMENTS                   = 'versements';
+}

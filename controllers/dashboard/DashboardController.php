@@ -24,6 +24,7 @@ class DashboardController
         $totalPaiements = $stats['total_paiements'] ?? 0;
         $revenusAujourdhui = $stats['today_revenue'] ?? 0;
         $paiementsAujourdhui = $stats['today_paiements'] ?? 0;
+        // var_dump($stats);return;
         
         require_once '../views/dashboard/dashboard.php';
     }

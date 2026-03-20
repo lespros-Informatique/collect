@@ -23,6 +23,7 @@ require_once '../models/articles/ModelArticle.php';
 require_once '../models/familles/ModelFamille.php';
 require_once '../models/versements/ModelVersement.php';
 require_once '../models/retraits/ModelRetrait.php';
+require_once '../models/demandes/ModelDemande.php';
 
 
 require_once '../controllers/home/HomeController.php';
@@ -34,5 +35,14 @@ require_once '../controllers/dashboard/DashboardController.php';
 require_once '../controllers/commercial/CommercialController.php';
 require_once '../controllers/kit/KitController.php';
 require_once '../controllers/client/ClientController.php';
+require_once '../controllers/admin/InscriptionController.php';
+require_once '../controllers/admin/PaiementController.php';
+require_once '../controllers/admin/VersementController.php';
+require_once '../controllers/admin/RetraitController.php';
+require_once '../controllers/admin/SettingsController.php';
+require_once '../controllers/admin/FamilleController.php';
+require_once '../controllers/admin/ArticleController.php';
+require_once '../controllers/admin/DemandeController.php';
+require_once '../controllers/entreprise/EntrepriseController.php';
 
 

@@ -2,7 +2,7 @@
 <?php require_once '../public/inc/header.php'; ?>
 
   <!-- Content Wrapper. Contains page content -->
- <!-- BEGIN: Content-->
+  <!-- BEGIN: Content-->
 <div class="app-content content">
   <div class="content-overlay"></div>
   <div class="content-wrapper">
@@ -18,11 +18,11 @@
                 <i class="feather icon-user text-white"></i>
               </span>
             </div>
-            <h5 class="mt-1">Membre de la race bénie</h5>
+            <h5 class="mt-1">Modifier les informations</h5>
           </div>
         </div>
 
-           
+          
 
           <div class="col-md-6">
             <div class="card">
@@ -39,7 +39,7 @@
                     <div class="form-group">
                       <label for="nom">Nom</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" id="nom" name="nom" value="<?= $user['nom']; ?>" placeholder="Entrer le nom et prénom">
+                        <input type="text" class="form-control" id="nom" name="nom" value="<?= $user['nom_user'] ?? ''; ?>" placeholder="Entrer le nom">
                         <div class="input-group-append">
                           <span class="input-group-text"><?= Validator::icon('user'); ?></span>
                         </div>
@@ -47,11 +47,11 @@
                       <div class="error-message" id="nomError"></div>
                     </div>
 
-                          <!-- prenom -->
-                      <div class="form-group">
-                      <label for="prenom">Nom</label>
+                    <!-- Prénom -->
+                    <div class="form-group">
+                      <label for="prenom">Prénom</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" id="prenom" name="prenom" value="<?= $user['prenom']; ?>" placeholder="Entrer le nom et prénom">
+                        <input type="text" class="form-control" id="prenom" name="prenom" value="<?= $user['prenom_user'] ?? ''; ?>" placeholder="Entrer le prénom">
                         <div class="input-group-append">
                           <span class="input-group-text"><?= Validator::icon('user'); ?></span>
                         </div>
@@ -63,7 +63,7 @@
                     <div class="form-group">
                       <label for="tel_user">Numéro de Téléphone</label>
                       <div class="input-group">
-                        <input type="tel" class="form-control" id="tel" name="tel" value="<?= $user['telephone']; ?>" maxlength="10" placeholder="Entrer le numéro">
+                        <input type="tel" class="form-control" id="tel" name="tel" value="<?= $user['telephone_user'] ?? ''; ?>" maxlength="10" placeholder="Entrer le numéro">
                         <div class="input-group-append">
                           <span class="input-group-text"><?= Validator::icon('phone'); ?></span>
                         </div>
@@ -71,48 +71,56 @@
                       <div class="error-message" id="telError"></div>
                     </div>
 
-                       <div class="form-group">
-                      <label for="sexe">Sexe</label>
+                    <!-- Email -->
+                    <div class="form-group">
+                      <label for="email">Email</label>
                       <div class="input-group">
-                        <select class="form-control" id="sexe" name="sexe">
-                          <option value="<?= $user['sexe_user']; ?>" selected><?= $user['sexe_user']; ?></option>
-                          <?php if ($user['sexe_user'] != 'Homme'): ?>
-                            <option value="Homme">Homme</option>
-                          <?php endif; ?>
-                          <?php if ($user['sexe_user'] != 'Femme'): ?>
-                            <option value="Femme">Femme</option>
-                          <?php endif; ?>
-                        </select>
+                        <input type="email" class="form-control" id="email" name="email" value="<?= $user['email_user'] ?? ''; ?>" placeholder="Entrer l'email">
                         <div class="input-group-append">
-                          <span class="input-group-text"><?= Validator::icon('user-secret'); ?></span>
+                          <span class="input-group-text"><?= Validator::icon('mail'); ?></span>
                         </div>
                       </div>
-                      <div class="error-message" id="roleError"></div>
+                      <div class="error-message" id="emailError"></div>
                     </div>
 
+                    <!-- Quartier -->
                     <div class="form-group">
-                      <label for="fonction_user">Profession</label>
+                      <label for="quartier">Quartier</label>
                       <div class="input-group">
-                        <input type="tel" class="form-control" id="fonction" name="fonction" value="<?= $user['profession_user']; ?>" >
+                        <input type="text" class="form-control" id="quartier" name="quartier" value="<?= $user['quartier_user'] ?? ''; ?>" placeholder="Entrer le quartier">
                         <div class="input-group-append">
-                          <span class="input-group-text"><?= Validator::icon('briefcase'); ?></span>
+                          <span class="input-group-text"><?= Validator::icon('map-pin'); ?></span>
                         </div>
                       </div>
-                      <div class="error-message" id="fonctionError"></div>
+                      <div class="error-message" id="quartierError"></div>
+                    </div>
+
+                    <!-- Zone -->
+                    <div class="form-group">
+                      <label for="zone">Zone</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="zone" name="zone" value="<?= $user['zone_user'] ?? ''; ?>" placeholder="Entrer la zone">
+                        <div class="input-group-append">
+                          <span class="input-group-text"><?= Validator::icon('map'); ?></span>
+                        </div>
+                      </div>
+                      <div class="error-message" id="zoneError"></div>
                     </div>
 
                     <!-- Rôle -->
-                 
+                
                     <div class="form-group">
                       <label for="role">Rôle</label>
                       <div class="input-group">
                         <select class="form-control" id="role" name="role">
-                          <option value="<?= $user['id_role']; ?>" selected><?= $user['libelle']; ?></option>
-                          <?php foreach ($roles as $role): ?>
-                            <?php if ($role['id_role'] != $user['id_role']): ?>
-                              <option value="<?= $role['id_role']; ?>"><?= $role['libelle']; ?></option>
-                            <?php endif; ?>
-                          <?php endforeach; ?>
+                          <option value="<?= $user['role_code']; ?>" selected><?= $user['role_code']; ?></option>
+                          <?php if (!empty($roles)): ?>
+                            <?php foreach ($roles as $role): ?>
+                              <?php if ($role['code_role'] != $user['role_code']): ?>
+                                <option value="<?= $role['code_role']; ?>"><?= $role['libelle_role']; ?></option>
+                              <?php endif; ?>
+                            <?php endforeach; ?>
+                          <?php endif; ?>
                         </select>
                         <div class="input-group-append">
                           <span class="input-group-text"><?= Validator::icon('user-secret'); ?></span>

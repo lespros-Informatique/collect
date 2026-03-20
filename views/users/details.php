@@ -21,10 +21,10 @@
               <div class="card-img-actions text-center">
                 <div class="card-img-actions-inner">
                   <img class="img-responsive img-rounded" src="<?= RACINE ?>public/app-assets/images/portrait/small/avatar-s-1.png" alt="Photo de profil" width="120" height="120">
-                  <h4 class="mt-2"><?= htmlspecialchars($userProfile['nom']) ?></h4>
-                  <p class="text-muted"><?= htmlspecialchars($userProfile['email']) ?></p>
-                  <span class="badge badge-<?= $userProfile['actif'] == 1 ? 'success' : 'danger' ?>">
-                    <?= $userProfile['actif'] == 1 ? 'Actif' : 'Inactif' ?>
+                  <h4 class="mt-2"><?= htmlspecialchars(($userProfile['nom_user'] ?? '') . ' ' . ($userProfile['prenom_user'] ?? '')) ?></h4>
+                  <p class="text-muted"><?= htmlspecialchars($userProfile['email_user'] ?? 'N/A') ?></p>
+                  <span class="badge badge-<?= $userProfile['etat_user'] == 1 ? 'success' : 'danger' ?>">
+                    <?= $userProfile['etat_user'] == 1 ? 'Actif' : 'Inactif' ?>
                   </span>
                 </div>
               </div>
@@ -42,33 +42,51 @@
                   <div class="media">
                     <div class="media-body">
                       <h5 class="media-heading">Code Utilisateur</h5>
-                      <p><?= htmlspecialchars($userProfile['code_user']) ?></p>
+                      <p><?= htmlspecialchars($userProfile['code_user'] ?? '') ?></p>
                     </div>
                   </div>
                   <div class="media">
                     <div class="media-body">
-                      <h5 class="media-heading">Nom Complet</h5>
-                      <p><?= htmlspecialchars($userProfile['nom']) ?></p>
+                      <h5 class="media-heading">Nom</h5>
+                      <p><?= htmlspecialchars($userProfile['nom_user'] ?? '') ?></p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-body">
+                      <h5 class="media-heading">Prénom</h5>
+                      <p><?= htmlspecialchars($userProfile['prenom_user'] ?? '') ?></p>
                     </div>
                   </div>
                   <div class="media">
                     <div class="media-body">
                       <h5 class="media-heading">Téléphone</h5>
-                      <p><?= htmlspecialchars($userProfile['telephone']) ?></p>
+                      <p><?= htmlspecialchars($userProfile['telephone_user'] ?? '') ?></p>
                     </div>
                   </div>
                   <div class="media">
                     <div class="media-body">
                       <h5 class="media-heading">Email</h5>
-                      <p><?= htmlspecialchars($userProfile['email']) ?></p>
+                      <p><?= htmlspecialchars($userProfile['email_user'] ?? 'N/A') ?></p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-body">
+                      <h5 class="media-heading">Quartier</h5>
+                      <p><?= htmlspecialchars($userProfile['quartier_user'] ?? 'N/A') ?></p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-body">
+                      <h5 class="media-heading">Zone</h5>
+                      <p><?= htmlspecialchars($userProfile['zone_user'] ?? 'N/A') ?></p>
                     </div>
                   </div>
                   <div class="media">
                     <div class="media-body">
                       <h5 class="media-heading">Rôle</h5>
                       <p>
-                        <span class="badge badge-<?= $userProfile['role'] == 'admin' ? 'primary' : ($userProfile['role'] == 'livreur' ? 'info' : 'secondary') ?>">
-                          <?= ucfirst($userProfile['role']) ?>
+                        <span class="badge badge-<?= $userProfile['role_code'] == 'ROLE-ADMIN-001' ? 'primary' : ($userProfile['role_code'] == 'ROLE-COM-001' ? 'info' : 'secondary') ?>">
+                          <?= htmlspecialchars($userProfile['role_code'] ?? '') ?>
                         </span>
                       </p>
                     </div>
@@ -76,23 +94,15 @@
                   <div class="media">
                     <div class="media-body">
                       <h5 class="media-heading">Statut</h5>
-                      <p><span class="badge badge-<?= $userProfile['actif'] == 1 ? 'success' : 'danger' ?>"><?= $userProfile['actif'] == 1 ? 'Actif' : 'Inactif' ?></span></p>
+                      <p><span class="badge badge-<?= $userProfile['etat_user'] == 1 ? 'success' : 'danger' ?>"><?= $userProfile['etat_user'] == 1 ? 'Actif' : 'Inactif' ?></span></p>
                     </div>
                   </div>
                   <div class="media">
                     <div class="media-body">
                       <h5 class="media-heading">Membre depuis</h5>
-                      <p><?= Validator::formatDate($userProfile['created_at']) ?></p>
+                      <p><?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?></p>
                     </div>
                   </div>
-                  <?php if ($userProfile['updated_at']): ?>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Dernière modification</h5>
-                      <p><?= Validator::formatDate($userProfile['updated_at']) ?></p>
-                    </div>
-                  </div>
-                  <?php endif; ?>
                 </div>
               </div>
             </div>
@@ -105,9 +115,9 @@
                 <a href="<?= RACINE ?>user/edition/<?= $userProfile['id_user'] ?>" class="btn btn-primary">
                   <i class="fa fa-edit"></i> Modifier
                 </a>
-                <button onclick="toggleUserStatus(<?= $userProfile['id_user'] ?>)" class="btn btn-<?= $userProfile['actif'] == 1 ? 'warning' : 'success' ?>">
-                  <i class="fa fa-<?= $userProfile['actif'] == 1 ? 'lock' : 'unlock' ?>"></i>
-                  <?= $userProfile['actif'] == 1 ? 'Désactiver' : 'Activer' ?>
+                <button onclick="toggleUserStatus(<?= $userProfile['id_user'] ?>)" class="btn btn-<?= $userProfile['etat_user'] == 1 ? 'warning' : 'success' ?>">
+                  <i class="fa fa-<?= $userProfile['etat_user'] == 1 ? 'lock' : 'unlock' ?>"></i>
+                  <?= $userProfile['etat_user'] == 1 ? 'Désactiver' : 'Activer' ?>
                 </button>
               </div>
             </div>

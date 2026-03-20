@@ -20,16 +20,16 @@
               <h4 class="card-title">Modifier l'utilisateur</h4>
             </div>
             <div class="card-body">
-              <form class="formEdituser" method="POST">
-                <input type="hidden" id="id_user" name="id_user" value="<?= htmlspecialchars($userProfile['id_user']) ?>">
+              <form class="formEditUser" method="POST">
+                <input type="hidden" id="id_user" name="id_user" value="<?= ($userProfile['id_user'] ?? '') ?>">
 
                 <!-- Email -->
                 <div class="form-group">
                   <label for="email">Email :</label>
                   <div class="input-group">
-                    <input type="email" class="form-control" id="email" name="email" 
-                           value="<?= htmlspecialchars($userProfile['email']) ?>" required 
-                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    <input type="email" class="form-control" id="email" name="email_user" 
+                           value="<?= ($userProfile['email_user'] ?? '') ?>" 
+                          >
                     <span class="input-group-addon"> <?= Validator::icon('envelope'); ?></span>
                   </div>
                   <div class="error-message" id="emailError"></div>
@@ -39,52 +39,74 @@
                 <div class="form-group">
                   <label for="nom">Nom :</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" id="nom" name="nom" 
-                           value="<?= htmlspecialchars($userProfile['nom']) ?>" required>
+                    <input type="text" class="form-control" id="nom" name="nom_user" 
+                           value="<?= ($userProfile['nom_user'] ?? '') ?>" required>
                     <span class="input-group-addon"> <?= Validator::icon('user'); ?></span>
                   </div>
                   <div class="error-message" id="nomError"></div>
+                </div>
+
+                <!-- Prénom -->
+                <div class="form-group">
+                  <label for="prenom">Prénom :</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="prenom" name="prenom_user" 
+                           value="<?= ($userProfile['prenom_user'] ?? '') ?>">
+                    <span class="input-group-addon"> <?= Validator::icon('user'); ?></span>
+                  </div>
+                  <div class="error-message" id="prenomError"></div>
                 </div>
 
                 <!-- Téléphone -->
                 <div class="form-group">
                   <label for="telephone">Numéro de Téléphone:</label>
                   <div class="input-group">
-                    <input type="tel" class="form-control" id="telephone" name="telephone" 
-                           value="<?= htmlspecialchars($userProfile['telephone']) ?>" 
+                    <input type="tel" class="form-control" id="telephone" name="telephone_user" 
+                           value="<?= ($userProfile['telephone_user'] ?? '') ?>" 
                            maxlength="10" required pattern="[0-9]{10}">
                     <span class="input-group-addon"> <?= Validator::icon('phone'); ?></span>
                   </div>
                   <div class="error-message" id="telephoneError"></div>
                 </div>
 
+                <!-- Quartier -->
+                <div class="form-group">
+                  <label for="quartier">Quartier :</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="quartier" name="quartier_user" 
+                           value="<?= ($userProfile['quartier_user'] ?? '') ?>">
+                    <span class="input-group-addon"> <?= Validator::icon('map-pin'); ?></span>
+                  </div>
+                  <div class="error-message" id="quartierError"></div>
+                </div>
+
+                <!-- Zone -->
+                <div class="form-group">
+                  <label for="zone">Zone :</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="zone" name="zone_user" 
+                           value="<?= ($userProfile['zone_user'] ?? '') ?>">
+                    <span class="input-group-addon"> <?= Validator::icon('map'); ?></span>
+                  </div>
+                  <div class="error-message" id="zoneError"></div>
+                </div>
+
                 <!-- Rôle -->
                 <div class="form-group">
                   <label for="role">Rôle:</label>
                   <div class="input-group">
-                    <select class="form-control" id="role" name="role" required>
+                    <select class="form-control" id="role" name="role_code" required>
                       <option value="">... Sélectionnez un rôle ...</option>
-                      <option value="admin" <?= $userProfile['role'] == 'admin' ? 'selected' : '' ?>>Administrateur</option>
-                      <option value="staff" <?= $userProfile['role'] == 'staff' ? 'selected' : '' ?>>Personnel</option>
-                      <option value="livreur" <?= $userProfile['role'] == 'livreur' ? 'selected' : '' ?>>Livreur</option>
+                      <?php if (isset($allRoles) && !empty($allRoles)){ ?>
+                        <?php foreach ($allRoles as $role): ?>
+                          <option value="<?= $role['code_role'] ?>" <?= ($userProfile['role_code'] ?? '') == $role['code_role'] ? 'selected' : '' ?>><?= htmlspecialchars($role['libelle_role']) ?></option>
+                        <?php endforeach; ?>
+                      <?php } ?>
+                       
                     </select>
                     <span class="input-group-addon"> <?= Validator::icon('user-secret'); ?></span>
                   </div>
                   <div class="error-message" id="roleError"></div>
-                </div>
-
-                <!-- Statut -->
-                <div class="form-group">
-                  <label for="actif">Statut:</label>
-                  <div class="input-group">
-                    <select class="form-control" id="actif" name="actif" required>
-                      <option value="">... Sélectionnez le statut ...</option>
-                      <option value="1" <?= $userProfile['actif'] == 1 ? 'selected' : '' ?>>Actif</option>
-                      <option value="0" <?= $userProfile['actif'] == 0 ? 'selected' : '' ?>>Inactif</option>
-                    </select>
-                    <span class="input-group-addon"> <?= Validator::icon('toggle-on'); ?></span>
-                  </div>
-                  <div class="error-message" id="actifError"></div>
                 </div>
 
                 <!-- Informations système (lecture seule) -->
@@ -92,7 +114,7 @@
                   <label>Code utilisateur :</label>
                   <div class="input-group">
                     <input type="text" class="form-control" 
-                           value="<?= htmlspecialchars($userProfile['code_user']) ?>" readonly>
+                           value="<?= ($userProfile['code_user'] ?? '') ?>" readonly>
                     <span class="input-group-addon"> <?= Validator::icon('code'); ?></span>
                   </div>
                 </div>
@@ -101,7 +123,7 @@
                   <label>Membre depuis :</label>
                   <div class="input-group">
                     <input type="text" class="form-control" 
-                           value="<?= Validator::formatDate($userProfile['created_at']) ?>" readonly>
+                           value="<?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?>" readonly>
                     <span class="input-group-addon"> <?= Validator::icon('calendar'); ?></span>
                   </div>
                 </div>

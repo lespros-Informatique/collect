@@ -14,22 +14,22 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h5>Informations personnelles</h5>
-                                <p><strong>Nom:</strong> <?= $client['nom'] ?? '' ?></p>
-                                <p><strong>Téléphone:</strong> <?= $client['telephone'] ?? '' ?></p>
-                                <p><strong>Email:</strong> <?= $client['email'] ?? '' ?></p>
-                                <p><strong>Adresse:</strong> <?= $client['adresse'] ?? '' ?></p>
-                                <p><strong>Date d'inscription:</strong> <?= Validator::formatDate($client['created_at'] ?? '') ?></p>
+                                <p><strong>Nom:</strong> <?= $client['nom_client'] ?? '' ?></p>
+                                <p><strong>Téléphone:</strong> <?= $client['telephone_client'] ?? '' ?></p>
+                                <p><strong>Quartier:</strong> <?= $client['quartier_client'] ?? '' ?></p>
+                                <p><strong>Zone:</strong> <?= $client['zone_client'] ?? '' ?></p>
+                                <p><strong>Date d'inscription:</strong> <?= Validator::formatDate($client['created_at_client'] ?? '') ?></p>
                             </div>
                             <div class="col-md-6">
                                 <h5>Statistiques</h5>
-                                <p><strong>Nombre de commandes:</strong> <?= count($commandes) ?></p>
-                                <p><strong>Dernière commande:</strong>
+                                <p><strong>Nombre d'inscriptions:</strong> <?= count($inscriptions) ?></p>
+                                <p><strong>Dernière inscription:</strong>
                                     <?php
-                                    if (!empty($commandes)) {
-                                        $lastOrder = $commandes[0];
-                                        echo Validator::formatDateTime($lastOrder['created_at']);
+                                    if (!empty($inscriptions)) {
+                                        $lastInscription = $inscriptions[0];
+                                        echo Validator::formatDateTime($lastInscription['date_debut']);
                                     } else {
-                                        echo 'Aucune commande';
+                                        echo 'Aucune inscription';
                                     }
                                     ?>
                                 </p>
@@ -38,39 +38,37 @@
 
                         <div class="row mt-4">
                             <div class="col-12">
-                                <h5>Historique des commandes</h5>
+                                <h5>Historique des inscriptions</h5>
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>ID Commande</th>
-                                                <th>Date</th>
-                                                <th>Statut</th>
-                                                <th>Total</th>
-                                                <th>Actions</th>
+                                                <th>#</th>
+                                                <th>Code Inscription</th>
+                                                <th>Date début</th>
+                                                <th>Date fin</th>
+                                                <th>Type</th>
+                                                <th>État</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $i=0; foreach ($commandes as $commande): $i++; 
-                                        $cryptedParams = $this->validator->crypter($commande['id_commande']); ?>
-                                            
+                                            <?php $i=0; foreach ($inscriptions as $inscription): $i++; ?>
                                                 <tr>
                                                     <td><?= $i ?></td>
-                                                    <td><?= Validator::formatDateTime($commande['created_at'] ?? '') ?></td>
+                                                    <td><?= $inscription['code_inscription'] ?? '' ?></td>
+                                                    <td><?= Validator::formatDateTime($inscription['date_debut'] ?? '') ?></td>
+                                                    <td><?= Validator::formatDateTime($inscription['date_fin'] ?? '') ?></td>
+                                                    <td><?= $inscription['type_inscription'] ?? '' ?></td>
                                                     <td>
-                                                        <span class="badge badge-<?= $commande['statut'] == 'livrée' ? 'success' : ($commande['statut'] == 'en préparation' ? 'warning' : 'info') ?>">
-                                                            <?= $commande['statut'] ?? '' ?>
+                                                        <span class="badge badge-<?= $inscription['etat_inscription'] == 1 ? 'success' : 'danger' ?>">
+                                                            <?= $inscription['etat_inscription'] == 1 ? 'Active' : 'Inactive' ?>
                                                         </span>
-                                                    </td>
-                                                    <td><?= number_format($commande['total'] ?? 0, 0, ',', ' ') ?> FCFA</td>
-                                                    <td>
-                                                        <a href="<?= RACINE ?>admin/commandes/details/<?= $cryptedParams ?>" class="btn btn-sm btn-primary">Voir détails</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                            <?php if (empty($commandes)): ?>
+                                            <?php if (empty($inscriptions)): ?>
                                                 <tr>
-                                                    <td colspan="5" class="text-center">Aucune commande trouvée</td>
+                                                    <td colspan="6" class="text-center">Aucune inscription trouvée</td>
                                                 </tr>
                                             <?php endif; ?>
                                         </tbody>

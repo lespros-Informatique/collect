@@ -27,10 +27,11 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Code Client</th>
+                                        <th>Commercial</th>
                                         <th>Nom</th>
                                         <th>Téléphone</th>
-                                        <th>Email</th>
-                                        <th>Adresse</th>
+                                        <th>Quartier</th>
+                                        <th>Zone</th>
                                         <th>Date d'inscription</th>
                                         <th>Actions</th>
                                     </tr>
@@ -38,16 +39,29 @@
                                 <tbody>
                                     <?php $i = 0;
                                     foreach ($clients as $client): $i++; 
-                                        $cryptedParams = $this->validator->crypter($client['id_client']); ?>
+                                        $cryptedParams = $validator->crypter($client['code_client']); ?>
                                     
                                         <tr>
                                             <td><?= $i ?></td>
                                             <td><?= htmlspecialchars($client['code_client']) ?></td>
-                                            <td><?= htmlspecialchars($client['nom']) ?></td>
-                                            <td><?= htmlspecialchars($client['telephone']) ?></td>
-                                            <td><?= htmlspecialchars($client['email'] ?? 'N/A') ?></td>
-                                            <td><?= htmlspecialchars(substr($client['adresse'], 0, 10)) ?>...</td>
-                                            <td><?= Validator::formatDate($client['created_at']) ?></td>
+                                            <td>
+                                                <?php
+                                                // Trouver le commercial qui a ajouté ce client
+                                                $userName = 'N/A';
+                                                foreach ($users as $u) {
+                                                    if ($u['user_code'] == $client['user_code']) {
+                                                        $userName = $u['nom_user'] . ' ' . $u['prenom_user'];
+                                                        break;
+                                                    }
+                                                }
+                                                echo htmlspecialchars($userName);
+                                                ?>
+                                            </td>
+                                            <td><?= htmlspecialchars($client['nom_client']) ?></td>
+                                            <td><?= htmlspecialchars($client['telephone_client']) ?></td>
+                                            <td><?= htmlspecialchars($client['quartier_client'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($client['zone_client'] ?? 'N/A') ?></td>
+                                            <td><?= Validator::formatDate($client['created_at_client']) ?></td>
                                             <td>
                                                 <a href="<?= RACINE ?>admin/clients/details/<?= $cryptedParams ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
                                                     <i class="feather icon-eye"></i> Détails
@@ -79,17 +93,7 @@
             
             <!-- Corps du modal -->
             <div class="modal-body">
-            <form class="formClient" method="POST">
-                <!-- Code Client -->
-                <div class="form-group">
-                    <label for="code_client">Code Client :</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="code_client" name="code_client" placeholder="Code client" required>
-                        <span class="input-group-addon"><i class="feather icon-hashtag"></i></span>
-                    </div>
-                    <div class="error-message" id="codeClientError"></div>
-                </div>
-
+            <form class="formClient" method="POST" enctype="multipart/form-data">
                 <!-- Nom -->
                 <div class="form-group">
                     <label for="nom">Nom :</label>
@@ -110,24 +114,41 @@
                     <div class="error-message" id="telephoneError"></div>
                 </div>
 
-                <!-- Email -->
+                <!-- Quartier -->
                 <div class="form-group">
-                    <label for="email">Email :</label>
+                    <label for="quartier">Quartier :</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="email@exemple.com">
-                        <span class="input-group-addon"><i class="feather icon-mail"></i></span>
-                    </div>
-                    <div class="error-message" id="emailError"></div>
-                </div>
-
-                <!-- Adresse -->
-                <div class="form-group">
-                    <label for="adresse">Adresse :</label>
-                    <div class="input-group">
-                        <textarea class="form-control" id="adresse" name="adresse" rows="3" placeholder="Adresse complète" required></textarea>
+                        <input type="text" class="form-control" id="quartier" name="quartier" placeholder="Quartier" required>
                         <span class="input-group-addon"><i class="feather icon-map-pin"></i></span>
                     </div>
-                    <div class="error-message" id="adresseError"></div>
+                    <div class="error-message" id="quartierError"></div>
+                </div>
+
+                <!-- Zone -->
+                <div class="form-group">
+                    <label for="zone">Zone :</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone" required>
+                        <span class="input-group-addon"><i class="feather icon-map"></i></span>
+                    </div>
+                    <div class="error-message" id="zoneError"></div>
+                </div>
+
+                <!-- Commercial -->
+                <div class="form-group">
+                    <label for="user_code">Commercial :</label>
+                    <div class="input-group">
+                        <select class="form-control" id="user_code" name="user_code" required>
+                            <option value="">Sélectionner un commercial</option>
+                            <?php foreach ($users as $user): ?>
+                                <option value="<?= htmlspecialchars($user['user_code']) ?>">
+                                    <?= htmlspecialchars($user['nom_user'] . ' ' . $user['prenom_user']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="input-group-addon"><i class="feather icon-user"></i></span>
+                    </div>
+                    <div class="error-message" id="user_codeError"></div>
                 </div>
 
             <!-- Pied de page -->
@@ -141,33 +162,5 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function() {
-        // Validation et soumission du formulaire client
-        $('.formClient').on('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            
-            $.ajax({
-                url: '<?= RACINE ?>admin/clients/create',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    const res = JSON.parse(response);
-                    if (res.status == 1) {
-                        toastr.success(res.msg);
-                        $('#addClientModal').modal('hide');
-                        location.reload();
-                    } else {
-                        toastr.error(res.msg);
-                    }
-                }
-            });
-        });
-    });
-</script>
 
 <?php require_once '../public/inc/footer.php'; ?>
