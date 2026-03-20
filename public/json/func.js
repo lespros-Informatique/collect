@@ -1,6 +1,6 @@
 const LINK = window.location.origin + '/collect/public/';
 const LINKS = window.location.origin + '/collect'; // En local il faut ajouter restaurant/ pour que çà passe!
-const LINKS_ADMIN = window.location.origin + '/collect'; // En local il faut ajouter restaurant/ pour que çà passe!
+const LINKS_ADMIN = window.location.origin + '/entreprise'; // En local il faut ajouter restaurant/ pour que çà passe!
 
 function trRemove(selecter) {
     $(selecter).remove();
@@ -270,10 +270,11 @@ function connexion() {
                 if (response.status == 1) {
                     showAlert('Connexion réussie !', response.msg, 'success');
                     window.location.href = LINKS;               
-                } else if(){
-
-                    
+                } else if(response.status == 2){
+                    showAlert('Connexion réussie !', response.msg, 'success');
+                    window.location.href = LINKS_ADMIN; 
                 }else{
+                    showAlert('Désolé !', response.msg, 'error');
                 }
             },
             error: function (xhr, status, error) {
