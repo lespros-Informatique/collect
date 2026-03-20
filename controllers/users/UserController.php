@@ -128,17 +128,21 @@ class UserController
                     }
                 } elseif (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $user = $this->validator->getByElement('entreprises', 'email_entreprise', $email);
-                    if ($user['etat_entreprise'] == 1) {
-                        $_SESSION['entreprise'] = [
-                            'id' => $user['id_entreprise'],
-                            'code' => $user['code_entreprise'],
-                            'libelle' => $user['libelle_entreprise'],
-                            'email' => $user['email_entreprise'],
-                        ];
+                    if(isset($user) && !empty($user) && Validator::verifyPassword($password, $user['password_entreprise'])){
+                        if ($user['etat_entreprise'] == 1) {
+                            $_SESSION['entreprise'] = [
+                                'id' => $user['id_entreprise'],
+                                'code' => $user['code_entreprise'],
+                                'libelle' => $user['libelle_entreprise'],
+                                'email' => $user['email_entreprise'],
+                            ];
 
-                        $msg = ['msg' => 'Bienvenue sur ' . APP_NAME . '!', 'status' => 2]; //connexion pour une entreprise statuts = 2
-                    } else {
-                        $msg = ['msg' => 'Ce compte utilisateur est inactif', 'status' => 0];
+                            $msg = ['msg' => 'Bienvenue sur ' . APP_NAME . '!', 'status' => 2]; //connexion pour une entreprise statuts = 2
+                        } else {
+                            $msg = ['msg' => 'Ce compte utilisateur est inactif', 'status' => 0];
+                        }
+                    }else{
+                        $msg = ['msg' => 'Identifiants incorrects. Veuillez vérifier votre email/téléphone et mot de passe.', 'status' => 0];
                     }
 
                 } else{

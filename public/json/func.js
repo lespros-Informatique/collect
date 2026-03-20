@@ -1,6 +1,5 @@
 const LINK = window.location.origin + '/collect/public/';
 const LINKS = window.location.origin + '/collect'; // En local il faut ajouter restaurant/ pour que çà passe!
-const LINKS_ADMIN = window.location.origin + '/entreprise'; // En local il faut ajouter restaurant/ pour que çà passe!
 
 function trRemove(selecter) {
     $(selecter).remove();
@@ -272,7 +271,7 @@ function connexion() {
                     window.location.href = LINKS;               
                 } else if(response.status == 2){
                     showAlert('Connexion réussie !', response.msg, 'success');
-                    window.location.href = LINKS_ADMIN; 
+                    window.location.href = LINKS+'/entreprise'; 
                 }else{
                     showAlert('Désolé !', response.msg, 'error');
                 }

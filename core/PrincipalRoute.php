@@ -43,5 +43,6 @@ require_once '../controllers/admin/SettingsController.php';
 require_once '../controllers/admin/FamilleController.php';
 require_once '../controllers/admin/ArticleController.php';
 require_once '../controllers/admin/DemandeController.php';
+require_once '../controllers/entreprise/EntrepriseController.php';
 
 

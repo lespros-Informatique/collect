@@ -21,6 +21,8 @@ $familleController = new FamilleController();
 $articleController = new ArticleController();
 $demandeController = new DemandeController();
 
+$entrepriseController = new EntrepriseController();
+
 
 // Ajout des routes
 
@@ -28,6 +30,8 @@ $demandeController = new DemandeController();
 $route->addRoute('/', [$homeController, 'index']); // Page de connexion
 
 $route->addRoute('/home', [$homeController, 'home']); // Vue d'accueil
+
+$route->addRoute('/entreprise', [$entrepriseController, 'home']); // Vue d'accueil
 
 
 $route->addRoute('/home/settings', [$homeController, 'settings']); // Vue de settings
