@@ -20,6 +20,9 @@ $settingsController = new SettingsController();
 $familleController = new FamilleController();
 $articleController = new ArticleController();
 $demandeController = new DemandeController();
+$succursaleController = new SuccursaleController();
+
+$campagneController = new CampagneController();
 
 $entrepriseController = new EntrepriseController();
 
@@ -32,6 +35,14 @@ $route->addRoute('/', [$homeController, 'index']); // Page de connexion
 $route->addRoute('/home', [$homeController, 'home']); // Vue d'accueil
 
 $route->addRoute('/entreprise', [$entrepriseController, 'home']); // Vue d'accueil
+
+// succursale routes
+$route->addRoute('/succursale/list', [$succursaleController, 'home']); // Vue d'accueil
+$route->addRoute('/succursale/add', [$succursaleController, 'add']); // Vue d'accueil
+
+// campagne routes
+$route->addRoute('/campagne/list', [$campagneController, 'home']); // Vue d'accueil
+$route->addRoute('/campagne/add', [$campagneController, 'add']); // Vue d'accueil
 
 
 $route->addRoute('/home/settings', [$homeController, 'settings']); // Vue de settings

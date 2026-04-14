@@ -5,7 +5,7 @@ function trRemove(selecter) {
     $(selecter).remove();
 
 }
-function go_b(){
+function go_b() {
     history.back();
 }
 function showAlert(title, message, icon = 'success') {
@@ -34,10 +34,10 @@ function togglePassword() {
 function profilTogglePassword(idPassword) {
     var passwordField = document.getElementById(idPassword);
     if (!passwordField) return;
-    
+
     var toggleIcon = document.getElementById(idPassword === 'anPassword' ? 'togglePasswordIcon' : 'newTogglePasswordIcon');
     if (!toggleIcon) return;
-    
+
     if (passwordField.type === "password") {
         passwordField.type = "text";
         toggleIcon.classList.remove("fa-eye");
@@ -75,33 +75,33 @@ function verifForm(fields)  // verification des champs du  formulaire
         const errorElement = document.getElementById(input.id + 'Error');
         const nextSibling = input.nextElementSibling;
         const iconElement = nextSibling ? nextSibling.querySelector('i') : null;
-      
+
         if (!regex.test(input.value)) {
-          input.classList.add('invalid');
-          input.classList.remove('valid');
-          if (errorElement) {
-            errorElement.innerHTML = `<i class="fa fa-exclamation-circle mr-2"></i> ${errorMessage}`;
-            errorElement.classList.add('text-red-500');
-          }
-          if (iconElement) {
-            iconElement.classList.add('text-red-500');
-          }
-          return false;
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            if (errorElement) {
+                errorElement.innerHTML = `<i class="fa fa-exclamation-circle mr-2"></i> ${errorMessage}`;
+                errorElement.classList.add('text-red-500');
+            }
+            if (iconElement) {
+                iconElement.classList.add('text-red-500');
+            }
+            return false;
         } else {
-          input.classList.add('valid');
-          input.classList.remove('invalid');
-          if (errorElement) {
-            errorElement.innerHTML = '';
-            errorElement.classList.remove('text-red-500');
-          }
-          if (iconElement) {
-            iconElement.classList.remove('text-red-500');
-            iconElement.classList.add('text-green-500');
-          }
-          return true;
+            input.classList.add('valid');
+            input.classList.remove('invalid');
+            if (errorElement) {
+                errorElement.innerHTML = '';
+                errorElement.classList.remove('text-red-500');
+            }
+            if (iconElement) {
+                iconElement.classList.remove('text-red-500');
+                iconElement.classList.add('text-green-500');
+            }
+            return true;
         }
-      }
-      
+    }
+
 
 
     return validateForm;
@@ -112,7 +112,7 @@ function tableField(includeFields) {
         nom: { id: 'nom', regex: /.+/, errorMessage: 'Le nom est requis.' },
         prenom: { id: 'prenom', regex: /.+/, errorMessage: 'Le nom est requis.' },
         fonction: { id: 'fonction', regex: /.+/, errorMessage: 'La profession est requise.' },
-        tel: { id: 'tel', regex: /^(07|05|01)\d{8}$/, errorMessage: 'Veuillez entrer un numéro de téléphone valide qui commence par 07, 05, ou 01, suivi de 8 chiffres.'},
+        tel: { id: 'tel', regex: /^(07|05|01)\d{8}$/, errorMessage: 'Veuillez entrer un numéro de téléphone valide qui commence par 07, 05, ou 01, suivi de 8 chiffres.' },
         // Mot de passe (vérifie que le mot de passe est égal à "PRO-01" ou qu'il est présent)
         password: { id: 'password', regex: /^(MEMBRE-01)$/, errorMessage: 'Le mot de passe est incorrect.' },
         anPassword: { id: 'anPassword', regex: /.+/, errorMessage: 'L\'ancien mot de passe est requis.' },
@@ -123,9 +123,9 @@ function tableField(includeFields) {
         responsable: { id: 'responsable', regex: /^(?!default$).+$/, errorMessage: 'Vous devez donner une reponse valide.' },
         role: { id: 'role', regex: /^(?!default$).+$/, errorMessage: 'Veuillez sélectionner un role valide.' },
         libelle: { id: 'libelle', regex: /.+/, errorMessage: 'Le libelle est requis.' },
-        date: { id: 'date', regex: /^\d{4}-\d{2}-\d{2}$/, errorMessage: 'Veuillez saisir une date valide (YYYY-MM-DD).'},
+        date: { id: 'date', regex: /^\d{4}-\d{2}-\d{2}$/, errorMessage: 'Veuillez saisir une date valide (YYYY-MM-DD).' },
         photo: { id: 'photo', regex: /.+/, errorMessage: 'Veuillez télécharger la photo (formats acceptés : .jpg, .png).' },
-        
+
     };
 
     return includeFields.map(field => allFields[field]);  // Retourne uniquement les champs spécifiés dans includeFields
@@ -141,6 +141,94 @@ function formIsValided(table)  // recreate Datatable
 function loading(selector, status, message) {
     $(selector).html(message);
     $(selector).attr('disabled', status);
+}
+
+function createPagination(containerSelector, itemSelector, itemsPerPage = 6) {
+    const items = document.querySelectorAll(itemSelector);
+    const pagination = document.querySelector(containerSelector);
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+    let currentPage = 1;
+
+    function showPage(page) {
+        currentPage = page;
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        items.forEach((item, index) => {
+            item.style.display = (index >= start && index < end) ? 'block' : 'none';
+        });
+
+        // Met à jour les classes actives
+        const pageItems = pagination.querySelectorAll('.page-item');
+        pageItems.forEach(el => el.classList.remove('active'));
+        const activeBtn = pagination.querySelector(`.page-link[data-page="${page}"]`);
+        if (activeBtn) activeBtn.parentElement.classList.add('active');
+
+        // Activer/désactiver les boutons prev/next
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (prevBtn && nextBtn) {
+            prevBtn.classList.toggle('disabled', page === 1);
+            nextBtn.classList.toggle('disabled', page === totalPages);
+        }
+    }
+
+    function setupPagination() {
+        pagination.innerHTML = '';
+
+        // Bouton précédent
+        const prevLi = document.createElement('li');
+        prevLi.className = 'page-item';
+        prevLi.id = 'prevBtn';
+        const prevA = document.createElement('a');
+        prevA.className = 'page-link';
+        prevA.href = '#';
+        prevA.innerHTML = '&laquo;';
+        prevA.addEventListener('click', e => {
+            e.preventDefault();
+            if (currentPage > 1) showPage(currentPage - 1);
+        });
+        prevLi.appendChild(prevA);
+        pagination.appendChild(prevLi);
+
+        // Pages numérotées
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === 1 ? ' active' : '');
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.textContent = i;
+            a.setAttribute('data-page', i);
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                showPage(i);
+            });
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+
+        // Bouton suivant
+        const nextLi = document.createElement('li');
+        nextLi.className = 'page-item';
+        nextLi.id = 'nextBtn';
+        const nextA = document.createElement('a');
+        nextA.className = 'page-link';
+        nextA.href = '#';
+        nextA.innerHTML = '&raquo;';
+        nextA.addEventListener('click', e => {
+            e.preventDefault();
+            if (currentPage < totalPages) showPage(currentPage + 1);
+        });
+        nextLi.appendChild(nextA);
+        pagination.appendChild(nextLi);
+    }
+
+    // Initialisation
+    if (items.length > 0) {
+        setupPagination();
+        showPage(1);
+    }
 }
 
 function changeById(id) {
@@ -177,7 +265,7 @@ function changeById(id) {
         }
     });
 }
-function changeDeleteById(url,id) {
+function changeDeleteById(url, id) {
     event.preventDefault(); // Empêche le rechargement si le bouton est dans un <form>
 
     Swal.fire({
@@ -192,24 +280,24 @@ function changeDeleteById(url,id) {
 
             $.ajax({
                 method: "POST",
-                url: LINK+url,
+                url: LINK + url,
                 data: { id: id, btn_changer: 1 },  // Envoi de l'ID au serveur
                 success: function (rep) {
                     // console.log(rep);return;
-                    
-                    let response = JSON.parse(rep);                    
-                    if (response.status== 1) {
+
+                    let response = JSON.parse(rep);
+                    if (response.status == 1) {
                         showAlert('Félicitations !', response.msg, 'success');
-                        if( response.remove==true) {
-                            trRemove('#trRemove-'+id);
+                        if (response.remove == true) {
+                            trRemove('#trRemove-' + id);
                         }
-                        if(response.reload == 1) {
+                        if (response.reload == 1) {
                             setInterval(() => {
                                 location.reload(); // Actualise la page si nécessaire
 
                             }, 2000)
                         }
-                   
+
                     }
                 },
                 error: function (xhr, status, error) {
@@ -248,9 +336,9 @@ function connexion() {
     $('.formConnexion').on('submit', function (e) {
         e.preventDefault(); // Empêche la soumission normale du formulaire
         // Vérifie si le formulaire est valide
-        
+
         // console.log(LINK + 'userController/connexion');
-        
+
         $.ajax({
             url: LINK + 'userController/connexion',
             type: 'POST',
@@ -268,11 +356,11 @@ function connexion() {
 
                 if (response.status == 1) {
                     showAlert('Connexion réussie !', response.msg, 'success');
-                    window.location.href = LINKS;               
-                } else if(response.status == 2){
+                    window.location.href = LINKS;
+                } else if (response.status == 2) {
                     showAlert('Connexion réussie !', response.msg, 'success');
-                    window.location.href = LINKS+'/entreprise'; 
-                }else{
+                    window.location.href = LINKS + '/entreprise';
+                } else {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
@@ -294,74 +382,74 @@ function addUser() // form
 
         // Vérifie si le formulaire est valide
         // if (formIsValided(table)) {
-            // Créer un objet FormData pour gérer l'upload de fichiers
-            let formData = $(this).serialize();
-            $.ajax({
-                url: LINK + 'userController/add',
-                type: 'POST',
-                data: formData,
-                beforeSend: function () {
-                    loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
-                },
-                success: function (rep) {
-                    // console.log(rep);return
-                    let response = JSON.parse(rep);
+        // Créer un objet FormData pour gérer l'upload de fichiers
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'userController/add',
+            type: 'POST',
+            data: formData,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
+            },
+            success: function (rep) {
+                // console.log(rep);return
+                let response = JSON.parse(rep);
 
-                    loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_action">Sauvegarder</button>'); // desactiver loader
-                    if (response.status == 1) {
-                        showAlert('Félicitations !', response.msg , 'success');
-                        setInterval(() => {
-                            location.reload(); // Actualise la page si nécessaire
-                        }, 2000)
-                    } else {
-                        showAlert('Désolé !', response.msg, 'error');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Erreur :' + error);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_action">Sauvegarder</button>'); // desactiver loader
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setInterval(() => {
+                        location.reload(); // Actualise la page si nécessaire
+                    }, 2000)
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
         // }
     });
 }
 function editUser() // form agent edit
 {
-    
+
     $('.formEditUser').on('submit', function (e) {
         e.preventDefault();
         // const table = ['nom','prenom', 'tel','fonction', "role"];
-        
+
         // Vérifie si le formulaire est valide
         // if (formIsValided(table)) {
-            // Créer un objet FormData pour gérer l'upload de fichiers
-            let formData = $(this).serialize();
-            // alert('click me='+formData);return;
-            $.ajax({
-                url: LINK + 'userController/edit',
-                type: 'POST',
-                data: formData,
-                beforeSend: function () {
-                    loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
-                },
-                success: function (rep) {
-                    // console.log(rep);return;
-                    let response = JSON.parse(rep);
+        // Créer un objet FormData pour gérer l'upload de fichiers
+        let formData = $(this).serialize();
+        // alert('click me='+formData);return;
+        $.ajax({
+            url: LINK + 'userController/edit',
+            type: 'POST',
+            data: formData,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
+            },
+            success: function (rep) {
+                // console.log(rep);return;
+                let response = JSON.parse(rep);
 
-                    loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Sauvegarder</button>'); // desactiver loader
-                    if (response.status == 1) {
-                        showAlert('Félicitations !', 'Modification effectué avec succès.', 'success');
-                        // redirect(LINK + 'agent/list');
-                        setInterval(() => {
-                            go_b(); // Retourne à la page précédente
-                        }, 2000)
-                    } else {
-                        showAlert('Désolé !', response.msg, 'error');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Erreur :' + error);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Sauvegarder</button>'); // desactiver loader
+                if (response.status == 1) {
+                    showAlert('Félicitations !', 'Modification effectué avec succès.', 'success');
+                    // redirect(LINK + 'agent/list');
+                    setInterval(() => {
+                        go_b(); // Retourne à la page précédente
+                    }, 2000)
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
         // }
     });
 }
@@ -374,34 +462,34 @@ function editPassword() // form agent edit
 
         // Vérifie si le formulaire est valide
         // if (formIsValided(table)) {
-            // Créer un objet FormData pour gérer l'upload de fichiers
-            let formData = $(this).serialize();
-            $.ajax({
-                url: LINK + 'userController/editPassword',
-                type: 'POST',
-                data: formData,
-                beforeSend: function () {
-                    loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
-                },
-                success: function (rep) {
-                    // console.log(rep);return;
-                    let response = JSON.parse(rep);
+        // Créer un objet FormData pour gérer l'upload de fichiers
+        let formData = $(this).serialize();
+        $.ajax({
+            url: LINK + 'userController/editPassword',
+            type: 'POST',
+            data: formData,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
+            },
+            success: function (rep) {
+                // console.log(rep);return;
+                let response = JSON.parse(rep);
 
-                    loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Sauvegarder</button>'); // desactiver loader
-                    if (response.status == 1) {
-                        showAlert('Félicitations !', 'Modification effectué avec succès.', 'success');
-                        // redirect(LINK + 'agent/list');
-                        setInterval(() => {
-                            window.reload();
-                        }, 2000)
-                    } else {
-                        showAlert('Désolé !', response.msg, 'error');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Erreur :' + error);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_action">Sauvegarder</button>'); // desactiver loader
+                if (response.status == 1) {
+                    showAlert('Félicitations !', 'Modification effectué avec succès.', 'success');
+                    // redirect(LINK + 'agent/list');
+                    setInterval(() => {
+                        window.reload();
+                    }, 2000)
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
         // }
     });
 }
@@ -427,13 +515,13 @@ function toggleUserStatus() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             }
-       });
+        });
     });
 }
 
 // ========== CATEGORIES ==========
 function addCategorie() {
-    $('.formCategorie').on('submit', function(e) {
+    $('.formCategorie').on('submit', function (e) {
         e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
@@ -442,10 +530,10 @@ function addCategorie() {
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -455,7 +543,7 @@ function addCategorie() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -464,7 +552,7 @@ function addCategorie() {
 
 // ========== KITS ==========
 function addKit() {
-    $('.formKit').on('submit', function(e) {
+    $('.formKit').on('submit', function (e) {
         e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
@@ -473,10 +561,10 @@ function addKit() {
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -490,7 +578,7 @@ function addKit() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -498,7 +586,7 @@ function addKit() {
 }
 
 function editKit() {
-    $('.formKitEdit').on('submit', function(e) {
+    $('.formKitEdit').on('submit', function (e) {
         e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
@@ -507,10 +595,10 @@ function editKit() {
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
                 if (response.status == 1) {
@@ -522,7 +610,141 @@ function editKit() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== SUCCURSALES ==========
+function addSuccursale() {
+    $('.formSuccursale').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: LINK + 'succursale/add',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function (rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    // Fermer le modal et rediriger vers la page d'ajout d'articles au kit
+                    setTimeout(() => {
+                        $('#addSuccursaleModal').modal('hide');
+                        window.location.href = LINKS + '/succursale/list';
+                    }, 1500);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+function editSuccursale() {
+    $('.formKitEdit').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: LINK + 'succursale/edit',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function (rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setTimeout(() => {
+                        window.location.href = LINKS + '/succursale/list';
+                    }, 1500);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+// ========== CAMPAGNES ==========
+function addCampagne() {
+    $('.formCampagne').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: LINK + 'campagne/add',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function (rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    // Fermer le modal et rediriger vers la page d'ajout d'articles au kit
+                    setTimeout(() => {
+                        $('#addCampagneModal').modal('hide');
+                        window.location.href = LINKS + '/campagne/list';
+                    }, 1500);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Erreur :' + error);
+            }
+        });
+    });
+}
+
+function editCampagne() {
+    $('.formCampagneEdit').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: LINK + 'campagne/edit',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            },
+            success: function (rep) {
+                let response = JSON.parse(rep);
+                loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
+                if (response.status == 1) {
+                    showAlert('Félicitations !', response.msg, 'success');
+                    setTimeout(() => {
+                        window.location.href = LINKS + '/campagne/list';
+                    }, 1500);
+                } else {
+                    showAlert('Désolé !', response.msg, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -531,17 +753,17 @@ function editKit() {
 
 // ========== INSCRIPTIONS ==========
 function addInscription() {
-    $('.formInscription').on('submit', function(e) {
+    $('.formInscription').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/inscriptions/create',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -551,7 +773,7 @@ function addInscription() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -560,17 +782,17 @@ function addInscription() {
 
 // ========== PAIEMENTS ==========
 function addPaiement() {
-    $('.formPaiement').on('submit', function(e) {
+    $('.formPaiement').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/paiements/create',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -580,7 +802,7 @@ function addPaiement() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -589,32 +811,32 @@ function addPaiement() {
 
 // Gestion du bouton Payer dans la liste des inscriptions
 function initPaiementButtons() {
-    $(document).on('click', '.btn-payer-inscription', function() {
+    $(document).on('click', '.btn-payer-inscription', function () {
         var inscriptionCode = $(this).data('inscription');
         var userCode = $(this).data('user');
-        
+
         console.log('>>> Opening paiement modal for inscription:', inscriptionCode, 'user:', userCode);
-        
+
         // Ouvrir le modal
         $('#addPaiementModal').modal('show');
-        
+
         // Sélectionner l'utilisateur
         $('#user_select').val(userCode);
-        
+
         // Charger les inscriptions de cet utilisateur
         if (userCode) {
             $.ajax({
                 url: LINK + 'admin/paiements/getInscriptionsByUser',
                 type: 'POST',
                 data: { user_code: userCode },
-                success: function(rep) {
+                success: function (rep) {
                     let inscriptions = JSON.parse(rep);
-                    
+
                     $('#inscription_select').empty();
                     $('#inscription_select').append('<option value="">... Sélectionnez une inscription ...</option>');
-                    
+
                     if (inscriptions && inscriptions.length > 0) {
-                        inscriptions.forEach(function(ins) {
+                        inscriptions.forEach(function (ins) {
                             var selected = ins.code_inscription === inscriptionCode ? 'selected' : '';
                             $('#inscription_select').append(
                                 $('<option ' + selected + '></option>')
@@ -623,14 +845,14 @@ function initPaiementButtons() {
                             );
                         });
                     }
-                    
+
                     $('#inscription_select').prop('disabled', false);
-                    
+
                     // Sélectionner l'inscription spécifique
                     $('#inscription_select').val(inscriptionCode);
                     $('#inscription_select').trigger('change');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.log('>>> Error:', error);
                 }
             });
@@ -640,17 +862,17 @@ function initPaiementButtons() {
 
 // ========== VERSEMENTS ==========
 function addVersement() {
-    $('.formVersement').on('submit', function(e) {
+    $('.formVersement').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/versements/create',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -660,7 +882,7 @@ function addVersement() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -669,17 +891,17 @@ function addVersement() {
 
 // ========== RETRAITS ==========
 function addRetrait() {
-    $('.formRetrait').on('submit', function(e) {
+    $('.formRetrait').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/retraits/create',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -689,7 +911,7 @@ function addRetrait() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -698,17 +920,17 @@ function addRetrait() {
 
 // ========== SETTINGS ==========
 function updateSettings() {
-    $('.formSettings').on('submit', function(e) {
+    $('.formSettings').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/settings/update',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
                 if (response.status == 1) {
@@ -717,7 +939,7 @@ function updateSettings() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -725,17 +947,17 @@ function updateSettings() {
 }
 
 function updatePreferences() {
-    $('.formPreferences').on('submit', function(e) {
+    $('.formPreferences').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/settings/updatePreferences',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-save"></i> Sauvegarder</button>');
                 if (response.status == 1) {
@@ -744,7 +966,7 @@ function updatePreferences() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -753,17 +975,17 @@ function updatePreferences() {
 
 // ========== FAMILLES ==========
 function addFamille() {
-    $('.formFamille').on('submit', function(e) {
+    $('.formFamille').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'admin/familles/create',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -773,7 +995,7 @@ function addFamille() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -782,7 +1004,7 @@ function addFamille() {
 
 // ========== ARTICLES ==========
 function addArticle() {
-    $('.formArticle').on('submit', function(e) {
+    $('.formArticle').on('submit', function (e) {
         e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
@@ -791,10 +1013,10 @@ function addArticle() {
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -804,7 +1026,7 @@ function addArticle() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -813,17 +1035,17 @@ function addArticle() {
 
 // ========== DEMANDES ==========
 function addDemande() {
-    $('.formDemande').on('submit', function(e) {
+    $('.formDemande').on('submit', function (e) {
         e.preventDefault();
         let formData = $(this).serialize();
         $.ajax({
             url: LINK + 'demandeController/create',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -833,7 +1055,7 @@ function addDemande() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -841,20 +1063,20 @@ function addDemande() {
 }
 
 function updateStockByCategorie() {
-    $(document).on('change', '#categorie_code', function() {
+    $(document).on('change', '#categorie_code', function () {
         var categorie_code = $(this).val();
-        if(categorie_code) {
+        if (categorie_code) {
             $.ajax({
                 url: LINK + 'demandeController/getStockByCategorie',
                 type: 'POST',
                 data: { categorie_code: categorie_code },
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     var stock = response.stock || 0;
                     var html = '<strong>Stock actuel: ' + stock + ' carnets</strong>';
                     $('#stock-info').html(html);
                 },
-                error: function() {
+                error: function () {
                     $('#stock-info').html('<span class="text-danger">Erreur lors de la récupération du stock</span>');
                 }
             });
@@ -865,10 +1087,10 @@ function updateStockByCategorie() {
 }
 
 function validerDemande() {
-    $(document).on('click', '.btn-valider-demande', function(e) {
+    $(document).on('click', '.btn-valider-demande', function (e) {
         e.preventDefault();
         var code_demande = $(this).data('code');
-        
+
         Swal.fire({
             title: '<span style="font-size: 24px;">Confirmation</span>',
             html: '<span style="font-size: 18px;">Voulez-vous valider cette demande?</span>',
@@ -883,13 +1105,13 @@ function validerDemande() {
                     type: 'POST',
                     data: { code_demande: code_demande },
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         showAlert('Résultat', response.msg, response.status == 1 ? 'success' : 'error');
-                        if(response.status == 1) {
+                        if (response.status == 1) {
                             setInterval(() => { location.reload(); }, 2000);
                         }
                     },
-                    error: function() {
+                    error: function () {
                         showAlert('Erreur', 'Une erreur est survenue', 'error');
                     }
                 });
@@ -899,10 +1121,10 @@ function validerDemande() {
 }
 
 function rejeterDemande() {
-    $(document).on('click', '.btn-rejeter-demande', function(e) {
+    $(document).on('click', '.btn-rejeter-demande', function (e) {
         e.preventDefault();
         var code_demande = $(this).data('code');
-        
+
         Swal.fire({
             title: '<span style="font-size: 24px;">Confirmation</span>',
             html: '<span style="font-size: 18px;">Voulez-vous rejeter cette demande?</span>',
@@ -917,13 +1139,13 @@ function rejeterDemande() {
                     type: 'POST',
                     data: { code_demande: code_demande },
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         showAlert('Résultat', response.msg, response.status == 1 ? 'success' : 'error');
-                        if(response.status == 1) {
+                        if (response.status == 1) {
                             setInterval(() => { location.reload(); }, 2000);
                         }
                     },
-                    error: function() {
+                    error: function () {
                         showAlert('Erreur', 'Une erreur est survenue', 'error');
                     }
                 });
@@ -933,32 +1155,32 @@ function rejeterDemande() {
 }
 
 function addStock() {
-    $('.formStock').on('submit', function(e) {
+    $('.formStock').on('submit', function (e) {
         e.preventDefault();
-        
+
         var type_mouvement = $('#type_mouvement').val();
-        var url = type_mouvement === 'ENTREE' 
+        var url = type_mouvement === 'ENTREE'
             ? LINK + 'demandeController/entreeStock'
             : LINK + 'demandeController/retourStock';
-        
+
         let formData = $(this).serialize();
-        
+
         $.ajax({
             url: url,
             type: 'POST',
             data: formData,
             dataType: 'json',
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(response) {
+            success: function (response) {
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 showAlert('Résultat', response.msg, response.status == 1 ? 'success' : 'error');
-                if(response.status == 1) {
+                if (response.status == 1) {
                     setInterval(() => { location.reload(); }, 2000);
                 }
             },
-            error: function() {
+            error: function () {
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 showAlert('Erreur', 'Une erreur est survenue', 'error');
             }
@@ -982,19 +1204,19 @@ function addKitArticles() {
         }
     });
 
-    $('.formKitArticles').on('submit', function(e) {
+    $('.formKitArticles').on('submit', function (e) {
         e.preventDefault();
-        
+
         var formData = $(this).serialize();
-        
+
         $.ajax({
             url: LINK + 'admin/kits/saveArticles',
             type: 'POST',
             data: formData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin"></i> Enregistrement...');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<i class="feather icon-save"></i> Sauvegarder');
                 if (response.status == 1) {
@@ -1006,7 +1228,7 @@ function addKitArticles() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 loading('.btn_actions', false, '<i class="feather icon-save"></i> Sauvegarder');
                 alert('Erreur : ' + error);
             }
@@ -1017,39 +1239,39 @@ function addKitArticles() {
 // ========== PAIEMENTS ==========
 function initPaiementForm() {
     console.log('>>> initPaiementForm called');
-    
+
     // Variables globales pour stocker les données
     var montantTotal = 0;
     var montantTotalPeriode = 0;
     var resteAPayer = 0;
     var nombreJourPeriode = 0;
     var selectedKits = [];
-    
-    $(document).ready(function() {
+
+    $(document).ready(function () {
         // Charger les données depuis localStorage au démarrage
         loadPaiementFromStorage();
-        
+
         // Gestion du changement d'utilisateur
-        $('#user_select').on('change', function() {
+        $('#user_select').on('change', function () {
             var userCode = $(this).val();
             console.log('>>> User selected:', userCode);
-            
+
             if (userCode) {
                 // Charger les inscriptions de cet utilisateur
                 $.ajax({
                     url: LINK + 'admin/paiements/getInscriptionsByUser',
                     type: 'POST',
                     data: { user_code: userCode },
-                    success: function(rep) {
+                    success: function (rep) {
                         console.log('>>> Inscriptions:', rep);
                         let inscriptions = JSON.parse(rep);
-                        
+
                         // Vider le select et ajouter l'option par défaut
                         $('#inscription_select').empty();
                         $('#inscription_select').append('<option value="">... Sélectionnez une inscription ...</option>');
-                        
+
                         if (inscriptions && inscriptions.length > 0) {
-                            inscriptions.forEach(function(ins) {
+                            inscriptions.forEach(function (ins) {
                                 $('#inscription_select').append(
                                     $('<option></option>')
                                         .val(ins.code_inscription)
@@ -1057,9 +1279,9 @@ function initPaiementForm() {
                                 );
                             });
                         }
-                        
+
                         $('#inscription_select').prop('disabled', false);
-                        
+
                         // Activer Choices si disponible
                         if (typeof Choices !== 'undefined') {
                             var element = document.getElementById('inscription_select');
@@ -1075,14 +1297,14 @@ function initPaiementForm() {
                             }
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log('>>> Error:', error);
                     }
                 });
             } else {
                 $('#inscription_select').html('<option value="">Sélectionnez d\'abord un utilisateur</option>').prop('disabled', true);
             }
-            
+
             // Effacer les détails et sauvegarder
             $('#inscription_details').html('');
             $('#montant_display').hide();
@@ -1090,19 +1312,19 @@ function initPaiementForm() {
             $('#nombre_jour').val('');
             savePaiementToStorage();
         });
-        
+
         // Gestion du changement d'inscription
-        $('#inscription_select').on('change', function() {
+        $('#inscription_select').on('change', function () {
             var inscriptionCode = $(this).val();
             console.log('>>> Inscription selected:', inscriptionCode);
-            
+
             if (inscriptionCode) {
                 // Charger les détails de l'inscription
                 $.ajax({
                     url: LINK + 'admin/paiements/getInscriptionDetails',
                     type: 'POST',
                     data: { inscription_code: inscriptionCode },
-                    success: function(rep) {
+                    success: function (rep) {
                         console.log('>>> Details:', rep);
                         let data = JSON.parse(rep);
                         if (data) {
@@ -1111,10 +1333,10 @@ function initPaiementForm() {
                             montantTotalPeriode = parseFloat(data.montant_total_periode) || 0;
                             resteAPayer = parseFloat(data.reste_a_payer) || 0;
                             nombreJourPeriode = parseInt(data.nombre_jour) || 0;
-                            
+
                             displayInscriptionDetails(data);
                             savePaiementToStorage();
-                            
+
                             // Si un nombre de jours est déjà saisi, recalculer le montant
                             var nbJour = $('#nombre_jour').val();
                             if (nbJour && nbJour > 0) {
@@ -1122,7 +1344,7 @@ function initPaiementForm() {
                             }
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log('>>> Error:', error);
                     }
                 });
@@ -1135,26 +1357,26 @@ function initPaiementForm() {
                 savePaiementToStorage();
             }
         });
-        
+
         // Gestion du changement de nombre de jours
-        $('#nombre_jour').on('input', function() {
+        $('#nombre_jour').on('input', function () {
             calculateMontant();
             savePaiementToStorage();
         });
-        
+
         // Soumission du formulaire
         // $('.formPaiement').on('submit', function(e) {
         //     e.preventDefault();
-            
+
         //     // Empêcher la double soumission
         //     if ($(this).data('submitting')) {
         //         return;
         //     }
         //     $(this).data('submitting', true);
-            
+
         //     var formData = $(this).serialize();
         //     console.log('>>> Form data:', formData);
-            
+
         //     $.ajax({
         //         url: LINK + 'admin/paiements/create',
         //         type: 'POST',
@@ -1182,14 +1404,14 @@ function initPaiementForm() {
         //         }
         //     });
         // });
-        
+
         // Nettoyer le localStorage quand le modal est fermé
-        $('#addPaiementModal').on('hidden.bs.modal', function() {
+        $('#addPaiementModal').on('hidden.bs.modal', function () {
             // Optionnel: garder les données pour la prochaine ouverture
             // localStorage.removeItem('collect_paiementData');
         });
     });
-    
+
     // Fonction pour afficher les détails de l'inscription
     function displayInscriptionDetails(data) {
         selectedKits = data.kits || [];
@@ -1197,7 +1419,7 @@ function initPaiementForm() {
         montantTotalPeriode = parseFloat(data.montant_total_periode) || 0;
         resteAPayer = parseFloat(data.reste_a_payer) || 0;
         nombreJourPeriode = parseInt(data.nombre_jour) || 0;
-        
+
         var html = '<div class="alert alert-info">';
         html += '<h5>Détails de l\'inscription</h5>';
         html += '<p><strong>Client:</strong> ' + (data.inscription.client_code || 'N/A') + '</p>';
@@ -1205,34 +1427,34 @@ function initPaiementForm() {
         html += '<p><strong>Date fin:</strong> ' + formatDate(data.inscription.date_fin) + '</p>';
         html += '<p><strong>Type:</strong> ' + (data.inscription.type_inscription || 'N/A') + '</p>';
         html += '</div>';
-        
+
         // Informations sur la période
         html += '<div class="alert alert-secondary mt-2">';
         html += '<p class="mb-1"><strong>Période de la catégorie:</strong> ' + nombreJourPeriode + ' jours</p>';
         html += '<p class="mb-0"><strong>Montant pour la période complète:</strong> ' + montantTotalPeriode.toLocaleString() + ' F</p>';
         html += '</div>';
-        
+
         // Tableau des kits
         if (selectedKits && selectedKits.length > 0) {
             html += '<div class="table-responsive mt-3">';
             html += '<table class="table table-sm table-bordered">';
             html += '<thead><tr><th>Kits</th><th>Cotisation</th></tr></thead>';
             html += '<tbody>';
-            
-            selectedKits.forEach(function(kit) {
+
+            selectedKits.forEach(function (kit) {
                 var cot = parseFloat(kit.cotisation_choix) || 0;
                 html += '<tr><td>' + (kit.libelle_choix || 'N/A') + '</td><td>' + cot.toLocaleString() + ' F</td></tr>';
             });
-            
+
             html += '<tr class="table-primary"><td><strong>Total Kits</strong></td><td><strong>' + montantTotal.toLocaleString() + ' F</strong></td></tr>';
             html += '<tr><td>Déjà payé (validé)</td><td>' + (parseFloat(data.montant_paye) || 0).toLocaleString() + ' F</td></tr>';
             html += '<tr class="table-success"><td><strong>Reste à payer</strong></td><td><strong>' + resteAPayer.toLocaleString() + ' F</strong></td></tr>';
             html += '</tbody></table></div>';
         }
-        
+
         $('#inscription_details').html(html);
     }
-    
+
     // Fonction pour formater les dates
     function formatDate(dateStr) {
         if (!dateStr) return 'N/A';
@@ -1243,15 +1465,15 @@ function initPaiementForm() {
             return dateStr;
         }
     }
-    
+
     // Fonction pour calculer le montant
     function calculateMontant() {
         var nombreJour = parseInt($('#nombre_jour').val()) || 0;
-        
+
         // Calcul: nb jours × total des kits (pas de la période)
         if (nombreJour > 0 && montantTotal > 0) {
             var montant = Math.round(montantTotal * nombreJour);
-            
+
             $('#montant').val(montant);
             $('#montant_value').text(montant.toLocaleString());
             $('#montant_display').show();
@@ -1260,7 +1482,7 @@ function initPaiementForm() {
             $('#montant_display').hide();
         }
     }
-    
+
     // Fonction pour sauvegarder dans localStorage
     function savePaiementToStorage() {
         try {
@@ -1280,7 +1502,7 @@ function initPaiementForm() {
             console.error('>>> Error saving to localStorage:', e);
         }
     }
-    
+
     // Fonction pour charger depuis localStorage
     function loadPaiementFromStorage() {
         try {
@@ -1288,24 +1510,24 @@ function initPaiementForm() {
             console.log('>>> Loading from localStorage:', stored);
             if (stored) {
                 var data = JSON.parse(stored);
-                
+
                 if (data.user_code) {
                     $('#user_select').val(data.user_code);
-                    
+
                     // Déclencher le chargement des inscriptions
                     $('#user_select').trigger('change');
-                    
+
                     // Attendre que les inscriptions soient chargées
-                    setTimeout(function() {
+                    setTimeout(function () {
                         if (data.inscription_code) {
                             $('#inscription_select').val(data.inscription_code);
-                            
+
                             // Charger les détails de l'inscription depuis le serveur
                             $.ajax({
                                 url: LINK + 'admin/paiements/getInscriptionDetails',
                                 type: 'POST',
                                 data: { inscription_code: data.inscription_code },
-                                success: function(rep) {
+                                success: function (rep) {
                                     console.log('>>> Reloading Details from storage:', rep);
                                     let inscriptionData = JSON.parse(rep);
                                     if (inscriptionData) {
@@ -1317,7 +1539,7 @@ function initPaiementForm() {
                                         }
                                     }
                                 },
-                                error: function(xhr, status, error) {
+                                error: function (xhr, status, error) {
                                     console.log('>>> Error reloading details:', error);
                                 }
                             });
@@ -1333,7 +1555,7 @@ function initPaiementForm() {
 
 // ========== CLIENTS ==========
 function addClient() {
-    $('.formClient').on('submit', function(e) {
+    $('.formClient').on('submit', function (e) {
         e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
@@ -1342,10 +1564,10 @@ function addClient() {
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
@@ -1359,7 +1581,7 @@ function addClient() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Erreur :' + error);
             }
         });
@@ -1368,8 +1590,8 @@ function addClient() {
 
 // ========== INSCRIPTION CHOIX KIT ==========
 function addChoixKit() {
-    
-    $('.formChoixKit').on('submit', function(e) {
+
+    $('.formChoixKit').on('submit', function (e) {
         e.preventDefault();
 
         // Récupérer les données du formulaire
@@ -1377,38 +1599,38 @@ function addChoixKit() {
         var clientCode = formData.get('client_code');
         var typeInscription = formData.get('type_inscription');
         var userCode = formData.get('user_code');
-        
+
         // Récupérer les kits sélectionnés depuis le localStorage
         var kits = window.selectedKits || [];
-        
+
         console.log('>>> Submitting form with kits:', kits);
         console.log('>>> Client code:', clientCode);
         console.log('>>> Type:', typeInscription);
         console.log('>>> User:', userCode);
-        
+
         if (kits.length === 0) {
             showAlert('Erreur', 'Veuillez sélectionner au moins un kit!', 'error');
             return;
         }
-        
+
         // Préparer les données pour saveMultiple
         var postData = {
             client_code: clientCode,
             type_inscription: typeInscription,
             user_code: userCode,
-            kits: kits.map(function(kit) { return kit.code; })
+            kits: kits.map(function (kit) { return kit.code; })
         };
-        
+
         console.log('>>> Post data:', postData);
 
         $.ajax({
             url: LINK + 'admin/inscriptions/saveMultiple',
             type: 'POST',
             data: postData,
-            beforeSend: function() {
+            beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function(rep) {
+            success: function (rep) {
                 console.log('>>> Response:', rep);
                 let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions"><i class="feather icon-check-circle"></i> Finaliser l\'inscription</button>');
@@ -1423,7 +1645,7 @@ function addChoixKit() {
                     showAlert('Désolé !', response.msg, 'error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log('>>> Error:', error);
                 alert('Erreur :' + error);
             }
@@ -1432,23 +1654,23 @@ function addChoixKit() {
 }
 // ========== GESTION KITS PAR CATÉGORIE ==========
 function loadKitsByCategorie() {
-    $(document).on('change', '#categorie', function() {
+    $(document).on('change', '#categorie', function () {
         const categorieCode = $(this).val();
         const kitSelect = $('#kit');
         const choixParCategorie = window.choixParCategorie || {};
-        
+
         if (categorieCode && choixParCategorie[categorieCode]) {
             kitSelect.empty();
             kitSelect.append('<option value="">Sélectionner un kit</option>');
-            
-            choixParCategorie[categorieCode].forEach(function(kit) {
+
+            choixParCategorie[categorieCode].forEach(function (kit) {
                 kitSelect.append(
                     $('<option></option>')
                         .val(kit.code_choix)
                         .text(kit.libelle_choix + ' - ' + Number(kit.cotisation_choix).toLocaleString() + ' CFA')
                 );
             });
-            
+
             kitSelect.prop('disabled', false);
         } else {
             kitSelect.empty();
@@ -1461,36 +1683,36 @@ function loadKitsByCategorie() {
 // ========== SÉLECTION KITS POUR INSCRIPTION (AVEC LOCALSTORAGE) ==========
 function initKitSelection() {
     console.log('>>> initKitSelection called');
-    
+
     // Wrapper dans document ready pour s'assurer que jQuery est chargé
-    $(document).ready(function() {
+    $(document).ready(function () {
         console.log('>>> document is ready');
-        
+
         // Charger les kits depuis localStorage au démarrage
         loadKitsFromStorage();
-        
+
         // Gestion du clic sur le bouton de choix de kit
-        $(document).on('click', '.btn-choose-kit', function(e) {
+        $(document).on('click', '.btn-choose-kit', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            
+
             var code = $(this).data('code');
             var libelle = $(this).data('libelle');
             var cotisations = $(this).data('cotisation');
-            
+
             console.log('>>> Kit selected:', code, libelle, cotisations);
             console.log('>>> Data attributes:', $(this).data());
-            
+
             // Vérifier si déjà sélectionné
             if (!window.selectedKits) {
                 window.selectedKits = [];
             }
-            
-            if (window.selectedKits.some(function(kit) { return kit.code === code; })) {
+
+            if (window.selectedKits.some(function (kit) { return kit.code === code; })) {
                 showAlert('Info', 'Ce kit est déjà sélectionné!', 'info');
                 return;
             }
-            
+
             // Ajouter le kit
             var newKit = {
                 code: code,
@@ -1498,29 +1720,29 @@ function initKitSelection() {
                 cotisations: parseFloat(cotisations)
             };
             window.selectedKits.push(newKit);
-            
+
             console.log('>>> Kits after add:', window.selectedKits);
-            
+
             // Sauvegarder dans localStorage
             saveKitsToStorage();
-            
+
             // Mettre à jour l'interface
             updateSelectionUI();
             showAlert('Succès', libelle + ' ajouté à votre sélection!', 'success');
         });
-        
+
         // Gestion de la suppression de kit
-        $(document).on('click', '.remove-kit', function(e) {
+        $(document).on('click', '.remove-kit', function (e) {
             e.preventDefault();
             var code = $(this).data('code');
             window.removeKitFromSelection(code);
         });
-        
+
         // Filtrer les kits par catégorie
-        $(document).on('change', '#filter_categorie', function() {
+        $(document).on('change', '#filter_categorie', function () {
             var categorieCode = $(this).val();
-            
-            $('.kit-card').each(function() {
+
+            $('.kit-card').each(function () {
                 if (categorieCode === '' || $(this).data('categorie') === categorieCode) {
                     $(this).show();
                 } else {
@@ -1528,14 +1750,14 @@ function initKitSelection() {
                 }
             });
         });
-        
+
         // Soumettre le formulaire quand on clique sur Finaliser
-        $(document).on('click', '.formChoixKitSubmit', function(e) {
+        $(document).on('click', '.formChoixKitSubmit', function (e) {
             e.preventDefault();
             $('.formChoixKit').trigger('submit');
         });
     });
-    
+
     // Fonction pour sauvegarder dans localStorage
     function saveKitsToStorage() {
         try {
@@ -1545,7 +1767,7 @@ function initKitSelection() {
             console.error('>>> Error saving to localStorage:', e);
         }
     }
-    
+
     // Fonction pour charger depuis localStorage
     function loadKitsFromStorage() {
         try {
@@ -1564,28 +1786,28 @@ function initKitSelection() {
             window.selectedKits = [];
         }
     }
-    
+
     // Fonction globale pour vider le panier (à appeler après soumission réussie)
-    window.clearKitSelection = function() {
+    window.clearKitSelection = function () {
         window.selectedKits = [];
         localStorage.removeItem('collect_selectedKits');
         updateSelectionUI();
     };
-    
+
     // Mettre à jour l'interface de sélection
-    window.updateSelectionUI = function() {
+    window.updateSelectionUI = function () {
         var container = $('#selectionContainer');
         var kits = window.selectedKits || [];
-        
+
         if (kits.length === 0) {
             container.html('<div class="text-center text-muted py-4"><i class="feather icon-shopping-cart" style="font-size: 48px;"></i><p class="mt-2">Aucun kit sélectionné</p></div>');
             return;
         }
-        
+
         var total = 0;
         var html = '<ul class="list-group">';
-        
-        kits.forEach(function(kit) {
+
+        kits.forEach(function (kit) {
             // Support both 'cotisation' and 'cotisations' for backward compatibility
             var cot = kit.cotisation || kit.cotisations || 0;
             total += cot;
@@ -1596,20 +1818,20 @@ function initKitSelection() {
                 '<button type="button" class="btn btn-sm btn-danger remove-kit" data-code="' + kit.code + '">' +
                 '<i class="feather icon-trash-2"></i></button></div></li>';
         });
-        
+
         html += '</ul>';
         html += '<div class="mt-3 p-3 bg-primary text-white rounded">' +
             '<div class="d-flex justify-content-between align-items-center">' +
             '<strong>Total:</strong>' +
             '<strong style="font-size: 18px;">' + Number(total).toLocaleString() + ' CFA</strong></div></div>';
-        
+
         container.html(html);
     };
-    
+
     // Fonction globale pour supprimer un kit
-    window.removeKitFromSelection = function(code) {
+    window.removeKitFromSelection = function (code) {
         if (!window.selectedKits) return;
-        window.selectedKits = window.selectedKits.filter(function(kit) { return kit.code !== code; });
+        window.selectedKits = window.selectedKits.filter(function (kit) { return kit.code !== code; });
         saveKitsToStorage();
         updateSelectionUI();
     };

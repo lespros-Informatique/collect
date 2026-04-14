@@ -22,6 +22,8 @@ define('ROLE_ADMIN', "code-admin");
 define('ROLE_COMPTABLE', "code-comptable");
 define('ROLE_SUPERVISEUR', "code-code-superviseur");
 define('ROLE_COMMERCIAL', "code-commercial");
+define('CODE_ENTREPRISE', $_SESSION['entreprise']['code'] ?? null);
+define('LIBELLE_ENTREPRISE', $_SESSION['entreprise']['libelle'] ?? null);
 
 // Additional user constants for profile view
 define('ROLE', $_SESSION['user']['role'] ?? 'Utilisateur');
