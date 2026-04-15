@@ -132,7 +132,7 @@
                   <button type="submit" class="btn btn-primary btn_actions">
                     <i class="fa fa-save"></i> Sauvegarder
                   </button>
-                  <a href="<?= RACINE ?>admin/users" class="btn btn-secondary">
+                  <a href="<?= RACINE ?>admin/users" class="btn btn-outline-danger">
                     <i class="fa fa-times"></i> Annuler
                   </a>
                 </div>

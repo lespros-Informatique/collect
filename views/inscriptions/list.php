@@ -4,6 +4,46 @@
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-body">
+            <!-- Filtres -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form id="filterForm" class="form-inline" method="post">
+                        <div class="row w-100">
+                            <div class="col-md-4">
+                                <label class="mr-2">Commercial:</label>
+                                <select name="user_code" class="form-control form-control-sm select2">
+                                    <option value="">Tous les commerciaux</option>
+                                    <?php foreach ($users as $u): ?>
+                                    <option value="<?= htmlspecialchars($u['code_user']) ?>">
+                                        <?= htmlspecialchars(($u['nom_user'] ?? '') . ' ' . ($u['prenom_user'] ?? '')) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="mr-2">Catégorie:</label>
+                                <select name="categorie_code" class="form-control form-control-sm select2">
+                                    <option value="">Toutes les catégories</option>
+                                    <?php foreach ($categories as $cat): ?>
+                                    <option value="<?= htmlspecialchars($cat['code_categorie']) ?>">
+                                        <?= htmlspecialchars($cat['libelle_categorie'] ?? '') ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-filter"></i> Filtrer
+                                </button>
+                                <button type="submit" class="btn btn-sm btn-outline-secondary ml-1">
+                                    <i class="fa fa-times"></i> Réinitialiser
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -31,7 +71,7 @@
                                 <tbody>
                                     <?php $i = 0;
                                     foreach ($inscriptions as $inscription): $i++; 
-                                        $cryptedParams = $this->validator->crypter($inscription['code_inscription']); ?>
+                                        $cryptedParams = $validator->crypter($inscription['code_inscription']); ?>
                                     
                                         <tr>
                                             <td><?= $i ?></td>
@@ -199,6 +239,5 @@
         </div>
     </div>
 </div>
-
 
 <?php require_once '../public/inc/footer.php'; ?>

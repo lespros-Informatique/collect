@@ -35,6 +35,7 @@ define('TITLE', 'Collect - Gestion de Collectes');
 define('APP_NAME', 'Collect');
 define('LOGO', RACINE.'assets/logo/logo.avif');
 
+const ETAT = [0,1];
 class TABLES
 {
    
@@ -62,3 +63,4 @@ class TABLES
     public const STOCKS                       = 'stocks';
     public const VERSEMENTS                   = 'versements';
 }
+

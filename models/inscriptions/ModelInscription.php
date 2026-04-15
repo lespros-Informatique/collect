@@ -13,7 +13,7 @@ class ModelInscription
     }
 
     // Obtenir toutes les inscriptions
-    public function getAllInscriptions($status = null)
+    public function getAllInscriptions($status = ETAT[1])
     {
         try {
             $sql = 'SELECT * FROM inscriptions';
@@ -128,11 +128,18 @@ class ModelInscription
         }
     }
 
-    // Obtenir les inscriptions par catégorie
+    // Obtenir les inscriptions par catégorie (via ligne_choix -> choix)
     public function getInscriptionsByCategory($categorieCode)
     {
         try {
-            $sql = 'SELECT * FROM inscriptions WHERE categorie_code = ? ORDER BY date_debut DESC';
+            $sql = 'SELECT DISTINCT i.*, c.nom_client as client_nom, u.nom_user, u.prenom_user
+                    FROM inscriptions i
+                    LEFT JOIN clients c ON i.client_code = c.code_client
+                    LEFT JOIN users u ON i.user_code = u.code_user
+                    INNER JOIN ligne_choix lc ON i.code_inscription = lc.inscription_code AND lc.etat_ligne_choix = 1
+                    INNER JOIN choix ch ON lc.choix_code = ch.code_choix
+                    WHERE ch.categorie_code = ?
+                    ORDER BY i.date_debut DESC';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$categorieCode]);
             if ($query->rowCount() > 0) {

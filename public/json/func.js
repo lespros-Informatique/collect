@@ -372,7 +372,6 @@ function connexion() {
     });
 }
 
-
 function addUser() // form
 {
     $('.formUser').on('submit', function (e) {
@@ -392,7 +391,7 @@ function addUser() // form
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
             },
             success: function (rep) {
-                // console.log(rep);return
+                console.log(rep);return
                 let response = JSON.parse(rep);
 
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_action">Sauvegarder</button>'); // desactiver loader
@@ -1846,3 +1845,34 @@ document.addEventListener('DOMContentLoaded', function () {
         searchEnabled: true
     });
 });
+
+// function filterFormInscription () {
+//     // Filter form submission via AJAX
+//     $('#filterForm').on('submit', function(e) {
+//         e.preventDefault();
+        
+//         var formData = $(this).serialize();
+        
+//         $.ajax({
+//             url: LINK + 'admin/inscriptions/filter',
+//             type: 'POST',
+//             data: formData,
+//             success: function(response) {
+//                 console.log(response);
+//                 // Replace the content-body with the response
+//                 $('.content-body').html($(response).find('.content-body').html());
+//                 // Reinitialize select2
+//                 $('.select2').select2();
+//             },
+//             error: function() {
+//                 toastr.error('Erreur lors du filtrage');
+//             }
+//         });
+//     });
+    
+//     // Reset filter
+//     $('#resetFilter').on('click', function() {
+//         $('#filterForm')[0].reset();
+//         window.location.href = '<?= RACINE ?>admin/inscriptions';
+//     });
+// }

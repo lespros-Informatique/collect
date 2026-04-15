@@ -476,3 +476,6 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- INSERT INTO `users` (`id_user`, `code_user`, `nom_user`, `prenom_user`, `telephone_user`, `email_user`, `password_user`, `quartier_user`, `zone_user`, `piece_user`, `photo_user`, `date_created_user`, `user_code`, `succursale_code`, `etat_user`, `role_code`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES (NULL, 'US-12345', 'JOHN', 'CENA', '0566015517', 'admin@collect.ci', '$2y$10$Og8OnUoHMF7MRadrL0rdQOh4P/5D6sfY96gVD4zV3gLGl3tOQDHeq', 'Zone', 'zone', NULL, NULL, '2026-04-15 11:47:14.000000', 'US-12OP', 'AONNS', '1', 'DSZ', NULL, NULL, NULL);

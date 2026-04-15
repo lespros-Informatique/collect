@@ -7,8 +7,14 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Détails de l'inscription</h4>
-                        <a href="<?= RACINE ?>admin/inscriptions" class="btn btn-secondary btn-sm">Retour</a>
+                        <h4 class="card-title">
+                            <i class="feather icon-user-check"></i> Détails de l'inscription
+                        </h4>
+                        <div class="heading-elements">
+                            <a href="<?= RACINE ?>admin/inscriptions" class="btn btn-sm btn-outline-secondary">
+                                <i class="fa fa-arrow-left"></i> Retour
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <!-- Informations principales -->

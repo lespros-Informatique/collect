@@ -103,7 +103,7 @@
                                     <button type="submit" class="btn btn-primary btn_actions">
                                         <i class="feather icon-save"></i> Sauvegarder
                                     </button>
-                                    <a href="<?= RACINE ?>admin/kits" class="btn btn-secondary">
+                                    <a href="<?= RACINE ?>admin/kits" class="btn btn-outline-danger">
                                         <i class="feather icon-x"></i> Annuler
                                     </a>
                                 </div>

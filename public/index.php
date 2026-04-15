@@ -78,6 +78,7 @@ $route->addRoute('/admin/inscriptions/getArticlesByKit', [$inscriptionController
 $route->addRoute('/admin/inscriptions/saveMultiple', [$inscriptionController, 'saveMultiple']); // Sauvegarder inscription avec plusieurs kits
 $route->addRoute('/admin/inscriptions/delete', [$inscriptionController, 'delete']); // Supprimer inscription
 $route->addRoute('/admin/inscriptions/details/{params}', [$inscriptionController, 'details']); // Détails inscription
+$route->addRoute('/admin/inscriptions/filter', [$inscriptionController, 'filter']); // Filtrer inscriptions
 
 // Paiements management routes
 $route->addRoute('/admin/paiements', [$paiementController, 'index']); // Liste des paiements
@@ -145,6 +146,7 @@ $route->addRoute('/admin/users/changer', [$userController, 'changer']); // Chang
 
 // Client management routes
 $route->addRoute('/admin/clients', [$clientController, 'index']); // Liste des clients
+$route->addRoute('/admin/clients/user/{param}', [$clientController, 'clientsByUser']); // Clients par utilisateur
 $route->addRoute('/admin/clients/create', [$clientController, 'add']); // Créer un client
 $route->addRoute('/admin/clients/details/{params}', [$clientController, 'details']); // Détails client
 

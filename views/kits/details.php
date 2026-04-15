@@ -10,12 +10,14 @@
                         <h4 class="card-title">
                             <i class="feather icon-gift"></i> Détails du Kit
                         </h4>
-                        <a href="<?= RACINE ?>admin/kits" class="btn btn-secondary btn-sm">
-                            <i class="feather icon-arrow-left"></i> Retour à la liste
-                        </a>
-                        <a href="<?= RACINE ?>admin/kits/edit/<?= $this->validator->crypter($kit['code_choix']) ?>" class="btn btn-primary btn-sm ml-1">
-                            <i class="feather icon-edit"></i> Modifier
-                        </a>
+                        <div class="heading-elements">
+                            <a href="<?= RACINE ?>admin/kits" class="btn btn-sm btn-outline-secondary">
+                                <i class="fa fa-arrow-left"></i> Retour
+                            </a>
+                            <a href="<?= RACINE ?>admin/kits/edit/<?= $validator->crypter($kit['code_choix']) ?>" class="btn btn-primary btn-sm ml-1">
+                                <i class="feather icon-edit"></i> Modifier
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <!-- Informations principales -->
@@ -110,7 +112,7 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= RACINE ?>admin/inscriptions/details/<?= $this->validator->crypter($inscription['code_inscription']) ?>" class="btn btn-sm btn-info">
+                                                    <a href="<?= RACINE ?>admin/inscriptions/details/<?= $validator->crypter($inscription['code_inscription']) ?>" class="btn btn-sm btn-info">
                                                         <i class="feather icon-eye"></i>
                                                     </a>
                                                 </td>

@@ -53,7 +53,7 @@
                                             </td>
                                             <td><?= Validator::viewStatus('lock', 'unlock', $user['etat_user'], STATUS_ACTIVE) ?></td>
                                             <td>
-                                                <a href="<?= RACINE ?>user/details/<?= $cryptedParams; ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
+                                                <a href="<?= RACINE ?>user/details/<?= $cryptedParams; ?>" class="btn btn-sm btn-outline-primary mr-1" title="Détails">
                                                     <?= Validator::icon('eye'); ?> Détails
                                                 </a>
                                                 </td>

@@ -32,7 +32,7 @@ class KitController
         // Déchiffrer le code du kit
         $code = $this->validator->decrypter($param);
         $kit = $this->choix->getChoixByCode($code);
-        if ($kit) {
+        if ($kit) { 
             $articles = $this->article->getArticlesByChoix($code);
             // Charger la catégorie
             if (!empty($kit['categorie_code'])) {
@@ -41,6 +41,7 @@ class KitController
             // Charger les inscriptions utilisant ce kit
             $inscriptionModel = new ModelInscription();
             $inscriptions = $inscriptionModel->getInscriptionsByKit($code);
+            $validator = $this->validator;
         }
         require_once '../views/kits/details.php';
     }

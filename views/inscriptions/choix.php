@@ -11,7 +11,11 @@
                             <h4 class="card-title">
                                 <i class="feather icon-gift"></i> Choisir un Kit pour <?= htmlspecialchars($client['nom_client'] ?? '') ?>
                             </h4>
-                            <a href="<?= RACINE ?>admin/clients" class="btn btn-secondary btn-sm">Retour</a>
+                            <div class="heading-elements">
+                                <a href="<?= RACINE ?>admin/clients" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fa fa-arrow-left"></i> Retour
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <!-- Informations client -->

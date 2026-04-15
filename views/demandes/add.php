@@ -7,7 +7,7 @@
             </div>
             <div class="content-header-right col-md-6 col-12">
                 <div class="btn-group">
-                    <a href="<?= $validator->url('admin/demandes') ?>" class="btn btn-secondary btn-sm">
+                    <a href="<?= $validator->url('admin/demandes') ?>" class="btn btn-sm btn-outline-secondary">
                         <i class="fa fa-arrow-left"></i> Retour
                     </a>
                 </div>
@@ -74,7 +74,7 @@
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fa fa-check"></i> Enregistrer la demande
                                             </button>
-                                            <a href="<?= $validator->url('admin/demandes') ?>" class="btn btn-secondary">Annuler</a>
+                                            <a href="<?= $validator->url('admin/demandes') ?>" class="btn btn-outline-danger">Annuler</a>
                                         </div>
                                     </form>
                                 </div>

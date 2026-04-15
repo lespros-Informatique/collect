@@ -63,7 +63,7 @@
                                             <td><?= htmlspecialchars($client['zone_client'] ?? 'N/A') ?></td>
                                             <td><?= Validator::formatDate($client['created_at_client']) ?></td>
                                             <td>
-                                                <a href="<?= RACINE ?>admin/clients/details/<?= $cryptedParams ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
+                                                <a href="<?= RACINE ?>admin/clients/details/<?= $cryptedParams ?>" class="btn btn-sm btn-outline-primary mr-1" title="Détails">
                                                     <i class="feather icon-eye"></i> Détails
                                                 </a>
                                             </td>

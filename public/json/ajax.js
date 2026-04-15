@@ -61,3 +61,4 @@ updateStockByCategorie();
 validerDemande();
 rejeterDemande();
 addStock();
+// filterFormInscription();

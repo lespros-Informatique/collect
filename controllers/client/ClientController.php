@@ -20,10 +20,33 @@ class ClientController
     // Liste des clients
     public function index()
     {
-        $clients = $this->client->getAllClients(1);
         $users = $this->user->getUsers(1);
         $validator = $this->validator;
+        $clients = $this->client->getAllClients(1);
+        
         require_once '../views/clients/list.php';
+    }
+
+    // Clients d'un utilisateur spécifique
+    public function clientsByUser($param)
+    {
+        try {
+            $userCode = $this->validator->decrypter($param);
+            $user = $this->user->getUserByCode($userCode);
+            
+            if (!$user) {
+                header('Location: ' . RACINE . 'admin/clients');
+                exit();
+            }
+            
+            $clients = $this->client->getClientsByUserCode($userCode);
+            $validator = $this->validator;
+            
+            require_once '../views/clients/list-user.php';
+        } catch (Exception $e) {
+            header('Location: ' . RACINE . 'admin/clients');
+            exit();
+        }
     }
 
     // Détails d'un client

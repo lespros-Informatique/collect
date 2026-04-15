@@ -1,27 +1,86 @@
-<?php
-// Inclure le header
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>404 - Page introuvable</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-include './inc/header.php';
-?>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
 
-<!-- 404 Start -->
-<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-    <div class="container text-center">
-        <div class="row justify-content-center">
-            <div class="col-lg-6">
-                <div id="lottie-animation" style="width: 200px; height: 200px; margin: 0 auto;"></div>
-                <h1 class="mb-4">Page introuvable</h1>
-                <p class="mb-4">Admin sommes désolé, la page que vous récherchez n'existe pas! veuillez utiliser autre méthode de récherche.</p>
-                <p class="mb-4">Si vous ne trouvez toujours pas de solution, veuillez contacter le service client.</p>
-                <a class="btn btn-primary py-3 px-5" href="/home">Retour à la page d'accueil</a>
-            </div>
-        </div>
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .message {
+            font-size: 22px;
+            margin: 20px 0;
+            opacity: 0.9;
+        }
+
+        .desc {
+            font-size: 14px;
+            margin-bottom: 30px;
+            opacity: 0.7;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #fff;
+            color: #2a5298;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #ddd;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="error-code">404</div>
+
+    <div class="message">Page introuvable</div>
+
+    <div class="desc">
+        Oups... La page que tu cherches n'existe pas ou a été déplacée.
     </div>
+
+    <a href="/collect/public" class="btn">Retour à l'accueil</a>
 </div>
 
-<!-- 404 End -->
-<?php
-
-// Inclure le footer si nécessaire
-include './inc/footer.php';
-?>
+</body>
+</html>

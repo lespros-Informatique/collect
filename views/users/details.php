@@ -4,164 +4,214 @@
 <div class="app-content content">
   <div class="content-overlay"></div>
   <div class="content-wrapper">
-    <div class="content-header row">
-      <div class="col-sm-12">
-        <a href="<?= RACINE ?>admin/users" class="btn btn-sm btn-outline-secondary">
-          <i class="fa fa-arrow-left"></i> Retour à la liste
-        </a>
-      </div>
-    </div>
-
     <div class="content-body">
-      <!-- Profil utilisateur -->
-      <section class="row">
+      <div class="row">
+        <!-- Colonne gauche - Photo et infos principales -->
         <div class="col-12 col-md-4">
           <div class="card">
-            <div class="card-body">
-              <div class="card-img-actions text-center">
-                <div class="card-img-actions-inner">
-                  <img class="img-responsive img-rounded" src="<?= RACINE ?>public/app-assets/images/portrait/small/avatar-s-1.png" alt="Photo de profil" width="120" height="120">
-                  <h4 class="mt-2"><?= htmlspecialchars(($userProfile['nom_user'] ?? '') . ' ' . ($userProfile['prenom_user'] ?? '')) ?></h4>
-                  <p class="text-muted"><?= htmlspecialchars($userProfile['email_user'] ?? 'N/A') ?></p>
-                  <span class="badge badge-<?= $userProfile['etat_user'] == 1 ? 'success' : 'danger' ?>">
-                    <?= $userProfile['etat_user'] == 1 ? 'Actif' : 'Inactif' ?>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Informations détaillées -->
-          <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Informations</h4>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Code Utilisateur</h5>
-                      <p><?= htmlspecialchars($userProfile['code_user'] ?? '') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Nom</h5>
-                      <p><?= htmlspecialchars($userProfile['nom_user'] ?? '') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Prénom</h5>
-                      <p><?= htmlspecialchars($userProfile['prenom_user'] ?? '') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Téléphone</h5>
-                      <p><?= htmlspecialchars($userProfile['telephone_user'] ?? '') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Email</h5>
-                      <p><?= htmlspecialchars($userProfile['email_user'] ?? 'N/A') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Quartier</h5>
-                      <p><?= htmlspecialchars($userProfile['quartier_user'] ?? 'N/A') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Zone</h5>
-                      <p><?= htmlspecialchars($userProfile['zone_user'] ?? 'N/A') ?></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Rôle</h5>
-                      <p>
-                        <span class="badge badge-<?= $userProfile['role_code'] == 'ROLE-ADMIN-001' ? 'primary' : ($userProfile['role_code'] == 'ROLE-COM-001' ? 'info' : 'secondary') ?>">
-                          <?= htmlspecialchars($userProfile['role_code'] ?? '') ?>
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Statut</h5>
-                      <p><span class="badge badge-<?= $userProfile['etat_user'] == 1 ? 'success' : 'danger' ?>"><?= $userProfile['etat_user'] == 1 ? 'Actif' : 'Inactif' ?></span></p>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="media-body">
-                      <h5 class="media-heading">Membre depuis</h5>
-                      <p><?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?></p>
-                    </div>
-                  </div>
-                </div>
+              <h4 class="card-title"><i class="feather icon-user"></i> Profil Utilisateur</h4>
+              <div class="heading-elements">
+                <a href="<?= RACINE ?>admin/users" class="btn btn-sm btn-outline-secondary">
+                  <i class="fa fa-arrow-left"></i> Retour
+                </a>
               </div>
             </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="card">
-            <div class="card-body">
-              <div class="text-center">
-                <a href="<?= RACINE ?>user/edition/<?= $userProfile['id_user'] ?>" class="btn btn-primary">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <?php if (!empty($userProfile['photo_user'])): ?>
+                  <img class="img-rounded rounded-circle" src="<?= RACINE ?>public/uploads/users/<?= htmlspecialchars($userProfile['photo_user']) ?>" alt="Photo de profil" width="140" height="140" style="object-fit: cover;">
+                <?php else: ?>
+                  <img class="img-rounded rounded-circle" src="<?= RACINE ?>public/app-assets/images/portrait/small/avatar-s-1.png" alt="Photo de profil" width="140" height="140">
+                <?php endif; ?>
+              </div>
+              <h4 class="font-weight-bold"><?= htmlspecialchars(($userProfile['nom_user'] ?? '') . ' ' . ($userProfile['prenom_user'] ?? '')) ?></h4>
+              <p class="text-muted mb-2"><?= htmlspecialchars($userProfile['email_user'] ?? 'N/A') ?></p>
+              <span class="badge badge-<?= $userProfile['etat_user'] == 1 ? 'success' : 'danger' ?> mb-3">
+                <?= $userProfile['etat_user'] == 1 ? 'Actif' : 'Inactif' ?>
+              </span>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="<?= RACINE ?>user/edition/<?= $userProfile['id_user'] ?>" class="btn btn-primary btn-sm">
                   <i class="fa fa-edit"></i> Modifier
                 </a>
-                <button onclick="toggleUserStatus(<?= $userProfile['id_user'] ?>)" class="btn btn-<?= $userProfile['etat_user'] == 1 ? 'warning' : 'success' ?>">
+                <button onclick="toggleUserStatus(<?= $userProfile['id_user'] ?>)" class="btn btn-<?= $userProfile['etat_user'] == 1 ? 'warning' : 'success' ?> btn-sm">
                   <i class="fa fa-<?= $userProfile['etat_user'] == 1 ? 'lock' : 'unlock' ?>"></i>
                   <?= $userProfile['etat_user'] == 1 ? 'Désactiver' : 'Activer' ?>
                 </button>
               </div>
             </div>
           </div>
+
+          <!-- Pièce d'identité -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <h5 class="card-title"><i class="fa fa-id-card"></i> Pièce d'identité</h5>
+            </div>
+            <div class="card-body">
+              <?php if (!empty($userProfile['piece_user'])): ?>
+                <p class="mb-2"><strong>Numéro:</strong> <?= htmlspecialchars($userProfile['piece_user']) ?></p>
+                <?php if (strpos($userProfile['piece_user'], '.') !== false): ?>
+                  <img src="<?= RACINE ?>public/uploads/pieces/<?= htmlspecialchars($userProfile['piece_user']) ?>" alt="Pièce d'identité" class="img-fluid rounded" style="max-height: 200px;">
+                <?php endif; ?>
+              <?php else: ?>
+                <p class="text-muted mb-0">Aucune pièce enregistrée</p>
+              <?php endif; ?>
+            </div>
+          </div>
         </div>
 
-        <!-- Contenu secondaire -->
+        <!-- Colonne droite - Détails complets -->
         <div class="col-12 col-md-8">
+          <!-- Informations personnelles -->
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Informations système</h4>
+              <h4 class="card-title"><i class="fa fa-user"></i> Informations personnelles</h4>
             </div>
             <div class="card-body">
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6 mb-3">
                   <div class="media">
-                    <div class="media-left">
-                      <i class="fa fa-database mr-2"></i>
-                    </div>
                     <div class="media-body">
-                      <h5 class="media-heading">ID Utilisateur</h5>
-                      <p>#<?= $userProfile['id_user'] ?></p>
+                      <small class="text-muted d-block">Code Utilisateur</small>
+                      <strong><?= htmlspecialchars($userProfile['code_user'] ?? '') ?></strong>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-md-6 mb-3">
                   <div class="media">
-                    <div class="media-left">
-                      <i class="fa fa-shield mr-2"></i>
-                    </div>
                     <div class="media-body">
-                      <h5 class="media-heading">Sécurité</h5>
-                      <p>Mot de passe hashé</p>
+                      <small class="text-muted d-block">Téléphone</small>
+                      <strong><?= htmlspecialchars($userProfile['telephone_user'] ?? '') ?></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Email</small>
+                      <strong><?= htmlspecialchars($userProfile['email_user'] ?? 'N/A') ?></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Quartier</small>
+                      <strong><?= htmlspecialchars($userProfile['quartier_user'] ?? 'N/A') ?></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Zone</small>
+                      <strong><?= htmlspecialchars($userProfile['zone_user'] ?? 'N/A') ?></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Membre depuis</small>
+                      <strong><?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?></strong>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Informations professionnelles -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <h4 class="card-title"><i class="fa fa-briefcase"></i> Informations professionnelles</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Rôle</small>
+                      <span class="badge badge-<?= $userProfile['role_code'] == 'code-admin' ? 'primary' : ($userProfile['role_code'] == 'code-commercial' ? 'info' : 'secondary') ?>">
+                        <?= htmlspecialchars($userProfile['role_code'] ?? '') ?>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Succursale</small>
+                      <strong><?= htmlspecialchars($userProfile['succursale_code'] ?? 'N/A') ?></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">Créé par</small>
+                      <strong><?= htmlspecialchars($userProfile['user_code'] ?? 'Système') ?></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="media">
+                    <div class="media-body">
+                      <small class="text-muted d-block">ID Utilisateur</small>
+                      <strong>#<?= $userProfile['id_user'] ?></strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statut -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <h4 class="card-title"><i class="fa fa-toggle-on"></i> Statut du compte</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 text-center">
+                  <div class="p-3 rounded" style="background-color: <?= $userProfile['etat_user'] == 1 ? '#d4edda' : '#f8d7da' ?>;">
+                    <i class="fa fa-<?= $userProfile['etat_user'] == 1 ? 'check-circle' : 'times-circle' ?> fa-2x mb-2" style="color: <?= $userProfile['etat_user'] == 1 ? '#28a745' : '#dc3545' ?>;"></i>
+                    <br>
+                    <strong><?= $userProfile['etat_user'] == 1 ? 'Compte actif' : 'Compte inactif' ?></strong>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="p-3 rounded" style="background-color: #d1ecf1;">
+                    <i class="fa fa-shield fa-2x mb-2" style="color: #17a2b8;"></i>
+                    <br>
+                    <strong>Mot de passe hashé</strong>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="p-3 rounded" style="background-color: #fff3cd;">
+                    <i class="fa fa-clock-o fa-2x mb-2" style="color: #ffc107;"></i>
+                    <br>
+                    <strong><?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?></strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bouton Clients -->
+          <div class="card mt-3">
+            <div class="card-body text-center">
+              <a href="<?= RACINE ?>admin/clients/user/<?= $validator->crypter($userProfile['code_user']) ?>" class="btn btn-lg btn-primary">
+                <i class="fa fa-users"></i> Voir les clients (<?= $clientCount ?>)
+              </a>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   </div>
 </div>
+
 <script>
 function toggleUserStatus(userId) {
     if (confirm('Êtes-vous sûr de vouloir changer le statut de cet utilisateur ?')) {

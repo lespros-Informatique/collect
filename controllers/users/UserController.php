@@ -3,11 +3,13 @@ class UserController
 {
     private $validator;
     private $user;
+    private $client;
 
     public function __construct()
     {
         $this->validator = new Validator();
         $this->user = new ModelUser();
+        $this->client = new ModelClient();
     }
 
     public function decon()
@@ -35,6 +37,12 @@ class UserController
                 header('Location: ' . RACINE . 'admin/users');
                 exit();
             }
+
+            // Get clients count and list created by this user
+            $clientCount = $this->client->countClientsByUserCode($userProfile['code_user']);
+            $userClients = $this->client->getClientsByUserCode($userProfile['code_user']);
+            $validator = $this->validator;
+
         } catch (Exception $e) {
             // Handle decryption error - redirect to user list
             header('Location: ' . RACINE . 'admin/users');

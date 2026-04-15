@@ -35,9 +35,67 @@ class InscriptionController
     // Liste des inscriptions
     public function index()
     {
-        $inscriptions = $this->inscription->getAllInscriptions(1);
+
+
+    $userCode = $_POST['user_code'] ?? null;
+        $categorieCode = $_POST['categorie_code'] ?? null;
+        
+        if ($userCode && $categorieCode) {
+            $inscriptions = $this->inscription->getInscriptionsByCommercial($userCode);
+            $inscriptions = array_filter($inscriptions, function($i) use ($categorieCode) {
+                $choix = $this->inscription->getChoixByInscription($i['code_inscription']);
+                foreach ($choix as $c) {
+                    if ($c['categorie_code'] == $categorieCode) return true;
+                }
+                return false;
+            });
+        } elseif ($userCode) {
+            $inscriptions = $this->inscription->getInscriptionsByCommercial($userCode);
+        } elseif ($categorieCode) {
+            $inscriptions = $this->inscription->getInscriptionsByCategory($categorieCode);
+        } else {
+            $inscriptions = $this->inscription->getAllInscriptions();
+        }
+        
+
+
+        // $inscriptions = $this->inscription->getAllInscriptions(1);
         $users = $this->user->getUsers(1);
         $clients = $this->client->getAllClients(1);
+        $categories = $this->categorie->getAllCategories(1);
+        
+        $validator = $this->validator;
+        require_once '../views/inscriptions/list.php';
+    }
+
+    // Filtrer les inscriptions
+    public function filter()
+    {
+        $userCode = $_POST['user_code'] ?? null;
+        $categorieCode = $_POST['categorie_code'] ?? null;
+        
+        if ($userCode && $categorieCode) {
+            $inscriptions = $this->inscription->getInscriptionsByCommercial($userCode);
+            $inscriptions = array_filter($inscriptions, function($i) use ($categorieCode) {
+                $choix = $this->inscription->getChoixByInscription($i['code_inscription']);
+                foreach ($choix as $c) {
+                    if ($c['categorie_code'] == $categorieCode) return true;
+                }
+                return false;
+            });
+        } elseif ($userCode) {
+            $inscriptions = $this->inscription->getInscriptionsByCommercial($userCode);
+        } elseif ($categorieCode) {
+            $inscriptions = $this->inscription->getInscriptionsByCategory($categorieCode);
+        } else {
+            $inscriptions = $this->inscription->getAllInscriptions(1);
+        }
+        
+        $users = $this->user->getUsers(1);
+        $clients = $this->client->getAllClients(1);
+        $categories = $this->categorie->getAllCategories(1);
+        
+        $validator = $this->validator;
         require_once '../views/inscriptions/list.php';
     }
 
