@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 20 mars 2026 à 16:27
--- Version du serveur : 9.1.0
--- Version de PHP : 8.3.14
+-- Généré le : mar. 14 avr. 2026 à 14:14
+-- Version du serveur : 8.4.7
+-- Version de PHP : 8.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -36,16 +36,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `famille_code` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `image_article` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   PRIMARY KEY (`id_article`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `articles`
---
-
-INSERT INTO `articles` (`id_article`, `code_article`, `libelle_article`, `etat_article`, `famille_code`, `image_article`) VALUES
-(8, 'ART-F66JKX', 'Neque minim cupidata', 1, 'FAM-F7VVP6', 'public/uploads/articles/img_69a86c6c4e5f6_1772645484.png'),
-(9, 'ART-M8BEWY', 'ARticle2', 1, 'FAM-I5UAQU', 'public/uploads/articles/img_69a86c7f5c7c1_1772645503.png'),
-(10, 'ART-BLR8E2', 'ARticle2', 1, 'FAM-F7VVP6', 'public/uploads/articles/img_69a86c8bcf85e_1772645515.png');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -63,7 +54,14 @@ CREATE TABLE IF NOT EXISTS `campagnes` (
   PRIMARY KEY (`id_campagne`),
   UNIQUE KEY `code_campagne` (`code_campagne`),
   KEY `fk_campagne_entreprise` (`entreprise_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `campagnes`
+--
+
+INSERT INTO `campagnes` (`id_campagne`, `code_campagne`, `libelle_campagne`, `entreprise_code`, `etat_campagne`) VALUES
+(1, 'CAMPPV4WRLLV', 'Campagne 2026', 'ENTRE123456', 1);
 
 -- --------------------------------------------------------
 
@@ -78,22 +76,21 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `libelle_categorie` varchar(100) NOT NULL,
   `description_categorie` text,
   `nombre_jour` int DEFAULT NULL,
+  `campagne_code` varchar(50) NOT NULL,
   `date_debut` datetime NOT NULL,
   `date_fin` datetime NOT NULL,
   `img_categorie` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
   `etat_categorie` int NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id_categorie`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COMMENT='la categorie des choix';
+  PRIMARY KEY (`id_categorie`),
+  UNIQUE KEY `campagne_code` (`campagne_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COMMENT='la categorie des choix';
 
 --
 -- Déchargement des données de la table `categories`
 --
 
-INSERT INTO `categories` (`id_categorie`, `code_categorie`, `libelle_categorie`, `description_categorie`, `nombre_jour`, `date_debut`, `date_fin`, `img_categorie`, `etat_categorie`) VALUES
-(1, 'CAT-2026-001', 'Collecte 2026', 'Programme annuel 2026', 365, '2026-01-01 00:00:00', '2026-12-31 23:59:59', NULL, 1),
-(2, 'CAT-LMNRJB', 'quibusdam ratione derelinquo', 'quibusdam ratione derelinquo', 65, '1957-01-18 00:00:00', '1957-01-18 00:00:00', NULL, 1),
-(3, 'CAT-113B9E', 'Omnis voluptas amet', 'Adipisicing do et co', 53, '2024-10-11 00:00:00', '2023-05-07 00:00:00', 'public/uploads/categories/img_69a84e8b6687c_1772637835.webp', 1),
-(4, 'CAT-LTSD1B', 'pauper nostrum utrimque', 'aucune desc', 28, '2026-03-12 00:00:00', '2026-03-29 00:00:00', 'public/uploads/categories/img_69b2949768b30_1773311127.jpg', 1);
+INSERT INTO `categories` (`id_categorie`, `code_categorie`, `libelle_categorie`, `description_categorie`, `nombre_jour`, `campagne_code`, `date_debut`, `date_fin`, `img_categorie`, `etat_categorie`) VALUES
+(1, 'CAT-3DZ33X', 'dsbvwsd', 'xdvwsdvb', 200, '', '2026-04-14 00:00:00', '2026-11-30 00:00:00', '', 1);
 
 -- --------------------------------------------------------
 
@@ -115,18 +112,7 @@ CREATE TABLE IF NOT EXISTS `choix` (
   `deleted_why` text,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_choix`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `choix`
---
-
-INSERT INTO `choix` (`id_choix`, `code_choix`, `categorie_code`, `libelle_choix`, `description_choix`, `cotisation_choix`, `img_choix`, `etat_choix`, `deleted_by`, `deleted_why`, `deleted_at`) VALUES
-(1, 'CHOIX-KIT-001', 'CAT-2026-001', 'Kit Vaisselle Premium', 'Kit complet pour mariage ou foyer', 500, NULL, 0, 1, 'Suppression', '2026-03-05 00:13:55'),
-(2, 'CHOIX-KIT-RQU4IZ', 'CAT-113B9E', 'pauper nostrum utrimque', 'pauper nostrum utrimquea', 25, 'public/uploads/kits/img_69a8d60dbc25b_1772672525.jpg', 1, NULL, NULL, NULL),
-(3, 'CHOIX-KIT-U4355U', 'CAT-2026-001', 'pauper nostrum utrimque', 'desc', 25, 'public/uploads/kits/img_69a8a21f9093b_1772659231.png', 1, NULL, NULL, NULL),
-(4, 'CHOIX-KIT-CG5K17', 'CAT-2026-001', 'kit1', 'des', 23, 'public/uploads/kits/img_69a8d9f2a6b3f_1772673522.png', 1, NULL, NULL, NULL),
-(5, 'CHOIX-KIT-8YCYF9', 'CAT-LMNRJB', 'kit1', 'descr', 23, 'public/uploads/kits/img_69a8dcee4a8b3_1772674286.png', 1, NULL, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -149,18 +135,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_client`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `clients`
---
-
-INSERT INTO `clients` (`id_client`, `code_client`, `user_code`, `nom_client`, `telephone_client`, `quartier_client`, `zone_client`, `created_at_client`, `etat_client`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'CLIENT-001', '', 'DIALLO Mariam', '0709090909', 'Kennedy', 'Bouake Sud', '2026-01-05 10:00:00', 1, NULL, NULL, NULL),
-(2, 'CLIENT-5DBVLE', '', 'Eligendi alias sit', '0566192277', 'Incididunt eum et vo', 'Et et nihil distinct', '2026-03-04 16:14:36', 1, NULL, NULL, NULL),
-(3, 'CLIENT-WRIXY7', 'USER-COM-001', 'Eligendi alias sit', '0566192273', 'Incididunt eum et vo', 'Et et nihil distinct', '2026-03-04 16:32:39', 1, NULL, NULL, NULL),
-(4, 'CLIENT-IWNZF9', 'USER-COM-001', 'Eligendi alias sit', '0566192270', 'Incididunt eum et vo', 'Et et nihil distinct', '2026-03-04 16:48:23', 1, NULL, NULL, NULL),
-(5, 'CLIENT-WDPGTY', 'USER-COM-001', 'Eligendi alias sit', '0566192272', 'Incididunt eum et vo', 'Et et nihil distinct', '2026-03-04 21:31:49', 1, NULL, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -198,7 +173,14 @@ CREATE TABLE IF NOT EXISTS `entreprises` (
   PRIMARY KEY (`id_entreprise`),
   UNIQUE KEY `code_entreprise` (`code_entreprise`),
   UNIQUE KEY `email_entreprise` (`email_entreprise`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `entreprises`
+--
+
+INSERT INTO `entreprises` (`id_entreprise`, `code_entreprise`, `libelle_entreprise`, `email_entreprise`, `password_entreprise`, `etat_entreprise`) VALUES
+(1, 'ENTRE123456', 'Test collect entreprise', 'test@collect.ci', '$2y$10$kxHoUmjW8mz0v9BoFqajrexyR02JttNjF.wyfelmowf1CgbIqu7Sa', 1);
 
 -- --------------------------------------------------------
 
@@ -215,15 +197,7 @@ CREATE TABLE IF NOT EXISTS `familles` (
   `created_at_famille` datetime NOT NULL,
   `etat_famille` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_famille`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `familles`
---
-
-INSERT INTO `familles` (`id_famille`, `code_famille`, `libelle_famille`, `description_famille`, `created_at_famille`, `etat_famille`) VALUES
-(1, 'FAM-F7VVP6', 'Neque minim cupidata', 'Sit eiusmod cum cons', '2026-03-04 13:57:57', 1),
-(2, 'FAM-I5UAQU', 'Neque minim cupidata', 'dd', '2026-03-04 14:29:14', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -246,16 +220,7 @@ CREATE TABLE IF NOT EXISTS `inscriptions` (
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_inscription`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `inscriptions`
---
-
-INSERT INTO `inscriptions` (`id_inscription`, `code_inscription`, `user_code`, `client_code`, `demande_code`, `etat_inscription`, `type_inscription`, `date_debut`, `date_fin`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'INS-001', 'USER-COM-001', 'CLIENT-001', '', 1, 'annuel', '2026-01-05 00:00:00', '2026-12-31 23:59:59', NULL, NULL, NULL),
-(2, 'INS-LYLXE9', 'USER-COM-001', 'CLIENT-WDPGTY', '', 1, 'annuel', '2026-03-04 23:30:08', '2027-03-04 00:00:00', NULL, NULL, NULL),
-(3, 'INS-LPDK3S', 'USER-COM-001', 'CLIENT-001', '', 1, 'annuel', '2026-03-05 00:03:36', '2027-03-05 00:00:00', NULL, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -276,16 +241,7 @@ CREATE TABLE IF NOT EXISTS `ligne_articles` (
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_ligne_article`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `ligne_articles`
---
-
-INSERT INTO `ligne_articles` (`id_ligne_article`, `code_ligne_article`, `quantite_ligne_article`, `article_code`, `choix_code`, `date_created`, `etat_ligne_article`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'LIG-ART-J7MDR9', 1, 'ART-M8BEWY', 'CHOIX-KIT-CG5K17', '2026-03-05 09:43:28', 1, NULL, NULL, NULL),
-(2, 'LIG-ART-P0H26O', 1, 'ART-BLR8E2', 'CHOIX-KIT-CG5K17', '2026-03-05 09:45:09', 1, NULL, NULL, NULL),
-(3, 'LIG-ART-HOS7GQ', 1, 'ART-F66JKX', 'CHOIX-KIT-CG5K17', '2026-03-05 09:45:09', 1, NULL, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -325,18 +281,7 @@ CREATE TABLE IF NOT EXISTS `ligne_choix` (
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_ligne_choix`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `ligne_choix`
---
-
-INSERT INTO `ligne_choix` (`id_ligne_choix`, `code_ligne_choix`, `created_at_ligne_choix`, `inscription_code`, `choix_code`, `etat_ligne_choix`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'LIG-CHOIX-001', '2026-03-03 13:21:42', 'INS-001', 'CHOIX-KIT-001', 1, NULL, NULL, NULL),
-(2, 'LIG-CHOIX-5FEKLA', '2026-03-04 23:30:08', 'INS-LYLXE9', 'CHOIX-KIT-RQU4IZ', 1, NULL, NULL, NULL),
-(3, 'LIG-CHOIX-7I6R7F', '2026-03-04 23:30:08', 'INS-LYLXE9', 'CHOIX-KIT-U4355U', 1, NULL, NULL, NULL),
-(4, 'LIG-CHOIX-QMRY4M', '2026-03-04 23:30:08', 'INS-LYLXE9', 'CHOIX-KIT-001', 1, NULL, NULL, NULL),
-(5, 'LIG-CHOIX-CMMM8K', '2026-03-05 00:03:36', 'INS-LPDK3S', 'CHOIX-KIT-U4355U', 1, NULL, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -363,17 +308,7 @@ CREATE TABLE IF NOT EXISTS `paiements` (
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_paiement`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `paiements`
---
-
-INSERT INTO `paiements` (`id_paiement`, `code_paiement`, `versement_code`, `user_code`, `inscription_code`, `montant_paiement`, `telephone_paiement`, `reseau_paiement`, `nombre_jour_paye`, `created_at_paiement`, `type_paiement`, `statut_paiement`, `etat_paiement`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'PAY-AJD7J8', NULL, 'USER-COM-001', 'INS-001', 500, NULL, 'ESPECES', 1, '2026-03-05 12:21:17', 'manuel', 1, 1, NULL, NULL, NULL),
-(2, 'PAY-03T302', NULL, 'USER-COM-001', 'INS-LYLXE9', 550, NULL, 'ESPECES', 1, '2026-03-05 14:55:36', 'manuel', 1, 1, NULL, NULL, NULL),
-(3, 'PAY-8NCU6Z', NULL, 'USER-COM-001', 'INS-LPDK3S', 100, NULL, 'ESPECES', 4, '2026-03-05 14:56:15', 'manuel', 1, 1, NULL, NULL, NULL),
-(4, 'PAY-22XOAC', NULL, 'USER-COM-001', 'INS-LPDK3S', 25, NULL, 'ESPECES', 1, '2026-03-05 15:15:04', 'manuel', 1, 1, NULL, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -412,15 +347,7 @@ CREATE TABLE IF NOT EXISTS `retraits` (
   `type_retrait` enum('inscription') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'inscription',
   `etat_retrait` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_retrait`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `retraits`
---
-
-INSERT INTO `retraits` (`id_retrait`, `code_retrait`, `date_retrait`, `user_code`, `inscription_code`, `details`, `type_retrait`, `etat_retrait`) VALUES
-(1, 'RET-001', '2026-12-31 10:00:00', 'USER-ADMIN-001', 'INS-001', '{\"choix\":\"Kit Vaisselle Premium\",\"articles\":[\"Assiettes 24 pieces\",\"Verres 24 pieces\",\"Casseroles 3 pieces\"]}', 'inscription', 1),
-(2, 'RET-MLNXX8', '2026-03-12 10:26:16', 'USER-ADMIN-001', 'INS-LPDK3S', '{\"inscription\":\"INS-LPDK3S\",\"type\":\"inscription\"}', 'inscription', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -483,7 +410,15 @@ CREATE TABLE IF NOT EXISTS `succursales` (
   PRIMARY KEY (`id_succursale`),
   UNIQUE KEY `code_succursale` (`code_succursale`),
   KEY `fk_succursale_entreprise` (`entreprise_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `succursales`
+--
+
+INSERT INTO `succursales` (`id_succursale`, `code_succursale`, `libelle_succursale`, `entreprise_code`, `etat_succursale`) VALUES
+(1, 'SUCCCFXFLUZ0', 'Bouaké 01', 'ENTRE123456', 1),
+(2, 'SUCCHGFAYZYX', 'Bouaké 02', 'ENTRE123456', 1);
 
 -- --------------------------------------------------------
 
@@ -506,22 +441,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `photo_user` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
   `date_created_user` datetime NOT NULL,
   `user_code` varchar(50) NOT NULL,
+  `succursale_code` varchar(100) NOT NULL,
   `etat_user` int NOT NULL DEFAULT '1',
   `role_code` varchar(50) NOT NULL,
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `users`
---
-
-INSERT INTO `users` (`id_user`, `code_user`, `nom_user`, `prenom_user`, `telephone_user`, `email_user`, `password_user`, `quartier_user`, `zone_user`, `piece_user`, `photo_user`, `date_created_user`, `user_code`, `etat_user`, `role_code`, `deleted_why`, `deleted_by`, `deleted_at`) VALUES
-(1, 'USER-ADMIN-001', 'KONE', 'Moussa', '0701010101', 'admin@collect.ci', '$2y$10$kxHoUmjW8mz0v9BoFqajrexyR02JttNjF.wyfelmowf1CgbIqu7Sa', 'Commerce', 'Bouake Centre', NULL, NULL, '2026-03-03 13:21:42', 'USER-ADMIN-001', 1, 'code-commercial', NULL, NULL, NULL),
-(2, 'USER-COMP-001', 'TRAORE', 'Aminata', '0702020202', 'comptable@collect.ci', '$2y$10$ComptableHashExample', 'Air France', 'Bouake Nord', NULL, NULL, '2026-03-03 13:21:42', 'USER-COMP-001', 1, 'code-comptable', NULL, NULL, NULL),
-(3, 'USER-COM-001', 'KOUASSI', 'Jean', '0703030303', 'commercial@collect.ci', '$2y$10$CommercialHashExample', 'Dar Es Salam', 'Bouake Zone 1', NULL, NULL, '2026-03-03 13:21:42', 'USER-COM-001', 1, 'code-commercial', NULL, NULL, NULL);
+  PRIMARY KEY (`id_user`),
+  UNIQUE KEY `succursale_code` (`succursale_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 

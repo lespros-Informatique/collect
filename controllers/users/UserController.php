@@ -90,7 +90,7 @@ class UserController
         $allRoles = $roles->getAllRoles(1);
         require_once '../views/users/list.php';
     }
-
+    
     public function connexion()
     {
 

@@ -12,6 +12,14 @@ addKit();
 editKit();
 addKitArticles();
 
+// Succursales management
+addSuccursale();
+editSuccursale();
+
+// Campagnes management
+addCampagne();
+editCampagne();
+
 // Inscriptions management
 addInscription();
 // addChoixKit();
@@ -28,6 +36,8 @@ $(document).ready(function() {
     initPaiementForm();
     initPaiementButtons();
 });
+
+createPagination('#paginationControls', '.element-item', 6);
 
 // Versements management
 addVersement();

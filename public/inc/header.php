@@ -72,6 +72,26 @@
     <!-- END: Vendor CSS-->
 <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
 
+<style>
+    .succ-card {
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+.succ-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.stat-box h4 {
+    font-weight: bold;
+}
+
+.badge.bg-success-subtle {
+    background-color: #e6f7f0;
+}
+</style>
+
 </head>
 <!-- END: Head-->
 
@@ -83,7 +103,7 @@
    <?php
    
 //    if(USER_ROLE === "admin"){ 
-      require_once '../public/inc/sub_header/super_admin.php'; 
+      require_once 'sub_header/super_admin.php'; 
 //    }
    
 
