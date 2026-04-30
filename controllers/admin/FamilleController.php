@@ -17,16 +17,17 @@ class FamilleController
     // Liste des familles
     public function index()
     {
-        $familles = $this->famille->getAllFamilles(1);
+        $familles = $this->famille->getAllFamilles(ETAT[1]);
         require_once '../views/familles/list.php';
     }
 
     // Créer une famille
     public function create()
     {
+        extract($_POST);
         $msg = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $notEmpty = Validator::validateRequiredFields($_POST);
+            $notEmpty = Validator::validateRequiredFields($_POST, ['description']);
 
             if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
@@ -34,18 +35,22 @@ class FamilleController
                 return;
             }
 
-            extract($_POST);
+            if ($this->validator->verif(TABLES::FAMILLES, "libelle_famille", $libelle)) {
+                $msg = ['msg' => 'Le libellé de famille existe déjà!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
 
             // Génération du code famille
-            $code_famille = $this->validator->generateCode('familles', 'code_famille', 'FAM-', 6);
+            $code_famille = $this->validator->generateCode(TABLES::FAMILLES, 'code_famille', 'FAM-', 6);
 
             // Préparation des données
             $data = [
                 'code_famille' => $code_famille,
                 'libelle_famille' => trim($libelle),
                 'description_famille' => $description ?? null,
-                'created_at_famille' => date('Y-m-d H:i:s'),
-                'etat_famille' => 1
+                'created_at_famille' => $this->validator->dateActuelle(),
+                'etat_famille' => ETAT[1]
             ];
 
             if ($this->famille->addFamille($data)) {
@@ -75,7 +80,7 @@ class FamilleController
             $data = [
                 'libelle_famille' => trim($libelle),
                 'description_famille' => $description ?? null,
-                'etat_famille' => $etat ?? 1
+                'etat_famille' => $etat ?? ETAT[1]
             ];
 
             if ($this->famille->updateFamille($id, $data)) {

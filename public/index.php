@@ -1,5 +1,4 @@
 <?php
-
 require_once '../core/PrincipalRoute.php';
 
 // Instanciation de la base de données
@@ -78,7 +77,7 @@ $route->addRoute('/admin/inscriptions/getArticlesByKit', [$inscriptionController
 $route->addRoute('/admin/inscriptions/saveMultiple', [$inscriptionController, 'saveMultiple']); // Sauvegarder inscription avec plusieurs kits
 $route->addRoute('/admin/inscriptions/delete', [$inscriptionController, 'delete']); // Supprimer inscription
 $route->addRoute('/admin/inscriptions/details/{params}', [$inscriptionController, 'details']); // Détails inscription
-$route->addRoute('/admin/inscriptions/filter', [$inscriptionController, 'filter']); // Filtrer inscriptions
+// $route->addRoute('/admin/inscriptions/filter', [$inscriptionController, 'filter']); // Filtrer inscriptions
 
 // Paiements management routes
 $route->addRoute('/admin/paiements', [$paiementController, 'index']); // Liste des paiements

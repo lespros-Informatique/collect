@@ -10,6 +10,8 @@
                         <h4 class="card-title">
                             <i class="feather icon-users"></i> Gestion des Clients
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-user-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>

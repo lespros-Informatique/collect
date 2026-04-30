@@ -43,14 +43,12 @@
                                         <div class="form-group">
                                             <label for="type_inscription">Type d'inscription :</label>
                                             <div class="input-group">
-                                                <select class="form-control" id="type_inscription" name="type_inscription" required>
-                                                    <option value="annuel">Annuel</option>
-                                                    <option value="mensuel">Mensuel</option>
-                                                </select>
+                                                <input type="text" readonly class="form-control" id="type_inscription" value="inscription" name="type_inscription" required>
                                                 <span class="input-group-addon"><i class="feather icon-calendar"></i></span>
                                             </div>
                                         </div>
                                     </div>
+                                    <?php if (ROLE !== ROLE_COMMERCIAL){ ?>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="commercial">Commercial :</label>
@@ -63,9 +61,11 @@
                                                         </option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                              
                                         </div>
                                     </div>
+                                    <?php } else { ?>
+                                        <input type="hidden" id="commercial" name="user_code" value="<?= $_SESSION['code_user'] ?>">
+                                    <?php } ?>
                                 </div>
                             </form>
                         </div>
@@ -105,7 +105,7 @@
                                             <div class="card-body">
                                                 <?php if(!empty($kit['img_choix'])): ?>
                                                     <img src="<?= RACINE . $kit['img_choix'] ?>" alt="<?= htmlspecialchars($kit['libelle_choix']) ?>" 
-                                                         class="img-fluid mb-2" style="max-height: 120px; object-fit: contain;">
+                                                        class="img-fluid mb-2" style="max-height: 120px; object-fit: contain;">
                                                 <?php else: ?>
                                                     <div class="bg-secondary text-white rounded p-4 mb-2" style="height: 120px; display: flex; align-items: center; justify-content: center;">
                                                         <i class="feather icon-gift" style="font-size: 48px;"></i>

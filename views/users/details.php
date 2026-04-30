@@ -42,22 +42,7 @@
             </div>
           </div>
 
-          <!-- Pièce d'identité -->
-          <div class="card mt-3">
-            <div class="card-header">
-              <h5 class="card-title"><i class="fa fa-id-card"></i> Pièce d'identité</h5>
-            </div>
-            <div class="card-body">
-              <?php if (!empty($userProfile['piece_user'])): ?>
-                <p class="mb-2"><strong>Numéro:</strong> <?= htmlspecialchars($userProfile['piece_user']) ?></p>
-                <?php if (strpos($userProfile['piece_user'], '.') !== false): ?>
-                  <img src="<?= RACINE ?>public/uploads/pieces/<?= htmlspecialchars($userProfile['piece_user']) ?>" alt="Pièce d'identité" class="img-fluid rounded" style="max-height: 200px;">
-                <?php endif; ?>
-              <?php else: ?>
-                <p class="text-muted mb-0">Aucune pièce enregistrée</p>
-              <?php endif; ?>
-            </div>
-          </div>
+         
         </div>
 
         <!-- Colonne droite - Détails complets -->
@@ -115,83 +100,6 @@
                       <small class="text-muted d-block">Membre depuis</small>
                       <strong><?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?></strong>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Informations professionnelles -->
-          <div class="card mt-3">
-            <div class="card-header">
-              <h4 class="card-title"><i class="fa fa-briefcase"></i> Informations professionnelles</h4>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <div class="media">
-                    <div class="media-body">
-                      <small class="text-muted d-block">Rôle</small>
-                      <span class="badge badge-<?= $userProfile['role_code'] == 'code-admin' ? 'primary' : ($userProfile['role_code'] == 'code-commercial' ? 'info' : 'secondary') ?>">
-                        <?= htmlspecialchars($userProfile['role_code'] ?? '') ?>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <div class="media">
-                    <div class="media-body">
-                      <small class="text-muted d-block">Succursale</small>
-                      <strong><?= htmlspecialchars($userProfile['succursale_code'] ?? 'N/A') ?></strong>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <div class="media">
-                    <div class="media-body">
-                      <small class="text-muted d-block">Créé par</small>
-                      <strong><?= htmlspecialchars($userProfile['user_code'] ?? 'Système') ?></strong>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <div class="media">
-                    <div class="media-body">
-                      <small class="text-muted d-block">ID Utilisateur</small>
-                      <strong>#<?= $userProfile['id_user'] ?></strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Statut -->
-          <div class="card mt-3">
-            <div class="card-header">
-              <h4 class="card-title"><i class="fa fa-toggle-on"></i> Statut du compte</h4>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-4 text-center">
-                  <div class="p-3 rounded" style="background-color: <?= $userProfile['etat_user'] == 1 ? '#d4edda' : '#f8d7da' ?>;">
-                    <i class="fa fa-<?= $userProfile['etat_user'] == 1 ? 'check-circle' : 'times-circle' ?> fa-2x mb-2" style="color: <?= $userProfile['etat_user'] == 1 ? '#28a745' : '#dc3545' ?>;"></i>
-                    <br>
-                    <strong><?= $userProfile['etat_user'] == 1 ? 'Compte actif' : 'Compte inactif' ?></strong>
-                  </div>
-                </div>
-                <div class="col-md-4 text-center">
-                  <div class="p-3 rounded" style="background-color: #d1ecf1;">
-                    <i class="fa fa-shield fa-2x mb-2" style="color: #17a2b8;"></i>
-                    <br>
-                    <strong>Mot de passe hashé</strong>
-                  </div>
-                </div>
-                <div class="col-md-4 text-center">
-                  <div class="p-3 rounded" style="background-color: #fff3cd;">
-                    <i class="fa fa-clock-o fa-2x mb-2" style="color: #ffc107;"></i>
-                    <br>
-                    <strong><?= Validator::formatDate($userProfile['date_created_user'] ?? '') ?></strong>
                   </div>
                 </div>
               </div>

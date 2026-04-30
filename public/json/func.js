@@ -390,13 +390,13 @@ function addUser() // form
             beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>'); // activer loader
             },
+            dataType: 'JSON',
             success: function (rep) {
-                console.log(rep);return
-                let response = JSON.parse(rep);
+                let response = rep;
 
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_action">Sauvegarder</button>'); // desactiver loader
                 if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg, 'success');
+                        showAlert('Félicitations !', response.msg, 'success');
                     setInterval(() => {
                         location.reload(); // Actualise la page si nécessaire
                     }, 2000)
@@ -405,7 +405,7 @@ function addUser() // form
                 }
             },
             error: function (xhr, status, error) {
-                alert('Erreur :' + error);
+                console.log('Erreur :' + error);
             }
         });
         // }
@@ -532,8 +532,10 @@ function addCategorie() {
             beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
+            dataType: 'json',
             success: function (rep) {
-                let response = JSON.parse(rep);
+                console.log(rep);
+                let response = rep;
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
                     showAlert('Félicitations !', response.msg, 'success');
@@ -791,8 +793,8 @@ function addPaiement() {
             beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
-            success: function (rep) {
-                let response = JSON.parse(rep);
+            dataType: 'json',
+            success: function (response) {
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
                     showAlert('Félicitations !', response.msg, 'success');
@@ -840,7 +842,7 @@ function initPaiementButtons() {
                             $('#inscription_select').append(
                                 $('<option ' + selected + '></option>')
                                     .val(ins.code_inscription)
-                                    .text(ins.code_inscription + ' - ' + (ins.client_code || 'N/A'))
+                                    .text(ins.code_inscription + ' - ' + (ins.client_code || '...'))
                             );
                         });
                     }
@@ -984,8 +986,9 @@ function addFamille() {
             beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
             },
+            dataType: 'json',
             success: function (rep) {
-                let response = JSON.parse(rep);
+                let response = rep;
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
                 if (response.status == 1) {
                     showAlert('Félicitations !', response.msg, 'success');
@@ -1215,8 +1218,8 @@ function addKitArticles() {
             beforeSend: function () {
                 loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin"></i> Enregistrement...');
             },
-            success: function (rep) {
-                let response = JSON.parse(rep);
+            dataType: 'json',
+            success: function (response) {
                 loading('.btn_actions', false, '<i class="feather icon-save"></i> Sauvegarder');
                 if (response.status == 1) {
                     showAlert('Félicitations !', response.msg, 'success');
@@ -1563,12 +1566,13 @@ function addClient() {
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function () {
-                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
-            },
+            // beforeSend: function () {
+            //     loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            // },
+            dataType: 'json',
             success: function (rep) {
-                let response = JSON.parse(rep);
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary btn_actions">Sauvegarder</button>');
+                let response = rep;
                 if (response.status == 1) {
                     showAlert('Félicitations !', response.msg, 'success');
                     // Fermer le modal et rediriger vers la page de choix

@@ -220,7 +220,7 @@ class PaiementController
                 'nombre_jour_paye' => $nombre_jour,
                 'created_at_paiement' => Validator::dateActuelle(),
                 'type_paiement' => $type ?? 'manuel',
-                'statut_paiement' => PAIEMENT_STATUT_VALIDE,
+                'statut_paiement' => PAIEMENT_STATUT_EN_ATTENTE,
                 'etat_paiement' => PAIEMENT_ETAT_ACTIF
             ];
 

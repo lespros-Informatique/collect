@@ -4,17 +4,20 @@
 <div class="app-content content">
   <div class="content-overlay"></div>
   <div class="content-wrapper">
-    <div class="content-header row">
-      <div class="col-sm-12">
-        <a href="<?= RACINE ?>admin/users" class="btn btn-sm btn-outline-secondary">
-          <i class="fa fa-arrow-left"></i> Retour à la liste
-        </a>
+<div class="card-header">
+      <h4 class="card-title">
+          <i class="feather icon-users"></i> Modifier l'utilisateur
+      </h4>
+      <div class="heading-elements">
+          <a href="<?= RACINE ?>user/details/<?= $this->validator->crypter($userProfile['code_user']) ?>" class="btn btn-sm btn-outline-secondary">
+              <i class="fa fa-arrow-left"></i> Retour au profil
+          </a>
       </div>
-    </div>
+  </div>
 
     <div class="content-body">
       <div class="row">
-        <div class="col-12 col-md-8 col-lg-6">
+        <div class="col-12 col-md-12 col-lg-12">
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">Modifier l'utilisateur</h4>

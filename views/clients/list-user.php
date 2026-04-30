@@ -10,8 +10,10 @@
                         <h4 class="card-title">
                             <i class="feather icon-users"></i> Clients de <?= htmlspecialchars(($user['nom_user'] ?? '') . ' ' . ($user['prenom_user'] ?? '')) ?>
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-user-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
-                            <a href="<?= RACINE ?>admin/users/details/<?= $validator->crypter($user['id_user']) ?>" class="btn btn-sm btn-outline-secondary">
+                            <a href="<?= RACINE ?>user/details/<?= $validator->crypter($user['code_user']) ?>" class="btn btn-sm btn-outline-secondary">
                                 <i class="fa fa-arrow-left"></i> Retour au profil
                             </a>
                         </div>

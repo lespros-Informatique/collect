@@ -60,40 +60,9 @@ class InscriptionController
 
 
         // $inscriptions = $this->inscription->getAllInscriptions(1);
-        $users = $this->user->getUsers(1);
-        $clients = $this->client->getAllClients(1);
-        $categories = $this->categorie->getAllCategories(1);
-        
-        $validator = $this->validator;
-        require_once '../views/inscriptions/list.php';
-    }
-
-    // Filtrer les inscriptions
-    public function filter()
-    {
-        $userCode = $_POST['user_code'] ?? null;
-        $categorieCode = $_POST['categorie_code'] ?? null;
-        
-        if ($userCode && $categorieCode) {
-            $inscriptions = $this->inscription->getInscriptionsByCommercial($userCode);
-            $inscriptions = array_filter($inscriptions, function($i) use ($categorieCode) {
-                $choix = $this->inscription->getChoixByInscription($i['code_inscription']);
-                foreach ($choix as $c) {
-                    if ($c['categorie_code'] == $categorieCode) return true;
-                }
-                return false;
-            });
-        } elseif ($userCode) {
-            $inscriptions = $this->inscription->getInscriptionsByCommercial($userCode);
-        } elseif ($categorieCode) {
-            $inscriptions = $this->inscription->getInscriptionsByCategory($categorieCode);
-        } else {
-            $inscriptions = $this->inscription->getAllInscriptions(1);
-        }
-        
-        $users = $this->user->getUsers(1);
-        $clients = $this->client->getAllClients(1);
-        $categories = $this->categorie->getAllCategories(1);
+        $users = $this->user->getUsers(ETAT[1]);
+        // $clients = $this->client->getAllClients(ETAT[1]);
+        $categories = $this->categorie->getAllCategories(ETAT[1]);
         
         $validator = $this->validator;
         require_once '../views/inscriptions/list.php';
@@ -102,27 +71,15 @@ class InscriptionController
     // Page de choix du kit pour un client
     public function choix($clientCode)
     {
-        // Le code client est passé en clair (ex: CLIENT-ABC123) depuis addClient
-        // On vérifie si c'est un code valide qui commence par CLIENT-
-        // Si oui, pas de déchiffrement. Sinon, on essaie de déchiffrer (pour compatibilité avec d'autres routes)
-        if (strpos($clientCode, 'CLIENT-') === 0) {
-            $plainCode = $clientCode;
-        } else {
-            // Essayer de déchiffrer si c'est un code crypté
-            try {
-                $plainCode = $this->validator->decrypter($clientCode);
-            } catch (Exception $e) {
-                // Garder le code tel quel si le déchiffrement échoue
-                $plainCode = $clientCode;
-            }
-        }
+ 
+        $plainCode = $this->validator->decrypter($clientCode);
         
         $client = $this->client->getClientByCode($plainCode);
-        $categories = $this->categorie->getAllCategories(1);
-        $choixList = $this->choix->getAllChoix(1);
-        $users = $this->user->getUsers(1);
+        $categories = $this->categorie->getAllCategories(ETAT[1]);
+        $choixList = $this->choix->getAllChoix(ETAT[1]);
+        $users = $this->user->getUsers(ETAT[1]);
         // Passer tous les articles pour le select dans le modal
-        $articles = $this->article->getAllArticles(1);
+        // $articles = $this->article->getAllArticles(ETAT[1]);
         $clientCode = $plainCode;
         require_once '../views/inscriptions/choix.php';
     }
@@ -148,9 +105,14 @@ class InscriptionController
             
             // Kits (via ligne_choix)
             $kits = $this->choix->getChoixByInscription($code) ?? [];
+            $nombreJourPeriode = $this->inscription->getNombreJourByInscription($code);
             
             // Paiements (via ModelInscription)
             $paiements = $this->inscription->getPaiementsByInscription($code) ?? [];
+            $totalPayer = $this->choix->getTotalChoixAndJoursByInscription($code);
+            $totalPaye = $this->inscription->getMontantPayeValide($code);
+            
+            // $totalCotisation = $this->choix->getTotalChoixByInscription($code)['total'] ?? 0;
         }
         
         require_once '../views/inscriptions/details.php';

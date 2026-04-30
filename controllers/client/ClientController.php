@@ -87,14 +87,14 @@ class ClientController
                 return;
             }
             // Vérification si le téléphone existe déjà
-            if ($this->validator->verif('clients', 'telephone_client', $telephone)) {
+            if ($this->validator->verif(TABLES::CLIENTS, 'telephone_client', $telephone)) {
                 $msg = ['msg' => 'Ce numéro de téléphone existe déjà!', 'status' => 0];
                 echo json_encode($msg);
                 return;
             }
 
             // Génération automatique du code client
-            $code_client = $this->validator->generateCode('clients', 'code_client', 'CLIENT-', 6);
+            $code_client = $this->validator->generateCode(TABLES::CLIENTS, 'code_client', 'CLIENT-', 6);
 
             // Date de création
             $created_at_client = Validator::dateActuelle();
@@ -111,11 +111,11 @@ class ClientController
                 'etat_client' => 1
             ];
 
-            if ($this->validator->create('clients', $data)) {
+            if ($this->validator->create(TABLES::CLIENTS, $data)) {
                 $msg = [
                     'msg' => 'Client ajouté avec succès!',
-                    'status' => 1,
-                    'code_client' => $code_client
+                    'status' => ETAT[1],
+                    'code_client' => $this->validator->crypter($code_client)
                 ];
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
@@ -146,7 +146,7 @@ class ClientController
                 return;
             }
             // Vérification si le téléphone existe déjà pour un autre client
-            if ($this->validator->_verif('clients', 'telephone_client', $telephone, 'id_client', $id)) {
+            if ($this->validator->_verif(TABLES::CLIENTS, 'telephone_client', $telephone, 'id_client', $id)) {
                 $msg = ['msg' => 'Ce numéro de téléphone est déjà utilisé!', 'status' => 0];
                 echo json_encode($msg);
                 return;
@@ -161,7 +161,7 @@ class ClientController
                 'etat_client' => $etat_client ?? 1
             ];
 
-            if ($this->validator->update('clients', 'id_client', $id, $data)) {
+            if ($this->validator->update(TABLES::CLIENTS, 'id_client', $id, $data)) {
                 $msg = ['msg' => 'Client modifié avec succès!', 'status' => 1];
             } else {
                 $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];

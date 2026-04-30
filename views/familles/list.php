@@ -10,6 +10,8 @@
                         <h4 class="card-title">
                             <i class="feather icon-layers"></i> Gestion des Familles
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>
@@ -89,7 +91,7 @@
 
                 <!-- Description -->
                 <div class="form-group">
-                    <label for="description">Description :</label>
+                    <label for="description">Description (facultatif) :</label>
                     <div class="input-group">
                         <textarea class="form-control" id="description" name="description" placeholder="Description de la famille"></textarea>
                         <span class="input-group-addon"><i class="feather icon-file-text"></i></span>

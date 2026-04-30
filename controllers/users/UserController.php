@@ -211,9 +211,6 @@ class UserController
             $defaultPassword = 12345;
             $password_user = Validator::hashPassword($defaultPassword);
 
-            // Date de création
-            $date_created_user = Validator::dateActuelle();
-
             // Préparation des données pour la méthode create du Validator
             $data = [
                 'code_user' => $code_user,
@@ -226,9 +223,9 @@ class UserController
                 'zone_user' => trim($zone_user),
                 'piece_user' => $piece_user ?? null,
                 'photo_user' => $photo_user ?? null,
-                'date_created_user' => $date_created_user,
+                'date_created_user' => Validator::dateActuelle(),
                 'user_code' => $code_user,
-                'role_code' => $role_code ?? 'ROLE-COM-001'
+                'role_code' => $role_code
             ];
 
             if ($this->validator->create('users', $data)) {

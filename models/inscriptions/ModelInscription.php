@@ -205,6 +205,8 @@ class ModelInscription
         }
     }
 
+    
+
     // Obtenir les paiements validés d'une inscription (statut_paiement=1 ET etat_paiement=1)
     public function getPaiementsValidesByInscription($inscriptionCode)
     {

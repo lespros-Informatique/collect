@@ -18,12 +18,14 @@ define('USER_EMAIL', $_SESSION['user']['email'] ?? null);
 define('USER_ROLE', $_SESSION['user']['role'] ?? null);
 define('USER_PHONE', $_SESSION['user']['telephone'] ?? null);
 define('SIGN', USER_ROLE);
-define('ROLE_ADMIN', "code-admin");
-define('ROLE_COMPTABLE', "code-comptable");
-define('ROLE_SUPERVISEUR', "code-code-superviseur");
-define('ROLE_COMMERCIAL', "code-commercial");
+define('ROLE_ADMIN', "admin");
+define('ROLE_COMPTABLE', "comptable");
+define('ROLE_SUPERVISEUR', "superviseur");
+define('ROLE_COMMERCIAL', "commercial");
 define('CODE_ENTREPRISE', $_SESSION['entreprise']['code'] ?? null);
 define('LIBELLE_ENTREPRISE', $_SESSION['entreprise']['libelle'] ?? null);
+
+define('CAMPAGNE_CODE', "CAMPPV4WRLLV");
 
 // Additional user constants for profile view
 define('ROLE', $_SESSION['user']['role'] ?? 'Utilisateur');

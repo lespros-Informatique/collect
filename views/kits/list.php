@@ -10,6 +10,8 @@
                         <h4 class="card-title">
                             <i class="feather icon-gift"></i> Gestion des Kits
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>
@@ -143,15 +145,6 @@
                     <div class="error-message" id="libelleError"></div>
                 </div>
 
-                <!-- Description -->
-                <div class="form-group">
-                    <label for="description">Description :</label>
-                    <div class="input-group">
-                        <textarea class="form-control" id="description" name="description" placeholder="Description du kit"></textarea>
-                        <span class="input-group-addon"><i class="feather icon-file-text"></i></span>
-                    </div>
-                </div>
-
                 <!-- Cotisation -->
                 <div class="form-group">
                     <label for="cotisation">Cotisation :</label>
@@ -168,6 +161,16 @@
                     <div class="input-group">
                         <input type="file" class="form-control" id="image" name="image" accept="image/*">
                         <span class="input-group-addon"><i class="feather icon-image"></i></span>
+                    </div>
+                </div>
+
+                
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description (facultatif) :</label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="description" name="description" placeholder="Description du kit"></textarea>
+                        <span class="input-group-addon"><i class="feather icon-file-text"></i></span>
                     </div>
                 </div>
 
