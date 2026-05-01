@@ -53,7 +53,7 @@
                                             </td>
                                             <td><?= Validator::viewStatus('lock', 'unlock', $user['etat_user'], STATUS_ACTIVE) ?></td>
                                             <td>
-                                                <a href="<?= RACINE ?>user/details/<?= $cryptedParams; ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
+                                                <a href="<?= RACINE ?>user/details/<?= $cryptedParams; ?>" class="btn btn-sm btn-outline-primary mr-1" title="Détails">
                                                     <?= Validator::icon('eye'); ?> Détails
                                                 </a>
                                                 </td>
@@ -100,7 +100,7 @@
           <div class="form-group">
               <label for="email">Email :</label>
               <div class="input-group">
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Entrer l'adresse email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                  <input type="email" class="form-control" id="email" name="email_user" placeholder="Entrer l'adresse email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                   <span class="input-group-addon"> <?=Validator::icon('envelope'); ?></span>
               </div>
               <div class="error-message" id="emailError"></div>
@@ -110,7 +110,7 @@
           <div class="form-group">
               <label for="nom">Nom :</label>
               <div class="input-group">
-                  <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrer le nom complet" required>
+                  <input type="text" class="form-control" id="nom" name="nom_user" placeholder="Entrer le nom complet" required>
                   <span class="input-group-addon"> <?=Validator::icon('user'); ?></span>
               </div>
               <div class="error-message" id="nomError"></div>
@@ -120,7 +120,7 @@
           <div class="form-group">
               <label for="telephone">Numéro de Téléphone:</label>
               <div class="input-group">
-                  <input type="tel" class="form-control" id="telephone" name="telephone" maxlength="10" placeholder="Entrer 10 chiffres" required pattern="[0-9]{10}">
+                  <input type="tel" class="form-control" id="telephone" name="telephone_user" maxlength="10" placeholder="Entrer 10 chiffres" required pattern="[0-9]{10}">
                   <span class="input-group-addon"> <?=Validator::icon('phone'); ?></span>
               </div>
               <div class="error-message" id="telephoneError"></div>
@@ -130,18 +130,11 @@
           <div class="form-group">
               <label for="role">Rôle:</label>
               <div class="input-group">
-                  <select class="form-control" id="role" name="role" required>
+                  <select class="form-control" id="role_code" name="role_code" required>
                       <option value="">... Sélectionnez un rôle ...</option>
-                      <?php if (isset($allRoles) && !empty($allRoles)): ?>
                         <?php foreach ($allRoles as $role): ?>
                           <option value="<?= $role['code_role'] ?>"><?= htmlspecialchars($role['libelle_role']) ?></option>
                         <?php endforeach; ?>
-                      <?php else: ?>
-                        <option value="ROLE-ADMIN-001">Administrateur</option>
-                        <option value="ROLE-COMP-001">Comptable</option>
-                        <option value="ROLE-SUP-001">Superviseur</option>
-                        <option value="ROLE-COM-001">Commercial</option>
-                      <?php endif; ?>
                   </select>
                   <span class="input-group-addon"> <?=Validator::icon('user-secret'); ?></span>
               </div>
@@ -152,7 +145,7 @@
           <div class="form-group">
               <label for="prenom">Prénom :</label>
               <div class="input-group">
-                  <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Entrer le prénom" required>
+                  <input type="text" class="form-control" id="prenom" name="prenom_user" placeholder="Entrer le prénom" required>
                   <span class="input-group-addon"> <?=Validator::icon('user'); ?></span>
               </div>
               <div class="error-message" id="prenomError"></div>
@@ -162,7 +155,7 @@
           <div class="form-group">
               <label for="quartier">Quartier :</label>
               <div class="input-group">
-                  <input type="text" class="form-control" id="quartier" name="quartier" placeholder="Quartier" required>
+                  <input type="text" class="form-control" id="quartier" name="quartier_user" placeholder="Quartier" required>
                   <span class="input-group-addon"> <?=Validator::icon('map-pin'); ?></span>
               </div>
               <div class="error-message" id="quartierError"></div>
@@ -172,7 +165,7 @@
           <div class="form-group">
               <label for="zone">Zone :</label>
               <div class="input-group">
-                  <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone" required>
+                  <input type="text" class="form-control" id="zone" name="zone_user" placeholder="Zone" required>
                   <span class="input-group-addon"> <?=Validator::icon('map'); ?></span>
               </div>
               <div class="error-message" id="zoneError"></div>

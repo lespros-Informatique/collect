@@ -69,8 +69,8 @@
     <link rel="stylesheet" type="text/css" href="<?=RACINE; ?>app-assets/vendors/css/tables/extensions/responsive.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="<?=RACINE; ?>app-assets/vendors/css/forms/icheck/icheck.css">
     <link rel="stylesheet" type="text/css" href="<?=RACINE; ?>app-assets/vendors/css/forms/icheck/custom.css">
+    <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- END: Vendor CSS-->
-<link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
 
 <style>
     .succ-card {

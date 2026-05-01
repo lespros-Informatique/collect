@@ -32,7 +32,7 @@ class KitController
         // Déchiffrer le code du kit
         $code = $this->validator->decrypter($param);
         $kit = $this->choix->getChoixByCode($code);
-        if ($kit) {
+        if ($kit) { 
             $articles = $this->article->getArticlesByChoix($code);
             // Charger la catégorie
             if (!empty($kit['categorie_code'])) {
@@ -41,6 +41,7 @@ class KitController
             // Charger les inscriptions utilisant ce kit
             $inscriptionModel = new ModelInscription();
             $inscriptions = $inscriptionModel->getInscriptionsByKit($code);
+            $validator = $this->validator;
         }
         require_once '../views/kits/details.php';
     }
@@ -48,17 +49,24 @@ class KitController
     // Ajouter un kit
     public function add()
     {
+        extract($_POST);
         $msg = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $notEmpty = Validator::validateRequiredFields($_POST);
+            $notEmpty = Validator::validateRequiredFields($_POST, ['description']);
 
             if ($notEmpty !== true) {
-                $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                $msg = ['msg' => 'Veuillez renseigner les champs obligatoires!', 'status' => 0];
                 echo json_encode($msg);
                 return;
             }
 
-            extract($_POST);
+
+               if ($this->validator->verifs(TABLES::CHOIX, "libelle_choix",'categorie_code', $libelle, $categorie)) {
+                $msg = ['msg' => 'Le libellé de choix existe déjà dans cette catégorie!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
 
             // Génération du code choix
             $code_choix = $this->validator->generateCode('choix', 'code_choix', 'CHOIX-KIT-', 6);
@@ -106,7 +114,7 @@ class KitController
             $notEmpty = Validator::validateRequiredFields($_POST);
 
             if ($notEmpty !== true) {
-                $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                $msg = ['msg' => 'Veuillez renseigner les champs obligatoires!', 'status' => 0];
                 echo json_encode($msg);
                 return;
             }
@@ -190,25 +198,32 @@ class KitController
     // Ajouter une catégorie
     public function addCategory()
     {
+        extract($_POST);
+
         $msg = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $notEmpty = Validator::validateRequiredFields($_POST);
+            $notEmpty = Validator::validateRequiredFields($_POST,['description']);
 
             if ($notEmpty !== true) {
-                $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
+                $msg = ['msg' => 'Veuillez renseigner les champs obligatoires!', 'status' => 0];
                 echo json_encode($msg);
                 return;
             }
 
-            extract($_POST);
+            if ($this->validator->verifs(TABLES::CATEGORIES, "libelle_categorie",'campagne_code', $libelle, CAMPAGNE_CODE)) {
+                $msg = ['msg' => 'Le libellé de catégorie existe déjà dans cette campagne!', 'status' => 0];
+                echo json_encode($msg);
+                return;
+            }
+
 
             // Génération du code catégorie
-            $code_categorie = $this->validator->generateCode('categories', 'code_categorie', 'CAT-', 6);
+            $code_categorie = $this->validator->generateCode(TABLES::CATEGORIES, 'code_categorie', 'CAT-', 6);
 
             // Traitement de l'image
             $imagePath = '';
             try {
-                $imagePath = Validator::uploadImage('image', 'categories') ?? '';
+                $imagePath = Validator::uploadImage('image', TABLES::CATEGORIES) ?? '';
             } catch (Exception $e) {
                 $msg = ['msg' => 'Erreur lors de l\'upload de l\'image: ' . $e->getMessage(), 'status' => 0];
                 echo json_encode($msg);
@@ -217,6 +232,7 @@ class KitController
 
             // Préparation des données pour la méthode create du Validator
             $data = [
+                'campagne_code' => CAMPAGNE_CODE,
                 'code_categorie' => $code_categorie,
                 'libelle_categorie' => trim($libelle),
                 'description_categorie' => $description ?? null,
@@ -226,7 +242,7 @@ class KitController
                 'img_categorie' => $imagePath
             ];
 
-            if ($this->validator->create('categories', $data)) {
+            if ($this->validator->create(TABLES::CATEGORIES, $data)) {
                 $msg = ['msg' => 'Catégorie ajoutée avec succès!', 'status' => 1];
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
@@ -289,7 +305,7 @@ class KitController
         $kit = $this->choix->getChoixByCode($kitCode);
         
         // Récupérer tous les articles disponibles
-        $articles = $this->article->getAllArticles(1);
+        $articles = $this->article->getAllArticles(ETAT[1]);
         
         // Récupérer les articles déjà liés au kit
         $kitArticles = $this->article->getArticlesByChoix($kitCode);

@@ -21,7 +21,9 @@ class Router
             }
             
         }
-        echo '404 Page Not Found !!!!';
+        // rediriger vers la page 404
+        require_once '../core/errors/404.php';
+        exit;
     }
 
     public function getRoutes()

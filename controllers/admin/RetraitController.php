@@ -1,10 +1,6 @@
 <?php
 
-require_once '../models/Validator.php';
-require_once '../models/retraits/ModelRetrait.php';
-require_once '../models/users/ModelUser.php';
-require_once '../models/inscriptions/ModelInscription.php';
-require_once '../models/choix/ModelChoix.php';
+
 
 class RetraitController
 {
@@ -13,6 +9,7 @@ class RetraitController
     private $user;
     private $inscription;
     private $choix;
+    private $categorie;
 
     public function __construct()
     {
@@ -21,13 +18,19 @@ class RetraitController
         $this->user = new ModelUser();
         $this->inscription = new ModelInscription();
         $this->choix = new ModelChoix();
+        $this->categorie = new ModelCategorie();
     }
 
     // Liste des retraits
     public function index()
     {
         $retraits = $this->retrait->getAllRetraits(1);
-        $inscriptions = $this->inscription->getAllInscriptions(1);
+        $inscriptions = $this->inscription->getAllInscriptions(ETAT[0]);
+        $users = $this->user->getUsers(ETAT[1]);
+        // $clients = $this->client->getAllClients(ETAT[1]);
+        $categories = $this->categorie->getAllCategories(ETAT[1]);
+        
+        $validator = $this->validator;
         require_once '../views/retraits/list.php';
     }
 

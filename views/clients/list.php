@@ -10,6 +10,8 @@
                         <h4 class="card-title">
                             <i class="feather icon-users"></i> Gestion des Clients
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-user-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>
@@ -63,7 +65,7 @@
                                             <td><?= htmlspecialchars($client['zone_client'] ?? 'N/A') ?></td>
                                             <td><?= Validator::formatDate($client['created_at_client']) ?></td>
                                             <td>
-                                                <a href="<?= RACINE ?>admin/clients/details/<?= $cryptedParams ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
+                                                <a href="<?= RACINE ?>admin/clients/details/<?= $cryptedParams ?>" class="btn btn-sm btn-outline-primary mr-1" title="Détails">
                                                     <i class="feather icon-eye"></i> Détails
                                                 </a>
                                             </td>

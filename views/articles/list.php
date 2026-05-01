@@ -10,6 +10,8 @@
                         <h4 class="card-title">
                             <i class="feather icon-box"></i> Gestion des Articles
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>

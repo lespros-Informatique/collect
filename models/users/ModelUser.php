@@ -28,20 +28,21 @@ class ModelUser
     }
 
     // Obtenir un utilisateur par code
-    public function getUserByCode($code)
-    {
-        try {
-            $sql = 'SELECT * FROM users WHERE user_code = ?';
-            $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$code]);
-            if ($query->rowCount() > 0) {
-                return $query->fetch(PDO::FETCH_ASSOC);
-            }
-            return null;
-        } catch (\Exception $e) {
-            die('Erreur: ' . $e->getMessage());
-        }
+public function getUserByCode($code)
+{
+    try {
+        $sql = 'SELECT * FROM users WHERE code_user = :code';
+        $query = $this->pdo->getCon()->prepare($sql);
+        $query->execute(["code" => $code]);
+
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $user ?: null;
+
+    } catch (\Exception $e) {
+        die('Erreur: ' . $e->getMessage());
     }
+}
 
     // Obtenir un utilisateur par téléphone
     public function getUserByTelephone($telephone)

@@ -24,9 +24,9 @@ class PaiementController
     // Liste des paiements
     public function index()
     {
-        $paiements = $this->paiement->getAllPaiements(1);
-        $inscriptions = $this->inscription->getAllInscriptions(1);
-        $users = $this->user->getUsers(1);
+        $paiements = $this->paiement->getAllPaiements(ETAT[1]);
+        $inscriptions = $this->inscription->getAllInscriptions(ETAT[1]);
+        $users = $this->user->getUsers(ETAT[1]);
         require_once '../views/paiements/list.php';
     }
 
@@ -104,6 +104,7 @@ class PaiementController
     // Créer un paiement
     public function create()
     {
+        return 333;
         $msg = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Validation des champs obligatoires
@@ -126,7 +127,7 @@ class PaiementController
             }
             
             // 2. Vérifier que l'inscription est active
-            if ($inscription['etat_inscription'] != STATUS_ACTIVE) {
+            if ($inscription['etat_inscription'] != ETAT_INSCRIPTION[0]) {
                 $msg = ['msg' => 'Cette inscription n\'est plus active!', 'status' => 0];
                 echo json_encode($msg);
                 return;
@@ -206,7 +207,7 @@ class PaiementController
             // ========== FIN DES VALIDATIONS ==========
 
             // Génération du code paiement
-            $code_paiement = $this->validator->generateCode('paiements', 'code_paiement', 'PAY-', 6);
+            $code_paiement = $this->validator->generateCode(TABLES::PAIEMENTS, 'code_paiement', 'PAY-', 6);
 
             // Préparation des données
             $data = [
@@ -220,8 +221,7 @@ class PaiementController
                 'nombre_jour_paye' => $nombre_jour,
                 'created_at_paiement' => Validator::dateActuelle(),
                 'type_paiement' => $type ?? 'manuel',
-                'statut_paiement' => PAIEMENT_STATUT_VALIDE,
-                'etat_paiement' => PAIEMENT_ETAT_ACTIF
+                'statut_paiement' => STATUT[0]
             ];
 
             if ($this->paiement->addPaiement($data)) {
@@ -233,7 +233,7 @@ class PaiementController
                 // Si le reste à payer est à 0 ou moins, marquer l'inscription comme soldée
                 if ($resteApres <= 0) {
                     $this->inscription->updateInscription($inscription['id_inscription'], [
-                        'etat_inscription' => INSCRIPTION_ETAT_SOLDE
+                        'etat_inscription' => ETAT_INSCRIPTION[2]
                     ]);
                 }
                 // ========== FIN VÉRIFICATION ==========
@@ -268,8 +268,7 @@ class PaiementController
                 'reseau_paiement' => $reseau ?? 'ESPECES',
                 'nombre_jour_paye' => $nombre_jour,
                 'type_paiement' => $type ?? 'manuel',
-                'statut_paiement' => $statut ?? 1,
-                'etat_paiement' => $etat ?? 0
+                'statut_paiement' => $statut ?? STATUT[0]
             ];
 
             if ($this->paiement->updatePaiement($id, $data)) {

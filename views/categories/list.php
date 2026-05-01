@@ -1,4 +1,8 @@
-<?php require_once '../public/inc/header.php'; ?>
+<?php require_once '../public/inc/header.php';
+
+// var_dump($_SESSION);
+
+?>
 
 <!-- BEGIN: Content-->
 <div class="app-content content">
@@ -10,11 +14,12 @@
                         <h4 class="card-title">
                             <i class="feather icon-tag"></i> Gestion des Catégories
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-plus me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>
                                     <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addCategorieModal">
-                                        <i class="feather icon-plus"></i> Nouvelle Catégorie
+                                        <i class="feather icon-plus me-1"></i> Nouvelle Catégorie
                                     </button>
                                 </span>
                             </ul>
@@ -80,8 +85,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <!-- En-tête -->
-            <div class="modal-header text-light" style="background-color: #28a745;">
-                <h5 class="modal-title" id="modalTitle">Nouvelle Catégorie</h5>
+            <div class="modal-header text-light bg-success">
+                <h5 class="modal-title text-dark" id="modalTitle">Nouvelle Catégorie</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -98,15 +103,6 @@
                         <span class="input-group-addon"><i class="feather icon-tag"></i></span>
                     </div>
                     <div class="error-message" id="libelleError"></div>
-                </div>
-
-                <!-- Description -->
-                <div class="form-group">
-                    <label for="description">Description :</label>
-                    <div class="input-group">
-                        <textarea class="form-control" id="description" name="description" placeholder="Description de la catégorie"></textarea>
-                        <span class="input-group-addon"><i class="feather icon-file-text"></i></span>
-                    </div>
                 </div>
 
                 <!-- Nombre de jours -->
@@ -142,6 +138,16 @@
                     <div class="input-group">
                         <input type="file" class="form-control" id="image" name="image" accept="image/*">
                         <span class="input-group-addon"><i class="feather icon-image"></i></span>
+                    </div>
+                </div>
+
+                
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description (facultatif) :</label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="description" name="description" placeholder="Description de la catégorie"></textarea>
+                        <span class="input-group-addon"><i class="feather icon-file-text"></i></span>
                     </div>
                 </div>
 

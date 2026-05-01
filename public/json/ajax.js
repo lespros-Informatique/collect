@@ -37,7 +37,7 @@ $(document).ready(function() {
     initPaiementButtons();
 });
 
-createPagination('#paginationControls', '.element-item', 6);
+createPagination('#paginationControls', '.element-item');
 
 // Versements management
 addVersement();
@@ -61,3 +61,6 @@ updateStockByCategorie();
 validerDemande();
 rejeterDemande();
 addStock();
+// filterFormInscription();
+
+createRapport();

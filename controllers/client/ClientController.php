@@ -20,10 +20,33 @@ class ClientController
     // Liste des clients
     public function index()
     {
-        $clients = $this->client->getAllClients(1);
         $users = $this->user->getUsers(1);
         $validator = $this->validator;
+        $clients = $this->client->getAllClients(1);
+        
         require_once '../views/clients/list.php';
+    }
+
+    // Clients d'un utilisateur spécifique
+    public function clientsByUser($param)
+    {
+        try {
+            $userCode = $this->validator->decrypter($param);
+            $user = $this->user->getUserByCode($userCode);
+            
+            if (!$user) {
+                header('Location: ' . RACINE . 'admin/clients');
+                exit();
+            }
+            
+            $clients = $this->client->getClientsByUserCode($userCode);
+            $validator = $this->validator;
+            
+            require_once '../views/clients/list-user.php';
+        } catch (Exception $e) {
+            header('Location: ' . RACINE . 'admin/clients');
+            exit();
+        }
     }
 
     // Détails d'un client
@@ -64,14 +87,14 @@ class ClientController
                 return;
             }
             // Vérification si le téléphone existe déjà
-            if ($this->validator->verif('clients', 'telephone_client', $telephone)) {
+            if ($this->validator->verif(TABLES::CLIENTS, 'telephone_client', $telephone)) {
                 $msg = ['msg' => 'Ce numéro de téléphone existe déjà!', 'status' => 0];
                 echo json_encode($msg);
                 return;
             }
 
             // Génération automatique du code client
-            $code_client = $this->validator->generateCode('clients', 'code_client', 'CLIENT-', 6);
+            $code_client = $this->validator->generateCode(TABLES::CLIENTS, 'code_client', 'CLIENT-', 6);
 
             // Date de création
             $created_at_client = Validator::dateActuelle();
@@ -88,11 +111,11 @@ class ClientController
                 'etat_client' => 1
             ];
 
-            if ($this->validator->create('clients', $data)) {
+            if ($this->validator->create(TABLES::CLIENTS, $data)) {
                 $msg = [
                     'msg' => 'Client ajouté avec succès!',
-                    'status' => 1,
-                    'code_client' => $code_client
+                    'status' => ETAT[1],
+                    'code_client' => $this->validator->crypter($code_client)
                 ];
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
@@ -123,7 +146,7 @@ class ClientController
                 return;
             }
             // Vérification si le téléphone existe déjà pour un autre client
-            if ($this->validator->_verif('clients', 'telephone_client', $telephone, 'id_client', $id)) {
+            if ($this->validator->_verif(TABLES::CLIENTS, 'telephone_client', $telephone, 'id_client', $id)) {
                 $msg = ['msg' => 'Ce numéro de téléphone est déjà utilisé!', 'status' => 0];
                 echo json_encode($msg);
                 return;
@@ -138,7 +161,7 @@ class ClientController
                 'etat_client' => $etat_client ?? 1
             ];
 
-            if ($this->validator->update('clients', 'id_client', $id, $data)) {
+            if ($this->validator->update(TABLES::CLIENTS, 'id_client', $id, $data)) {
                 $msg = ['msg' => 'Client modifié avec succès!', 'status' => 1];
             } else {
                 $msg = ['msg' => 'Erreur lors de la modification', 'status' => 0];
@@ -160,7 +183,7 @@ class ClientController
                 // Vérification si l'inscription existe déjà
                 $existing = $this->inscription->getInscriptionsByClient($client_code);
                 foreach ($existing as $inscr) {
-                    if ($inscr['etat_inscription'] == 1 && $inscr['categorie_code'] == $categorie_code) {
+                    if ($inscr['etat_inscription'] == ETAT_INSCRIPTION[0] && $inscr['categorie_code'] == $categorie_code) {
                         $msg = ['msg' => 'Ce client est déjà inscrit à cette catégorie!', 'status' => 0];
                         echo json_encode($msg);
                         return;
@@ -179,7 +202,7 @@ class ClientController
                     'code_inscription' => $code_inscription,
                     'user_code' => $user_code,
                     'client_code' => $client_code,
-                    'etat_inscription' => 1,
+                    'etat_inscription' => ETAT_INSCRIPTION[0],
                     'type_inscription' => $type_inscription ?? 'annuel',
                     'date_debut' => $date_debut,
                     'date_fin' => $date_fin,

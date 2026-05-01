@@ -62,7 +62,7 @@ class ArticleController
                 'image_article' => $imagePath
             ];
 
-            if ($this->validator->create('articles', $data)) {
+            if ($this->validator->create(TABLES::ARTICLES, $data)) {
                 $msg = ['msg' => 'Article ajouté avec succès!', 'status' => 1];
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];

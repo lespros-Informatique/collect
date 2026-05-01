@@ -41,7 +41,7 @@ class ModelChoix
     public function getChoixById($id)
     {
         try {
-            $sql = 'SELECT * FROM choix WHERE id_choix = ?';
+            $sql = 'SELECT * FROM ' . TABLES::CHOIX . ' WHERE id_choix = ?';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$id]);
             if ($query->rowCount() > 0) {
@@ -57,7 +57,7 @@ class ModelChoix
     public function getChoixByCode($code)
     {
         try {
-            $sql = 'SELECT * FROM choix WHERE code_choix = ?';
+            $sql = 'SELECT * FROM ' . TABLES::CHOIX . ' WHERE code_choix = ?';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$code]);
             if ($query->rowCount() > 0) {
@@ -73,7 +73,7 @@ class ModelChoix
     public function getChoixByCategory($categorieCode)
     {
         try {
-            $sql = 'SELECT * FROM choix WHERE categorie_code = ? AND etat_choix = 1 ORDER BY libelle_choix ASC';
+            $sql = 'SELECT * FROM ' . TABLES::CHOIX . ' WHERE categorie_code = ? AND etat_choix = 1 ORDER BY libelle_choix ASC';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$categorieCode]);
             if ($query->rowCount() > 0) {
@@ -101,7 +101,7 @@ class ModelChoix
     public function deleteChoix($id, $reason)
     {
         try {
-            $sql = 'UPDATE choix SET deleted_by = ?, deleted_why = ?, deleted_at = NOW(), etat_choix = 0 WHERE id_choix = ?';
+            $sql = 'UPDATE ' . TABLES::CHOIX . ' SET deleted_by = ?, deleted_why = ?, deleted_at = NOW(), etat_choix = 0 WHERE id_choix = ?';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$_SESSION['user']['id_user'] ?? null, $reason, $id]);
             return true;
@@ -142,6 +142,44 @@ class ModelChoix
             $query->execute([$inscriptionCode]);
             if ($query->rowCount() > 0) {
                 return $query->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return [];
+        } catch (\Exception $e) {
+            die('Erreur: ' . $e->getMessage());
+        }
+    }
+
+    // Obtenir les choix/kits d'une inscription via ligne_choix
+    public function getTotalChoixByInscription($inscriptionCode)
+    {
+        try {
+            $sql = 'SELECT SUM(c.cotisation_choix) as total
+                    FROM ligne_choix lc
+                    INNER JOIN choix c ON lc.choix_code = c.code_choix
+                    WHERE lc.inscription_code = ? AND lc.etat_ligne_choix = 1';
+            $query = $this->pdo->getCon()->prepare($sql);
+            $query->execute([$inscriptionCode]);
+            if ($query->rowCount() > 0) {
+                return $query->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return [];
+        } catch (\Exception $e) {
+            die('Erreur: ' . $e->getMessage());
+        }
+    }
+
+        // Obtenir les choix/kits d'une inscription via ligne_choix
+    public function getTotalChoixAndJoursByInscription($inscriptionCode)
+    {
+        try {
+            $sql = 'SELECT SUM(c.cotisation_choix) as total, (SELECT SUM(c.cotisation_choix * ca.nombre_jour) FROM categories ca WHERE ca.code_categorie = c.categorie_code) as total_du_a_payer
+                    FROM ligne_choix lc
+                    INNER JOIN choix c ON lc.choix_code = c.code_choix
+                    WHERE lc.inscription_code = ? AND lc.etat_ligne_choix = 1';
+            $query = $this->pdo->getCon()->prepare($sql);
+            $query->execute([$inscriptionCode]);
+            if ($query->rowCount() > 0) {
+                return $query->fetch(PDO::FETCH_ASSOC);
             }
             return [];
         } catch (\Exception $e) {

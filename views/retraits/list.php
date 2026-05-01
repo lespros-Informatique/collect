@@ -4,21 +4,57 @@
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-body">
+            <!-- Filtres -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form id="filterForm" class="form-inline" method="post">
+                        <div class="row w-100">
+                            <?php if (ROLE !== ROLE_COMMERCIAL){ ?>
+                            <div class="col-md-4">
+                                <select name="user_code" class="form-control form-control-sm select2">
+                                    <option value="">Tous les commerciaux</option>
+                                    <?php foreach ($users as $u): ?>
+                                    <option value="<?= htmlspecialchars($u['code_user']) ?>">
+                                        <?= htmlspecialchars(($u['nom_user'] ?? '') . ' ' . ($u['prenom_user'] ?? '')) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php } else {?>
+                                <div class="col-md-4">
+                                    <p class="text-center text-primary font-weight-bold "><?= USER_NAME ?></p>
+                                </div>
+                            <?php }?>
+                            <div class="col-md-4 ">
+                                <select name="categorie_code" class="form-control form-control-sm select2">
+                                    <option value="">Toutes les catégories</option>
+                                    <?php foreach ($categories as $cat): ?>
+                                    <option value="<?= htmlspecialchars($cat['code_categorie']) ?>">
+                                        <?= htmlspecialchars($cat['libelle_categorie'] ?? '') ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-end phone-mt-1">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-filter"></i> Filtrer
+                                </button>
+                                <button type="submit" class="btn btn-sm btn-outline-secondary ml-1">
+                                    <i class="fa fa-times"></i> Réinitialiser
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                   
+                </div>
+            </div>
+            
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">
-                            <i class="feather icon-download"></i> Gestion des Retraits
+                            <i class="feather icon-dollar-sign"></i> Espace de Cotation
                         </h4>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <span>
-                                    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addRetraitModal">
-                                        <i class="feather icon-plus"></i> Nouveau Retrait
-                                    </button>
-                                </span>
-                            </ul>
-                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -27,67 +63,67 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Code</th>
-                                        <th>Date retrait</th>
                                         <th>Utilisateur</th>
-                                        <th>Inscription</th>
+                                        <th>Client</th>
                                         <th>Type</th>
-                                        <th>Détails</th>
+                                        <th>Date début</th>
+                                        <th>Date fin</th>
                                         <th>Etat</th>
+                                        <th>Détails</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $i = 0;
-                                    foreach ($retraits as $retrait): $i++; 
-                                        $cryptedParams = $this->validator->crypter($retrait['code_retrait']); ?>
+                                    foreach ($inscriptions as $inscription): $i++; 
+                                        $cryptedParams = $this->validator->crypter($inscription['code_inscription']); ?>
                                     
                                         <tr>
                                             <td><?= $i ?></td>
-                                            <td><?= htmlspecialchars($retrait['code_retrait']) ?></td>
-                                            <td><?= Validator::formatDate($retrait['date_retrait']) ?></td>
-                                            <td><?= htmlspecialchars($retrait['user_code'] ?? 'N/A') ?></td>
-                                            <td><?= htmlspecialchars($retrait['inscription_code'] ?? 'N/A') ?></td>
-                                            <td><?= htmlspecialchars($retrait['type_retrait'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($inscription['code_inscription']) ?></td>
+                                            <td><?= htmlspecialchars($inscription['user_code'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($inscription['client_code'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($inscription['type_inscription'] ?? 'N/A') ?></td>
+                                            <td><?= Validator::formatDate($inscription['date_debut']) ?></td>
+                                            <td><?= Validator::formatDate($inscription['date_fin']) ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#detailsModal<?= $i ?>">
-                                                    <i class="feather icon-eye"></i> Voir
-                                                </button>
-                                                <!-- Modal pour voir les détails -->
-                                                <div class="modal fade" id="detailsModal<?= $i ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Détails du Retrait</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <?php 
-                                                                $details = json_decode($retrait['details'], true);
-                                                                if ($details): ?>
-                                                                    <p><strong>Choix:</strong> <?= htmlspecialchars($details['choix'] ?? 'N/A') ?></p>
-                                                                    <?php if(isset($details['articles']) && is_array($details['articles'])): ?>
-                                                                        <p><strong>Articles:</strong></p>
-                                                                        <ul>
-                                                                        <?php foreach($details['articles'] as $article): ?>
-                                                                            <li><?= htmlspecialchars($article) ?></li>
-                                                                        <?php endforeach; ?>
-                                                                        </ul>
-                                                                    <?php endif; ?>
-                                                                <?php else: ?>
-                                                                    <p><?= htmlspecialchars($retrait['details'] ?? 'Aucun détail') ?></p>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <?php if($inscription['etat_inscription'] == ETAT_INSCRIPTION[2]): ?>
+                                                    <span class="badge badge-info">Soldée</span>
+                                                    <?php elseif($inscription['etat_inscription'] == ETAT_INSCRIPTION[0]): ?>
+                                                        <span class="badge badge-success">Active</span>
+                                                    <?php elseif($inscription['etat_inscription'] == ETAT_INSCRIPTION[1]): ?>
+                                                        <span class="badge badge-warning">En attente</span>
+                                                    <?php else: ?>
+                                                        <span class="badge badge-danger">Inactive</span>
+                                                    <?php endif; ?>
                                             </td>
                                             <td>
-                                                <?php if($retrait['etat_retrait'] == 1): ?>
-                                                    <span class="badge badge-success">Actif</span>
-                                                <?php else: ?>
-                                                    <span class="badge badge-danger">Annulé</span>
-                                                <?php endif; ?>
+                                                <a href="<?= RACINE ?>admin/inscriptions/details/<?= $cryptedParams ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
+                                                    <i class="feather icon-eye"></i> Détails
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="feather icon-settings"></i> Options
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item" href="<?= RACINE ?>admin/inscriptions/details/<?= $cryptedParams ?>">
+                                                            <i class="feather icon-eye"></i> Détails
+                                                        </a>
+                                                        <?php if($inscription['etat_inscription'] != ETAT_INSCRIPTION[2]): ?>
+                                                        <button type="button" class="dropdown-item btn-payer-inscription" 
+                                                            data-inscription="<?= htmlspecialchars($inscription['code_inscription']) ?>"
+                                                            data-user="<?= htmlspecialchars($inscription['user_code'] ?? '') ?>">
+                                                            <i class="feather icon-dollar-sign"></i> Payer
+                                                        </button>
+                                                        <?php endif; ?>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="<?= RACINE ?>admin/inscriptions/choix/<?= $inscription['client_code'] ?>">
+                                                            <i class="feather icon-refresh-cw"></i> Réinscrire
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -101,73 +137,98 @@
     </div>
 </div>
 
-<!-- Modal pour ajouter un retrait -->
-<div class="modal fade" id="addRetraitModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Modal pour ajouter un paiement -->
+<div class="modal fade" id="addPaiementModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
-            <!-- En-tête -->
-            <div class="modal-header text-light" style="background-color: #28a745;">
-                <h5 class="modal-title" id="modalTitle">Nouveau Retrait</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fermer">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">
+                    <i class="feather icon-dollar-sign"></i> Nouveau Paiement
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            
-            <!-- Corps du modal -->
             <div class="modal-body">
-            <form class="formRetrait" method="POST">
-                <!-- Code Retrait -->
-                <div class="form-group">
-                    <label for="code_retrait">Code Retrait :</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="code_retrait" name="code_retrait" placeholder="Code retrait" required>
-                        <span class="input-group-addon"><i class="feather icon-hashtag"></i></span>
+                <form class="formPaiement" method="POST">
+                    <div class="row">
+                        
+                        <!-- Sélection de l'inscription -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="inscription_select">Inscription <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather icon-file-text"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="inscription" id="inscription_select" class="form-control" readonly>
+                                    <!-- <select class="form-control" id="inscription_select" name="inscription" disabled>
+                                        <option value="">Sélectionnez d'abord un utilisateur</option>
+                                    </select> -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="error-message" id="codeRetraitError"></div>
-                </div>
-
-                <!-- Inscription -->
-                <div class="form-group">
-                    <label for="inscription">Inscription :</label>
-                    <div class="input-group">
-                        <select class="form-control" id="inscription" name="inscription" required>
-                            <option value="">... Sélectionnez une inscription ...</option>
-                            <?php if (isset($inscriptions) && !empty($inscriptions)): ?>
-                                <?php foreach ($inscriptions as $inscription): ?>
-                                    <option value="<?= $inscription['code_inscription'] ?>"><?= htmlspecialchars($inscription['code_inscription']) ?></option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                        <span class="input-group-addon"><i class="feather icon-file-text"></i></span>
+                    
+                    <!-- Détails de l'inscription -->
+                    <div id="inscription_details"></div>
+                    
+                    <!-- Nombre de jours et montant -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nombre_jour">Nombre de jours <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather icon-calendar"></i>
+                                        </div>
+                                    </div>
+                                    <input type="number" min="1" class="form-control" id="nombre_jour" name="nombre_jour" placeholder="Nombre de jours à payer" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="montant">Montant (F CFA) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather icon-dollar-sign"></i>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="form-control" id="montant" name="montant" min="1" placeholder="Montant à payer" required readonly>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Type -->
-                <div class="form-group">
-                    <label for="type">Type de retrait :</label>
-                    <div class="input-group">
-                        <select class="form-control" id="type" name="type">
-                            <option value="inscription">Inscription</option>
-                        </select>
-                        <span class="input-group-addon"><i class="feather icon-tag"></i></span>
+                    
+                    <!-- Affichage du montant -->
+                    <div id="montant_display" class="alert alert-success mt-2" style="display: none;">
+                        <i class="feather icon-check-circle"></i>
+                        Montant à payer: <strong id="montant_value">0</strong> F
                     </div>
-                </div>
-
-            <!-- Pied de page -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn_actions">Sauvegarder</button>
-                <span type="button" class="btn btn-danger" data-dismiss="modal">Annuler</span>
-            </div>
-            </form>
+                    
+                    <!-- Champs cachés pour type et réseau (optionnels) -->
+                    <input type="hidden" name="type" value="manuel">
+                    <input type="hidden" name="reseau" value="especes">
+                    
+                    <div class="modal-footer d-flex">
+                        
+                        <button type="submit" class="btn btn-primary btn_actions">
+                            <i class="feather icon-save"></i> Sauvegarder
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="feather icon-x"></i> Fermer
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function() {
-        addRetrait();
-    });
-</script>
 
 <?php require_once '../public/inc/footer.php'; ?>

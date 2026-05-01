@@ -7,8 +7,14 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Détails du client</h4>
-                        <a href="<?= RACINE ?>admin/clients" class="btn btn-secondary btn-sm">Retour</a>
+                        <h4 class="card-title">
+                            <i class="feather icon-user"></i> Détails du client
+                        </h4>
+                        <div class="heading-elements">
+                            <a href="<?= RACINE ?>admin/clients" class="btn btn-sm btn-outline-secondary">
+                                <i class="fa fa-arrow-left"></i> Retour
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -60,8 +66,8 @@
                                                     <td><?= Validator::formatDateTime($inscription['date_fin'] ?? '') ?></td>
                                                     <td><?= $inscription['type_inscription'] ?? '' ?></td>
                                                     <td>
-                                                        <span class="badge badge-<?= $inscription['etat_inscription'] == 1 ? 'success' : 'danger' ?>">
-                                                            <?= $inscription['etat_inscription'] == 1 ? 'Active' : 'Inactive' ?>
+                                                        <span class="badge badge-<?= $inscription['etat_inscription'] == ETAT_INSCRIPTION[0] ? 'success' : 'danger' ?>">
+                                                            <?= $inscription['etat_inscription'] == ETAT_INSCRIPTION[0] ? 'Active' : 'Inactive' ?>
                                                         </span>
                                                     </td>
                                                 </tr>
