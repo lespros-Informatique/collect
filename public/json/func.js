@@ -142,7 +142,6 @@ function loading(selector, status, message) {
     $(selector).html(message);
     $(selector).attr('disabled', status);
 }
-
 function createPagination(containerSelector, itemSelector, itemsPerPage = 6) {
     const items = document.querySelectorAll(itemSelector);
     const pagination = document.querySelector(containerSelector);
@@ -870,17 +869,18 @@ function addVersement() {
             url: LINK + 'admin/versements/create',
             type: 'POST',
             data: formData,
-            beforeSend: function () {
-                loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
-            },
+            // beforeSend: function () {
+            //     loading('.btn_actions', 'disabled', '<i class="fa fa-spinner fa-spin fa-2x text-light"></i>');
+            // },
+            // dataType: 'json',
             success: function (rep) {
-                let response = JSON.parse(rep);
+                console.log('>>> Response:', rep);return
                 loading('.btn_actions', false, '<button type="submit" class="btn btn-primary py-0 btn_actions">Sauvegarder</button>');
-                if (response.status == 1) {
-                    showAlert('Félicitations !', response.msg, 'success');
+                if (rep.status == 1) {
+                    showAlert('Félicitations !', rep.msg, 'success');
                     setInterval(() => { location.reload(); }, 2000);
                 } else {
-                    showAlert('Désolé !', response.msg, 'error');
+                    showAlert('Désolé !', rep.msg, 'error');
                 }
             },
             error: function (xhr, status, error) {
@@ -1085,6 +1085,86 @@ function updateStockByCategorie() {
         } else {
             $('#stock-info').html('Veuillez sélectionner une catégorie pour voir le stock disponible');
         }
+    });
+}
+
+function createRapport() {
+    $(document).on('click', '#addRapportBtn', function (e) {
+        e.preventDefault();
+        var user_code = $(this).data('user-code');
+        var montant_total = $('#montant_total').val();
+
+        console.log(user_code);
+        console.log(montant_total);
+        if (!montant_total) {
+            Swal.fire({
+                title: '<span style="font-size: 24px;">Erreur</span>',
+                html: '<span style="font-size: 18px;">Aucun versement trouvé!</span>',
+                icon: 'error',
+            });
+            return;
+        }
+        Swal.fire({
+            title: '<span style="font-size: 24px;">Confirmation</span>',
+            html: '<span style="font-size: 18px;">Voulez-vous envoyer ce rapport?</span>',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '<span style="font-size: 16px;">Oui, envoyer</span>',
+            cancelButtonText: '<span style="font-size: 16px;">Annuler</span>',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: LINK + 'rapportController/create',
+                    type: 'POST',
+                    data: { user_code: user_code, montant_total: montant_total,btn_create_rapport:1 },
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        showAlert('Résultat', response.msg, response.status == 1 ? 'success' : 'error');
+                        if (response.status == 1) {
+                            setInterval(() => { location.reload(); }, 2000);
+                        }
+                    },
+                    error: function () {
+                        showAlert('Erreur', 'Une erreur est survenue', 'error');
+                    }
+                });
+            }
+        });
+    });
+}
+
+function validerRapport() {
+    $(document).on('click', '.validerRapport', function (e) {
+        e.preventDefault();
+        var code = $(this).data('code');
+
+        Swal.fire({
+            title: '<span style="font-size: 24px;">Confirmation</span>',
+            html: '<span style="font-size: 18px;">Voulez-vous valider ce rapport?</span>',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '<span style="font-size: 16px;">Oui, valider</span>',
+            cancelButtonText: '<span style="font-size: 16px;">Annuler</span>',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: LINK + 'rapportController/valider',
+                    type: 'POST',
+                    data: { code: code, btn_valider_rapport:1 },
+                    dataType: 'json',
+                    success: function (response) {
+                        showAlert('Résultat', response.msg, response.status == 1 ? 'success' : 'error');
+                        if (response.status == 1) {
+                            setInterval(() => { history.back(); }, 2000);
+                        }
+                    },
+                    error: function () {
+                        showAlert('Erreur', 'Une erreur est survenue', 'error');
+                    }
+                });
+            }
+        });
     });
 }
 
@@ -1880,3 +1960,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //         window.location.href = '<?= RACINE ?>admin/inscriptions';
 //     });
 // }
+// }
+// }
+// }
+

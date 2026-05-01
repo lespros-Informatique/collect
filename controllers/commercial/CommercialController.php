@@ -192,7 +192,7 @@ class CommercialController
             extract($_POST);
 
             // Génération du code paiement
-            $code_paiement = $this->validator->generateCode('paiements', 'code_paiement', 'PAY-', 6);
+            $code_paiement = $this->validator->generateCode(TABLES::PAIEMENTS, 'code_paiement', 'PAY-', 6);
 
             // Date de création
             $created_at_paiement = Validator::dateActuelle();
@@ -209,11 +209,10 @@ class CommercialController
                 'nombre_jour_paye' => 1,
                 'created_at_paiement' => $created_at_paiement,
                 'type_paiement' => 'manuel',
-                'statut_paiement' => 1,
-                'etat_paiement' => 0
+                'statut_paiement' => STATUT[0]
             ];
 
-            if ($this->validator->create('paiements', $data)) {
+            if ($this->validator->create(TABLES::PAIEMENTS, $data)) {
                 $msg = ['msg' => 'Paiement enregistré avec succès!', 'status' => 1];
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'enregistrement', 'status' => 0];

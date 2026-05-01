@@ -14,6 +14,7 @@ $commercialController = new CommercialController();
 $inscriptionController = new InscriptionController();
 $paiementController = new PaiementController();
 $versementController = new VersementController();
+$rapportController = new RapportController();
 $retraitController = new RetraitController();
 $settingsController = new SettingsController();
 $familleController = new FamilleController();
@@ -80,7 +81,6 @@ $route->addRoute('/admin/inscriptions/details/{params}', [$inscriptionController
 // $route->addRoute('/admin/inscriptions/filter', [$inscriptionController, 'filter']); // Filtrer inscriptions
 
 // Paiements management routes
-$route->addRoute('/admin/paiements', [$paiementController, 'index']); // Liste des paiements
 $route->addRoute('/admin/paiements/create', [$paiementController, 'create']); // Créer paiement
 $route->addRoute('/admin/paiements/edit', [$paiementController, 'edit']); // Modifier paiement
 $route->addRoute('/admin/paiements/delete', [$paiementController, 'delete']); // Supprimer paiement
@@ -92,7 +92,15 @@ $route->addRoute('/admin/paiements/getInscriptionDetails', [$paiementController,
 $route->addRoute('/admin/versements', [$versementController, 'index']); // Liste des versements
 $route->addRoute('/admin/versements/create', [$versementController, 'create']); // Créer versement
 $route->addRoute('/admin/versements/edit', [$versementController, 'edit']); // Modifier versement
-$route->addRoute('/admin/versements/details/{params}', [$versementController, 'details']); // Détails versement
+$route->addRoute('/versements/details/{params}', [$versementController, 'details']); // Détails versement
+// Rapports management routes
+$route->addRoute('/rapports', [$rapportController, 'index']); // Liste des rapports
+$route->addRoute('/rapports/make_rapport', [$rapportController, 'make_rapport']); // Envoyer rapport
+$route->addRoute('/rapportController/create', [$rapportController, 'create']); // Envoyer rapport
+$route->addRoute('/rapportController/valider', [$rapportController, 'valider']); // Valider rapport
+$route->addRoute('/admin/rapports/edit', [$rapportController, 'edit']); // Modifier rapport
+$route->addRoute('/rapports/mes-rapports', [$rapportController, 'mesRapports']); // Mes rapports
+$route->addRoute('/rapports/details/{params}', [$rapportController, 'details']); // Détails rapport
 
 // Retraits management routes
 $route->addRoute('/admin/retraits', [$retraitController, 'index']); // Liste des retraits

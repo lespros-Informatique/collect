@@ -3,33 +3,39 @@
 require_once '../models/Validator.php';
 require_once '../models/versements/ModelVersement.php';
 require_once '../models/users/ModelUser.php';
+require_once '../models/paiements/ModelPaiement.php';
 
 class VersementController
 {
     private $validator;
     private $versement;
     private $user;
+    private $paiement;
 
     public function __construct()
     {
         $this->validator = new Validator();
         $this->versement = new ModelVersement();
+        $this->paiement = new ModelPaiement();
         $this->user = new ModelUser();
     }
 
     // Liste des versements
     public function index()
     {
-        $versements = $this->versement->getAllVersements();
+        $paiements = $this->versement->getPaiementsByCommercialInvalide();
         $users = $this->user->getUsers(1);
+        $paiementsInvalides = $this->paiement->getSumPaiementsByCommercialInvalide(USER_CODE);
         require_once '../views/versements/list.php';
     }
 
     // Détails d'un versement
     public function details($param)
     {
-        $code = $this->validator->decrypter($param);
-        $versement = $this->versement->getVersementByCode($code);
+        $params = explode('separator', $this->validator->decrypter($param));
+        $code = $params[0];
+        $statut = $params[1];
+        $paiements = $this->validator->getAllByElement(TABLES::PAIEMENTS, 'versement_code', $code);
         require_once '../views/versements/details.php';
     }
 
@@ -38,7 +44,7 @@ class VersementController
     {
         $msg = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $notEmpty = Validator::validateRequiredFields($_POST);
+            $notEmpty = Validator::validateRequiredFields($_POST,['description']);
 
             if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];
@@ -54,22 +60,41 @@ class VersementController
             // Préparation des données
             $data = [
                 'code_versement' => $code_versement,
-                'rapport_code' => $rapport_code ?? null,
-                'user_code' => $utilisateur,
+                'user_code' => USER_CODE,
                 'montant_versement' => $montant,
                 'date_created_versement' => date('Y-m-d H:i:s'),
-                'date_expires_versement' => $date_expiration,
-                'reseau_versement' => $reseau ?? 'Wave',
-                'statut_versement' => 'pending',
-                'etat_versement' => 'En cours'
+                'reseau_versement' => $reseau ?? 'ESPACE'
             ];
+            // Démarrer une transaction pour assurer l'intégrité des données
+            $this->validator->safeBeginTransaction();
 
+            try {
             if ($this->versement->addVersement($data)) {
-                $msg = ['msg' => 'Versement ajouté avec succès!', 'status' => 1];
+                // update paiement where versement_code = $code_versement
+                $dataUpdatePaiement = [
+                    'statut_paiement' => ETAT[1],
+                    'versement_code' => $code_versement
+                ];
+                $updated = $this->validator->update2(TABLES::PAIEMENTS, ['statut_paiement' => STATUT[0],'user_code' => USER_CODE], $dataUpdatePaiement);
+                if ($updated) {
+                    
+                    $msg = ['msg' => 'Versement ajouté avec succès!', 'status' => 1];
+                    $this->validator->safeCommit();
+                }else{
+                    $this->validator->safeRollBack();
+                    $msg = ['msg' => 'Erreur lors de la mise à jour du paiement', 'status' => 0];
+                }
+                $this->validator->safeRollBack();
             } else {
                 $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
+                $this->validator->safeRollBack();
             }
             echo json_encode($msg);
+            } catch (Exception $e) {
+                $this->validator->safeRollBack();
+                $msg = ['msg' => 'Erreur lors de l\'ajout', 'status' => 0];
+                echo json_encode($msg);
+            }
         }
     }
 
@@ -78,7 +103,7 @@ class VersementController
     {
         $msg = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $notEmpty = Validator::validateRequiredFields($_POST);
+            $notEmpty = Validator::validateRequiredFields($_POST,['description']);
 
             if ($notEmpty !== true) {
                 $msg = ['msg' => 'Veuillez renseigner tous les champs!', 'status' => 0];

@@ -108,7 +108,7 @@ class InscriptionController
             $nombreJourPeriode = $this->inscription->getNombreJourByInscription($code);
             
             // Paiements (via ModelInscription)
-            $paiements = $this->inscription->getPaiementsByInscription($code) ?? [];
+            $paiements = $this->paiement->getPaiementsByInscription($code) ?? [];
             $totalPayer = $this->choix->getTotalChoixAndJoursByInscription($code);
             $totalPaye = $this->inscription->getMontantPayeValide($code);
             
@@ -144,7 +144,7 @@ class InscriptionController
                 'type_inscription' => $type,
                 'date_debut' => $date_debut,
                 'date_fin' => $date_fin,
-                'etat_inscription' => 1
+                'etat_inscription' => ETAT_INSCRIPTION[0]
             ];
 
             if ($this->inscription->addInscription($data)) {
@@ -177,7 +177,7 @@ class InscriptionController
                 'type_inscription' => $type,
                 'date_debut' => $date_debut,
                 'date_fin' => $date_fin,
-                'etat_inscription' => $etat ?? 1
+                'etat_inscription' => $etat ?? ETAT_INSCRIPTION[0]
             ];
 
             if ($this->inscription->updateInscription($id, $data)) {
@@ -257,7 +257,7 @@ class InscriptionController
                 'type_inscription' => $type_inscription,
                 'date_debut' => $date_debut,
                 'date_fin' => $date_fin,
-                'etat_inscription' => 1
+                'etat_inscription' => ETAT_INSCRIPTION[0]
             ];
 
             if ($this->inscription->addInscription($data)) {
@@ -353,7 +353,7 @@ class InscriptionController
                 'type_inscription' => $type_inscription,
                 'date_debut' => $date_debut,
                 'date_fin' => $date_fin,
-                'etat_inscription' => 1
+                'etat_inscription' => ETAT_INSCRIPTION[0]
             ];
 
             if ($this->inscription->addInscription($data)) {

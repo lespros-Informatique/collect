@@ -303,7 +303,6 @@ CREATE TABLE IF NOT EXISTS `paiements` (
   `created_at_paiement` datetime DEFAULT NULL,
   `type_paiement` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `statut_paiement` int NOT NULL DEFAULT '1',
-  `etat_paiement` int NOT NULL DEFAULT '1',
   `deleted_why` text,
   `deleted_by` int DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,

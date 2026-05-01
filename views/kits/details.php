@@ -107,8 +107,8 @@
                                                 <td><?= ($inscription['nom_client'] ?? 'N/A') ?></td>
                                                 <td><?= Validator::formatDateTime($inscription['date_debut'] ?? '') ?></td>
                                                 <td>
-                                                    <span class="badge badge-<?= $inscription['etat_inscription'] == 1 ? 'success' : 'danger' ?>">
-                                                        <?= $inscription['etat_inscription'] == 1 ? 'Active' : 'Inactive' ?>
+                                                    <span class="badge badge-<?= $inscription['etat_inscription'] == ETAT_INSCRIPTION[1] ? 'success' : 'danger' ?>">
+                                                        <?= $inscription['etat_inscription'] == ETAT_INSCRIPTION[1] ? 'Active' : 'Inactive' ?>
                                                     </span>
                                                 </td>
                                                 <td>

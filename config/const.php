@@ -13,6 +13,7 @@ define('RACINE_PUBLIC', '/collect/public/');
 
 // Informations utilisateur connecté
 define('USER_ID', $_SESSION['user']['id_user'] ?? null);
+define('USER_CODE', $_SESSION['user']['code_user'] ?? null);
 define('USER_NAME', $_SESSION['user']['nom'] ?? null);
 define('USER_EMAIL', $_SESSION['user']['email'] ?? null);
 define('USER_ROLE', $_SESSION['user']['role'] ?? null);
@@ -38,6 +39,11 @@ define('APP_NAME', 'Collect');
 define('LOGO', RACINE.'assets/logo/logo.avif');
 
 const ETAT = [0,1];
+const STATUT_SHOW = ['pending' => 'En attente', 'valide' => 'Validé', 'annule' => 'Annulé'];
+const STATUT = ['pending', 'valide', 'annule'];
+const ETAT_INSCRIPTION_SHOW = ['solde' => 'Soldé', 'actif' => 'Actif', 'inactif' => 'Inactif','annule' => 'Annulé'];
+const ETAT_INSCRIPTION = ['actif', 'inactif', 'solde', 'annule'];
+
 class TABLES
 {
    

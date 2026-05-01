@@ -13,15 +13,15 @@ class ModelInscription
     }
 
     // Obtenir toutes les inscriptions
-    public function getAllInscriptions($status = ETAT[1])
+    public function getAllInscriptions($status = ETAT_INSCRIPTION[0])
     {
         try {
             $sql = 'SELECT * FROM inscriptions';
             $params = [];
 
             if ($status !== null) {
-                $sql .= ' WHERE etat_inscription = ?';
-                $params[] = $status;
+                $sql .= ' WHERE etat_inscription = :status';
+                $params[':status'] = $status;    
             }
 
             $sql .= ' ORDER BY date_debut DESC';
@@ -115,10 +115,10 @@ class ModelInscription
             $sql = 'SELECT c.*, lc.code_ligne_choix, lc.created_at_ligne_choix
                     FROM ligne_choix lc
                     INNER JOIN choix c ON lc.choix_code = c.code_choix
-                    WHERE lc.inscription_code = ? AND lc.etat_ligne_choix = 1
+                    WHERE lc.inscription_code = ? AND lc.etat_ligne_choix = :etat
                     ORDER BY lc.created_at_ligne_choix ASC';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$inscriptionCode]);
+            $query->execute([$inscriptionCode, 'etat' => ETAT[1]]);
             if ($query->rowCount() > 0) {
                 return $query->fetchAll(PDO::FETCH_ASSOC);
             }
@@ -180,22 +180,22 @@ class ModelInscription
     public function countInscriptionsByCommercial($userCode)
     {
         try {
-            $sql = 'SELECT COUNT(*) as total FROM inscriptions WHERE user_code = ? AND etat_inscription = 1';
+            $sql = 'SELECT COUNT(*) as total FROM inscriptions WHERE user_code = ? AND etat_inscription = :active';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$userCode]);
+            $query->execute([$userCode, 'active' => ETAT_INSCRIPTION[0]]);
             return $query->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
         } catch (\Exception $e) {
             die('Erreur: ' . $e->getMessage());
         }
     }
 
-    // Obtenir les paiements d'une inscription (tous)
-    public function getPaiementsByInscription($inscriptionCode)
+    // Obtenir les paiements validés d'une inscription (statut_paiement=1)
+    public function getPaiementsByInscriptionValide($inscriptionCode)
     {
         try {
-            $sql = 'SELECT * FROM paiements WHERE inscription_code = ? AND etat_paiement = ? ORDER BY created_at_paiement DESC';
+            $sql = 'SELECT * FROM paiements WHERE inscription_code = ? AND statut_paiement = :statut ORDER BY created_at_paiement DESC';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$inscriptionCode, PAIEMENT_ETAT_ACTIF]);
+            $query->execute([$inscriptionCode, 'statut' => STATUT[1]]);
             if ($query->rowCount() > 0) {
                 return $query->fetchAll(PDO::FETCH_ASSOC);
             }
@@ -207,13 +207,13 @@ class ModelInscription
 
     
 
-    // Obtenir les paiements validés d'une inscription (statut_paiement=1 ET etat_paiement=1)
+    // Obtenir les paiements validés d'une inscription (statut_paiement=1)
     public function getPaiementsValidesByInscription($inscriptionCode)
     {
         try {
-            $sql = 'SELECT * FROM paiements WHERE inscription_code = ? AND statut_paiement = ? AND etat_paiement = ? ORDER BY created_at_paiement DESC';
+            $sql = 'SELECT * FROM paiements WHERE inscription_code = ? AND statut_paiement = ? ORDER BY created_at_paiement DESC';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$inscriptionCode, PAIEMENT_STATUT_VALIDE, PAIEMENT_ETAT_ACTIF]);
+            $query->execute([$inscriptionCode, STATUT[1]]);
             if ($query->rowCount() > 0) {
                 return $query->fetchAll(PDO::FETCH_ASSOC);
             }
@@ -227,9 +227,9 @@ class ModelInscription
     public function getMontantPayeValide($inscriptionCode)
     {
         try {
-            $sql = 'SELECT COALESCE(SUM(montant_paiement), 0) as total FROM paiements WHERE inscription_code = ? AND statut_paiement = ? AND etat_paiement = ?';
+            $sql = 'SELECT COALESCE(SUM(montant_paiement), 0) as total FROM paiements WHERE inscription_code = ? AND statut_paiement = ?';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$inscriptionCode, PAIEMENT_STATUT_VALIDE, PAIEMENT_ETAT_ACTIF]);
+            $query->execute([$inscriptionCode, STATUT[1]]);
             return $query->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
         } catch (\Exception $e) {
             die('Erreur: ' . $e->getMessage());
@@ -281,10 +281,10 @@ class ModelInscription
                     FROM inscriptions i 
                     LEFT JOIN clients c ON i.client_code = c.code_client 
                     INNER JOIN ligne_choix lc ON i.code_inscription = lc.inscription_code
-                    WHERE lc.choix_code = ? AND i.etat_inscription = 1 
+                    WHERE lc.choix_code = ? AND i.etat_inscription = :active
                     ORDER BY i.date_debut DESC';
             $query = $this->pdo->getCon()->prepare($sql);
-            $query->execute([$kitCode]);
+            $query->execute([$kitCode, 'active' => ETAT_INSCRIPTION[0]]);
             if ($query->rowCount() > 0) {
                 return $query->fetchAll(PDO::FETCH_ASSOC);
             }

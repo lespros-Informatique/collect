@@ -1,6 +1,6 @@
 <?php
 
-class ModelVersement
+class ModelRapport
 {
     private $pdo;
     private $validator;
@@ -11,11 +11,11 @@ class ModelVersement
         $this->validator = new Validator();
     }
 
-    // Obtenir tous les versements
-    public function getAllVersements($status = null)
+    // Obtenir tous les rapports
+    public function getAllRapports($status = null)
     {
         try {
-            $sql = 'SELECT * FROM versements';
+            $sql = 'SELECT * FROM rapports';
             $params = [];
 
             if ($status !== null) {
@@ -37,11 +37,11 @@ class ModelVersement
         }
     }
 
-    // Obtenir un versement par ID
-    public function getVersementById($id)
+    // Obtenir un rapport par ID
+    public function getRapportById($id)
     {
         try {
-            $sql = 'SELECT * FROM versements WHERE id_versement = ?';
+            $sql = 'SELECT * FROM rapports WHERE id_rapport = ?';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$id]);
             if ($query->rowCount() > 0) {
@@ -53,11 +53,11 @@ class ModelVersement
         }
     }
 
-    // Obtenir un versement par code
-    public function getVersementByCode($code)
+    // Obtenir un rapport par code
+    public function getRapportByCode($code)
     {
         try {
-            $sql = 'SELECT * FROM versements WHERE code_versement = ?';
+            $sql = 'SELECT * FROM rapports WHERE code_rapport = ?';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$code]);
             if ($query->rowCount() > 0) {
@@ -69,11 +69,11 @@ class ModelVersement
         }
     }
 
-    // Obtenir les versements par utilisateur (commercial)
-    public function getVersementsByUser($userCode)
+    // Obtenir les rapports par utilisateur (commercial)
+    public function getRapportsByUser($userCode)
     {
         try {
-            $sql = 'SELECT * FROM versements WHERE user_code = ? ORDER BY date_created_versement DESC';
+            $sql = 'SELECT * FROM rapports WHERE user_code = ? ORDER BY date_created_rapport DESC';
             $query = $this->pdo->getCon()->prepare($sql);
             $query->execute([$userCode]);
             if ($query->rowCount() > 0) {

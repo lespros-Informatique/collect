@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <form id="filterForm" class="form-inline" method="post">
                         <div class="row w-100">
-                            <?php if (ROLE === ROLE_COMMERCIAL){ ?>
+                            <?php if (ROLE !== ROLE_COMMERCIAL){ ?>
                             <div class="col-md-4">
                                 <select name="user_code" class="form-control form-control-sm select2">
                                     <option value="">Tous les commerciaux</option>
@@ -87,13 +87,7 @@
                                             <td><?= Validator::formatDate($inscription['date_debut']) ?></td>
                                             <td><?= Validator::formatDate($inscription['date_fin']) ?></td>
                                             <td>
-                                                <?php if($inscription['etat_inscription'] == 1): ?>
-                                                    <span class="badge badge-success">Active</span>
-                                                <?php elseif($inscription['etat_inscription'] == 2): ?>
-                                                    <span class="badge badge-info">Soldée</span>
-                                                <?php else: ?>
-                                                    <span class="badge badge-danger">Inactive</span>
-                                                <?php endif; ?>
+                                                <?= Validator::badgeEtatInscription($inscription['etat_inscription']) ?>
                                             </td>
                                             <td>
                                                 <a href="<?= RACINE ?>admin/inscriptions/details/<?= $cryptedParams ?>" class="btn btn-sm btn-secondary mr-1" title="Détails">
@@ -109,7 +103,7 @@
                                                         <a class="dropdown-item" href="<?= RACINE ?>admin/inscriptions/details/<?= $cryptedParams ?>">
                                                             <i class="feather icon-eye"></i> Détails
                                                         </a>
-                                                        <?php if($inscription['etat_inscription'] != 2): ?>
+                                                        <?php if($inscription['etat_inscription'] != ETAT_INSCRIPTION[2]): ?>
                                                         <button type="button" class="dropdown-item btn-payer-inscription" 
                                                             data-inscription="<?= htmlspecialchars($inscription['code_inscription']) ?>"
                                                             data-user="<?= htmlspecialchars($inscription['user_code'] ?? '') ?>">

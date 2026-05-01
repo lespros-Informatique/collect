@@ -66,8 +66,8 @@
                                                     <td><?= Validator::formatDateTime($inscription['date_fin'] ?? '') ?></td>
                                                     <td><?= $inscription['type_inscription'] ?? '' ?></td>
                                                     <td>
-                                                        <span class="badge badge-<?= $inscription['etat_inscription'] == 1 ? 'success' : 'danger' ?>">
-                                                            <?= $inscription['etat_inscription'] == 1 ? 'Active' : 'Inactive' ?>
+                                                        <span class="badge badge-<?= $inscription['etat_inscription'] == ETAT_INSCRIPTION[0] ? 'success' : 'danger' ?>">
+                                                            <?= $inscription['etat_inscription'] == ETAT_INSCRIPTION[0] ? 'Active' : 'Inactive' ?>
                                                         </span>
                                                     </td>
                                                 </tr>

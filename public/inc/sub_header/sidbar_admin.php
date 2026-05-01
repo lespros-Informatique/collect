@@ -61,10 +61,13 @@
                     </ul>
                 </li>
 
-                <li class=" nav-item"><a href="#"><i class="feather icon-dollar-sign"></i><span class="menu-title" data-i18n="Templates">Paiements</span></a>
+                <li class=" nav-item"><a href="#"><i class="feather icon-file-text"></i><span class="menu-title" data-i18n="Templates">Rapports</span></a>
                     <ul class="menu-content">
                          <li>
-                        <a class="menu-item" href="<?=RACINE?>admin/paiements" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des paiements</a>
+                        <a class="menu-item" href="<?=RACINE?>rapports" data-i18n="Vertical"> <i class="feather icon-list"></i> Liste des rapports</a>
+                        </li>
+                         <li>
+                        <a class="menu-item" href="<?=RACINE?>rapports/make_rapport" data-i18n="Vertical"> <i class="feather icon-send"></i> Envoyer un rapport</a>
                         </li>
                     </ul>
                 </li>

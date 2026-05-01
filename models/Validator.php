@@ -521,6 +521,49 @@ class Validator
         </div>';
     }
 
+    public static function badgeStatutVersement(string $statut): string
+{
+    $badgeClass = 'warning';
+    $label = STATUT_SHOW['pending'] ?? 'En attente';
+
+    switch ($statut) {
+        case 'pending':
+            $badgeClass = 'warning';
+            $label = STATUT_SHOW['pending'];
+            break;
+
+        case 'valide':
+            $badgeClass = 'success';
+            $label = STATUT_SHOW['valide'];
+            break;
+
+        case 'annule':
+            $badgeClass = 'danger';
+            $label = STATUT_SHOW['annule'];
+            break;
+    }
+
+    return '<span class="badge badge-' . $badgeClass . ' badge-pill float-right">' . ucfirst($label) . '</span>';
+}
+
+public static function badgeEtatInscription(string $etat): string
+{
+    $map = [
+        'solde'   => ['class' => 'success',  'label' => ETAT_INSCRIPTION_SHOW['solde']],
+        'actif'   => ['class' => 'primary',  'label' => ETAT_INSCRIPTION_SHOW['actif']],
+        'inactif' => ['class' => 'warning',  'label' => ETAT_INSCRIPTION_SHOW['inactif']],
+        'annule'  => ['class' => 'danger',   'label' => ETAT_INSCRIPTION_SHOW['annule']],
+    ];
+
+    $data = $map[$etat] ?? $map['inactif'];
+
+    return sprintf(
+        '<span class="badge badge-%s badge-pill ">%s</span>',
+        $data['class'],
+        ucfirst($data['label'])
+    );
+}
+
     public static function viewStatus($icon1, $icon2, $status, $nb)
     {
         $isActive = $status == $nb;
@@ -984,20 +1027,47 @@ class Validator
         return $result;
     }
 
-    public function update2(string $table, array $keys, array $data)
-    {
-        $result = false;
-        $key = implode(' AND ', array_map(fn($k) => "$k = :$k", array_keys($keys)));
-        $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($data)));
+public function update2(string $table, array $keys, array $data)
+{
+    $result = false;
 
-        $sql = "UPDATE {$table} SET $set WHERE $key";
-        $stmt = $this->pdo->getCon()->prepare($sql);
-        $stmt->execute(array_merge($data, $keys));
+    // 🔥 PREFIXES pour éviter conflit PDO
+    $key = implode(' AND ', array_map(
+        fn($k) => "$k = :w_$k",
+        array_keys($keys)
+    ));
 
-        if ($stmt->rowCount() > 0) {
-            $result = true;
-        }
-        return $result;
+    $set = implode(', ', array_map(
+        fn($k) => "$k = :s_$k",
+        array_keys($data)
+    ));
+
+    $sql = "UPDATE {$table} SET $set WHERE $key";
+
+    $stmt = $this->pdo->getCon()->prepare($sql);
+
+    // 🔥 rename data (SET)
+    $newData = [];
+    foreach ($data as $k => $v) {
+        $newData["s_$k"] = $v;
     }
+
+    // 🔥 rename keys (WHERE)
+    $newKeys = [];
+    foreach ($keys as $k => $v) {
+        $newKeys["w_$k"] = $v;
+    }
+
+    // debug optionnel (à activer si besoin)
+    // var_dump($sql, $newData, $newKeys); die;
+
+    $stmt->execute(array_merge($newData, $newKeys));
+
+    if ($stmt->rowCount() > 0) {
+        $result = true;
+    }
+
+    return $result;
+}
 
 }

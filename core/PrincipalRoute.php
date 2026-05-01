@@ -24,6 +24,7 @@ require_once '../models/familles/ModelFamille.php';
 require_once '../models/versements/ModelVersement.php';
 require_once '../models/retraits/ModelRetrait.php';
 require_once '../models/demandes/ModelDemande.php';
+require_once '../models/rapports/ModelRapport.php';
 
 
 require_once '../controllers/home/HomeController.php';
@@ -38,6 +39,7 @@ require_once '../controllers/client/ClientController.php';
 require_once '../controllers/admin/InscriptionController.php';
 require_once '../controllers/admin/PaiementController.php';
 require_once '../controllers/admin/VersementController.php';
+require_once '../controllers/admin/RapportController.php';
 require_once '../controllers/admin/RetraitController.php';
 require_once '../controllers/admin/SettingsController.php';
 require_once '../controllers/admin/FamilleController.php';
@@ -46,5 +48,3 @@ require_once '../controllers/admin/DemandeController.php';
 require_once '../controllers/entreprise/EntrepriseController.php';
 require_once '../controllers/succursales/SuccursaleController.php';
 require_once '../controllers/campagne/CampagneController.php';
-
-

@@ -183,7 +183,7 @@ class ClientController
                 // Vérification si l'inscription existe déjà
                 $existing = $this->inscription->getInscriptionsByClient($client_code);
                 foreach ($existing as $inscr) {
-                    if ($inscr['etat_inscription'] == 1 && $inscr['categorie_code'] == $categorie_code) {
+                    if ($inscr['etat_inscription'] == ETAT_INSCRIPTION[0] && $inscr['categorie_code'] == $categorie_code) {
                         $msg = ['msg' => 'Ce client est déjà inscrit à cette catégorie!', 'status' => 0];
                         echo json_encode($msg);
                         return;
@@ -202,7 +202,7 @@ class ClientController
                     'code_inscription' => $code_inscription,
                     'user_code' => $user_code,
                     'client_code' => $client_code,
-                    'etat_inscription' => 1,
+                    'etat_inscription' => ETAT_INSCRIPTION[0],
                     'type_inscription' => $type_inscription ?? 'annuel',
                     'date_debut' => $date_debut,
                     'date_fin' => $date_fin,

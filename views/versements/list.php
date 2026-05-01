@@ -10,6 +10,8 @@
                         <h4 class="card-title">
                             <i class="feather icon-trending-up"></i> Gestion des Versements
                         </h4>
+                        <a class="heading-elements-toggle"><i class="feather icon-pocket me-1 font-medium-3 btn btn-round btn-primary btn-sm"></i></a>
+
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <span>
@@ -31,29 +33,28 @@
                                         <th>Utilisateur</th>
                                         <th>Montant</th>
                                         <th>Date création</th>
-                                        <th>Date expiration</th>
                                         <th>Réseau</th>
                                         <th>Statut</th>
                                         <th>Etat</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $i = 0;
-                                    foreach ($versements as $versement): $i++; 
-                                        $cryptedParams = $this->validator->crypter($versement['code_versement']); ?>
+                                    <?php 
+                                    $i = 0;
+                                    foreach ($paiements as $paiement): $i++; 
+                                        $cryptedParams = $this->validator->crypter($paiement['code_versement']); ?>
                                     
                                         <tr>
                                             <td><?= $i ?></td>
-                                            <td><?= htmlspecialchars($versement['code_versement']) ?></td>
-                                            <td><?= htmlspecialchars($versement['rapport_code'] ?? 'N/A') ?></td>
-                                            <td><?= htmlspecialchars($versement['user_code'] ?? 'N/A') ?></td>
-                                            <td><?= number_format($versement['montant_versement'], 0, ',', ' ') ?> F</td>
-                                            <td><?= Validator::formatDate($versement['date_created_versement']) ?></td>
-                                            <td><?= Validator::formatDate($versement['date_expires_versement']) ?></td>
-                                            <td><?= htmlspecialchars($versement['reseau_versement'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($paiement['code_versement']) ?></td>
+                                            <td><?= htmlspecialchars($paiement['rapport_code'] ?? 'N/A') ?></td>
+                                            <td><?= htmlspecialchars($paiement['user_code'] ?? 'N/A') ?></td>
+                                            <td><?= number_format($paiement['montant_versement'], 0, ',', ' ') ?> F</td>
+                                            <td><?= Validator::formatDate($paiement['date_created_versement']) ?></td>
+                                            <td><?= htmlspecialchars($paiement['reseau_versement'] ?? 'N/A') ?></td>
                                             <td>
                                                 <?php 
-                                                $statut = $versement['statut_versement'] ?? 'pending';
+                                                $statut = $paiement['statut_versement'] ?? 'pending';
                                                 $badgeClass = '';
                                                 switch($statut) {
                                                     case 'succès': $badgeClass = 'success'; break;
@@ -65,7 +66,7 @@
                                                 <span class="badge badge-<?= $badgeClass ?>"><?= ucfirst($statut) ?></span>
                                             </td>
                                             <td>
-                                                <?php if($versement['etat_versement'] == 'Validé'): ?>
+                                                <?php if($paiement['etat_versement'] == 'Validé'): ?>
                                                     <span class="badge badge-success">Validé</span>
                                                 <?php else: ?>
                                                     <span class="badge badge-warning">En cours</span>
@@ -98,31 +99,8 @@
             <!-- Corps du modal -->
             <div class="modal-body">
             <form class="formVersement" method="POST">
-                <!-- Code Versement -->
-                <div class="form-group">
-                    <label for="code_versement">Code Versement :</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="code_versement" name="code_versement" placeholder="Code versement" required>
-                        <span class="input-group-addon"><i class="feather icon-hashtag"></i></span>
-                    </div>
-                    <div class="error-message" id="codeVersementError"></div>
-                </div>
 
-                <!-- Utilisateur -->
-                <div class="form-group">
-                    <label for="utilisateur">Utilisateur :</label>
-                    <div class="input-group">
-                        <select class="form-control" id="utilisateur" name="utilisateur" required>
-                            <option value="">... Sélectionnez un utilisateur ...</option>
-                            <?php if (isset($users) && !empty($users)): ?>
-                                <?php foreach ($users as $user): ?>
-                                    <option value="<?= $user['code_user'] ?>"><?= htmlspecialchars($user['nom_user'] . ' ' . $user['prenom_user']) ?></option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                        <span class="input-group-addon"><i class="feather icon-user"></i></span>
-                    </div>
-                </div>
+            <span class="text-primary font-weight-bold text-center d-block">Total encaissé: <?= number_format($paiementsInvalides, 0, ',', ' '); ?> F</span>
 
                 <!-- Montant -->
                 <div class="form-group">
@@ -134,25 +112,26 @@
                     <div class="error-message" id="montantError"></div>
                 </div>
 
-                <!-- Date expiration -->
-                <div class="form-group">
-                    <label for="date_expiration">Date expiration :</label>
-                    <div class="input-group">
-                        <input type="date" class="form-control" id="date_expiration" name="date_expiration" required>
-                        <span class="input-group-addon"><i class="feather icon-calendar"></i></span>
-                    </div>
-                </div>
-
                 <!-- Réseau -->
                 <div class="form-group">
                     <label for="reseau">Réseau :</label>
                     <div class="input-group">
                         <select class="form-control" id="reseau" name="reseau">
+                            <option value="ESPACE">Espace</option>
                             <option value="WAVE">Wave</option>
                             <option value="MOOV_MONEY">Moov Money</option>
                             <option value="ORANGE_MONEY">Orange Money</option>
                         </select>
                         <span class="input-group-addon"><i class="feather icon-credit-card"></i></span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description (optionnel):</label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="description" name="description" placeholder="Description du versement" rows="3"></textarea>
+                        <span class="input-group-addon"><i class="feather icon-edit"></i></span>
                     </div>
                 </div>
 

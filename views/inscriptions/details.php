@@ -106,9 +106,7 @@
                                 <p><strong>Date fin:</strong> <?= Validator::formatDateTime($inscription['date_fin'] ?? '') ?></p>
                                 <p>
                                     <strong>État:</strong>
-                                    <span class="badge badge-<?= $inscription['etat_inscription'] == 1 ? 'success' : 'danger' ?>">
-                                        <?= $inscription['etat_inscription'] == 1 ? 'Active' : 'Inactive' ?>
-                                    </span>
+                                    <?= Validator::badgeEtatInscription($inscription['etat_inscription']) ?>
                                 </p>
                             </div>
 
